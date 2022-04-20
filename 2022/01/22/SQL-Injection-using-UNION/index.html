@@ -14,9 +14,9 @@
 <meta property="og:description" content="IntroductionWhen a web application is vulnerable to SQL injections, we can use UNION attacks to extract additional information about the database by querying other tables. UNION allows us to chain add">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-01-22T21:54:22.000Z">
-<meta property="article:modified_time" content="2022-04-20T03:47:54.480Z">
-<meta property="article:tag" content="Cheat Sheet">
+<meta property="article:modified_time" content="2022-04-20T03:54:21.099Z">
 <meta property="article:tag" content="SQL Injection">
+<meta property="article:tag" content="Cheat Sheet">
 <meta name="twitter:card" content="summary">
     
     
@@ -112,7 +112,7 @@
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Key-Requirements"><span class="toc-number">2.</span> <span class="toc-text">Key Requirements</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing-SQL-Vulnerability"><span class="toc-number">2.1.</span> <span class="toc-text">Testing SQL Vulnerability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Identifying-number-of-columns"><span class="toc-number">2.2.</span> <span class="toc-text">Identifying number of columns</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ORDER-BY"><span class="toc-number">2.2.1.</span> <span class="toc-text">ORDER BY</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UNION-SELECTing-NULLs"><span class="toc-number">2.3.</span> <span class="toc-text">UNION SELECTing NULLs</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Key-Requirements"><span class="toc-number">2.</span> <span class="toc-text">Key Requirements</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing-SQL-Vulnerability"><span class="toc-number">2.1.</span> <span class="toc-text">Testing SQL Vulnerability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Identifying-number-of-columns"><span class="toc-number">2.2.</span> <span class="toc-text">Identifying number of columns</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ORDER-BY"><span class="toc-number">2.2.1.</span> <span class="toc-text">ORDER BY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UNION-SELECTing-NULLs"><span class="toc-number">2.2.2.</span> <span class="toc-text">UNION SELECTing NULLs</span></a></li></ol></li></ol></li></ol>
     </div>
   </span>
 </div>
@@ -177,7 +177,7 @@
 <p>We would keep incrementing the index until an error such as this occured:</p>
 <p><code>ORA-01789: query block has incorrect number of result columns.</code></p>
 <p>If this error first occurs at index position 3, then we know that the number of columns is 2.</p>
-<h2 id="UNION-SELECTing-NULLs"><a href="#UNION-SELECTing-NULLs" class="headerlink" title="UNION SELECTing NULLs"></a>UNION SELECTing NULLs</h2><p>The second method involves a brute force use of <code>UNION SELECT</code>.</p>
+<h3 id="UNION-SELECTing-NULLs"><a href="#UNION-SELECTing-NULLs" class="headerlink" title="UNION SELECTing NULLs"></a>UNION SELECTing NULLs</h3><p>The second method involves a brute force use of <code>UNION SELECT</code>.</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x27; UNION SELECT NULL --</span><br><span class="line">&#x27; UNION SELECT NULL, NULL --</span><br><span class="line">&#x27; UNION SELECT NULL, NULL, NULL --</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 
 <p>Like the first method, we’ll just keep incrementing the number of NULL’s until an error occurs.</p>
@@ -208,7 +208,7 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Key-Requirements"><span class="toc-number">2.</span> <span class="toc-text">Key Requirements</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing-SQL-Vulnerability"><span class="toc-number">2.1.</span> <span class="toc-text">Testing SQL Vulnerability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Identifying-number-of-columns"><span class="toc-number">2.2.</span> <span class="toc-text">Identifying number of columns</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ORDER-BY"><span class="toc-number">2.2.1.</span> <span class="toc-text">ORDER BY</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#UNION-SELECTing-NULLs"><span class="toc-number">2.3.</span> <span class="toc-text">UNION SELECTing NULLs</span></a></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Key-Requirements"><span class="toc-number">2.</span> <span class="toc-text">Key Requirements</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Testing-SQL-Vulnerability"><span class="toc-number">2.1.</span> <span class="toc-text">Testing SQL Vulnerability</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Identifying-number-of-columns"><span class="toc-number">2.2.</span> <span class="toc-text">Identifying number of columns</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ORDER-BY"><span class="toc-number">2.2.1.</span> <span class="toc-text">ORDER BY</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UNION-SELECTing-NULLs"><span class="toc-number">2.2.2.</span> <span class="toc-text">UNION SELECTing NULLs</span></a></li></ol></li></ol></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
