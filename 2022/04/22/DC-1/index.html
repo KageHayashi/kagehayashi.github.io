@@ -6,21 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="AbstractThe target machine is running a WordPress site with a post that suggests we use cewl to scrape for passwords. Along with that, we use wpscan to identify users tom and jerry. Then, we use hydra">
+    <meta name="description" content="AbstractThe target machine is running Drupal 7 - vulnerable to the &#39;Drupalgeddon2&#39; Remote Code Execution exploit, which we utilize to gain a reverse shell as low-priv www-data user. From here,">
 <meta property="og:type" content="article">
-<meta property="og:title" content="DC-2">
-<meta property="og:url" content="http://example.com/2022/04/23/DC-2/index.html">
+<meta property="og:title" content="VulnHub - DC-1">
+<meta property="og:url" content="http://example.com/2022/04/22/DC-1/index.html">
 <meta property="og:site_name" content="LØNE&#39;s Blog">
-<meta property="og:description" content="AbstractThe target machine is running a WordPress site with a post that suggests we use cewl to scrape for passwords. Along with that, we use wpscan to identify users tom and jerry. Then, we use hydra">
+<meta property="og:description" content="AbstractThe target machine is running Drupal 7 - vulnerable to the &#39;Drupalgeddon2&#39; Remote Code Execution exploit, which we utilize to gain a reverse shell as low-priv www-data user. From here,">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-04-23T19:13:45.000Z">
-<meta property="article:modified_time" content="2022-04-23T19:29:17.278Z">
+<meta property="article:published_time" content="2022-04-22T19:06:24.000Z">
+<meta property="article:modified_time" content="2022-04-23T21:02:42.370Z">
 <meta property="article:tag" content="VulnHub">
 <meta property="article:tag" content="DC">
 <meta property="article:tag" content="Easy">
-<meta property="article:tag" content="Bruteforce">
-<meta property="article:tag" content="WordPress">
-<meta property="article:tag" content="Restricted Bash (rbash)">
 <meta name="twitter:card" content="summary">
     
     
@@ -41,7 +38,7 @@
       
     
     <!-- title -->
-    <title>DC-2</title>
+    <title>VulnHub - DC-1</title>
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
@@ -81,8 +78,10 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" aria-label="Previous post" href="/2022/04/22/DC-2/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
-        <li><a class="icon" aria-label="Next post" href="/2022/04/23/DC-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/04/19/OSCP-Survival-Guide/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -95,17 +94,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/04/23/DC-2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/04/23/DC-2/&text=DC-2"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/04/23/DC-2/&is_video=false&description=DC-2"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=DC-2&body=Check out this article: http://example.com/2022/04/23/DC-2/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/04/23/DC-2/&name=DC-2&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/04/23/DC-2/&t=DC-2"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/04/22/DC-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/04/22/DC-1/&text=VulnHub - DC-1"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/04/22/DC-1/&is_video=false&description=VulnHub - DC-1"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VulnHub - DC-1&body=Check out this article: http://example.com/2022/04/22/DC-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/04/22/DC-1/&name=VulnHub - DC-1&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/04/22/DC-1/&t=VulnHub - DC-1"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -122,7 +121,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        DC-2
+        VulnHub - DC-1
     </h1>
 
 
@@ -134,7 +133,7 @@
       
     <div class="postdate">
       
-        <time datetime="2022-04-23T19:13:45.000Z" itemprop="datePublished">2022-04-23</time>
+        <time datetime="2022-04-22T19:06:24.000Z" itemprop="datePublished">2022-04-22</time>
         
       
     </div>
@@ -145,7 +144,7 @@
       
     <div class="article-tag">
         <i class="fas fa-tag"></i>
-        <a class="tag-link-link" href="/tags/Bruteforce/" rel="tag">Bruteforce</a>, <a class="tag-link-link" href="/tags/DC/" rel="tag">DC</a>, <a class="tag-link-link" href="/tags/Easy/" rel="tag">Easy</a>, <a class="tag-link-link" href="/tags/Restricted-Bash-rbash/" rel="tag">Restricted Bash (rbash)</a>, <a class="tag-link-link" href="/tags/VulnHub/" rel="tag">VulnHub</a>, <a class="tag-link-link" href="/tags/WordPress/" rel="tag">WordPress</a>
+        <a class="tag-link-link" href="/tags/DC/" rel="tag">DC</a>, <a class="tag-link-link" href="/tags/Easy/" rel="tag">Easy</a>, <a class="tag-link-link" href="/tags/VulnHub/" rel="tag">VulnHub</a>
     </div>
 
 
@@ -154,8 +153,8 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running a <code>WordPress</code> site with a post that suggests we use <code>cewl</code> to scrape for passwords. Along with that, we use <code>wpscan</code> to identify users <code>tom</code> and <code>jerry</code>. Then, we use <code>hydra</code> to bruteforce the login and find valid credentials for both users. We <code>ssh</code> into the machine as <code>tom</code> and are greeted to a <code>rbash</code>, which we escape using <code>vi</code>. Then, we <code>su</code> to <code>jerry</code> and discover that they can run <code>git</code> as <code>sudo</code>. Finally, we escalate using a <code>sudo git</code> command detailed on <code>GTFOBins</code>. </p>
-<h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine:  <a target="_blank" rel="noopener" href="https://www.vulnhub.com/entry/dc-2,311/">https://www.vulnhub.com/entry/dc-2,311/</a></p>
+    <h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running <code>Drupal 7</code> - vulnerable to the <code>&#39;Drupalgeddon2&#39; Remote Code Execution</code> exploit, which we utilize to gain a reverse shell as low-priv <code>www-data</code> user. From here, we enumerate the machine and discover that the <code>find</code> command has <code>SUID</code> set. We utilize the <code>find</code> command along with its <code>-exec</code> option to read the contents of the final flag.</p>
+<h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine:  <a target="_blank" rel="noopener" href="https://www.vulnhub.com/entry/dc-1,292/">https://www.vulnhub.com/entry/dc-1,292/</a></p>
 
   </div>
 </article>
@@ -188,17 +187,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/04/23/DC-2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/04/23/DC-2/&text=DC-2"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/04/23/DC-2/&is_video=false&description=DC-2"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=DC-2&body=Check out this article: http://example.com/2022/04/23/DC-2/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/04/23/DC-2/&title=DC-2"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/04/23/DC-2/&name=DC-2&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/04/23/DC-2/&t=DC-2"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/04/22/DC-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/04/22/DC-1/&text=VulnHub - DC-1"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/04/22/DC-1/&is_video=false&description=VulnHub - DC-1"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=VulnHub - DC-1&body=Check out this article: http://example.com/2022/04/22/DC-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/04/22/DC-1/&title=VulnHub - DC-1"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/04/22/DC-1/&name=VulnHub - DC-1&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/04/22/DC-1/&t=VulnHub - DC-1"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
