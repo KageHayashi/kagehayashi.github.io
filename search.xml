@@ -4,11 +4,142 @@
   
     
     <entry>
+      <title>VulnHub - Djinn1</title>
+      <link href="/2022/06/21/VulnHub-Djinn1/"/>
+      <url>/2022/06/21/VulnHub-Djinn1/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running an <code>FTP</code> server that allows for <code>anonymous</code> login, granting access to three text files that indicate port <code>1337</code> is open. This is a rabbit hole (as I found out half an hour in trying to write a python program to solve it…). A deeper <code>nmap</code> enumeration will reveal that port <code>7331</code> is also open, which turns out to be a web application. Enumerating this website, we come upon a page that allows for command executions. It has some weak filtering (which we bypass by <code>base64</code> encoding our payload to get a reverse shell). On the target machine, we gain access to a <code>creds.txt</code> file in user <code>nitish</code>‘s home directory, which we use to <code>SSH</code> into. As <code>nitish</code>, we are able to run a <code>sudo</code> program as user <code>sam</code>. After a few trials, we are able to gain a shell as <code>sam</code>, who can run a program as <code>root</code> using <code>sudo</code>. Eventually, exploiting a <code>python</code> <code>input()</code> insecurity vulnerability, we are able to gain a root shell.</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> VulnHub </tag>
+            
+            <tag> File Transfer Protocol (FTP) </tag>
+            
+            <tag> Rabbit Hole </tag>
+            
+            <tag> Enumeration </tag>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>VulnHub - Digitalworld.local (Mercy v2)</title>
+      <link href="/2022/06/16/VulnHub-Digitalworld-local-Mercy-v2/"/>
+      <url>/2022/06/16/VulnHub-Digitalworld-local-Mercy-v2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> VulnHub </tag>
+            
+            <tag> Local File Inclusion (LFI) </tag>
+            
+            <tag> Tomcat </tag>
+            
+            <tag> Cron </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>VulnHub - Digitalworld.local (Development)</title>
+      <link href="/2022/06/16/VulnHub-Digitalworld-local-Development/"/>
+      <url>/2022/06/16/VulnHub-Digitalworld-local-Development/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> VulnHub </tag>
+            
+            <tag> Password Cracking </tag>
+            
+            <tag> Lshell </tag>
+            
+            <tag> Vim </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>VulnHub - Digitalworld.local (Bravery)</title>
+      <link href="/2022/06/15/VulnHub-Digitalworld-local-Bravery/"/>
+      <url>/2022/06/15/VulnHub-Digitalworld-local-Bravery/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target is sharing multiple NFS mounts that we can access. Through enumeration of the public shares, we are able to find passwords for more secured shares. Ultimately, we find the location of an internal website built using <code>CuppaCMS</code>, which is vulnerable to LFI&#x2F;RFI, allowing us to initiate a reverse shell. For privilege escalation, we enumerate the local machine for <code>SUID</code> binaries and find that <code>cp</code> has <code>SUID</code> set. This allows us to make a copy of <code>/etc/passwd</code>, modify it (i.e add another privileged user), and then <code>cp</code> it back into <code>/etc/passwd</code>. After this, we should be able to login as the new user and gain a root shell.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/digitalworldlocal-bravery,281/">https://www.vulnhub.com/entry/digitalworldlocal-bravery,281/</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> VulnHub </tag>
+            
+            <tag> Network File Share (NFS) </tag>
+            
+            <tag> Remote File Inclusion (RFI) </tag>
+            
+            <tag> CuppaCMS </tag>
+            
+            <tag> SUID </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>VulnHub - Joy</title>
+      <link href="/2022/06/14/VulnHub-Joy/"/>
+      <url>/2022/06/14/VulnHub-Joy/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running a <code>ProFTP</code> server that allows for anonymous logins with read&#x2F;write permissions. Reading through all the files in the FTP server, we discover a file named <code>version_control</code> in <code>/home/patrick</code>, however we are unable to retreive this file. After an aggressive scan for all UDP ports, we find that the target is also running <code>SNMP</code>, allowing us to use <code>snmpwalk</code> to enumerate for running processes. We find that the target is running <code>TFTP</code>, a file transfer protocol, with the root directory of <code>/home/patrick</code>. Using this information, we are able to retrieve the <code>version_control</code> file and identify version numbers of serveral services, one of which is <code>ProFTP 1.3.5</code>, which is vulnerable to a remote command execution vulnerability (CVE-2015–3306). After we craft an exploit for this vulnerability, we are able to get a reverse shell onto the system, running as user <code>www-data</code>. We directly escalate into user <code>patrick</code> after finding a file containing credentials in the <code>ossec</code> directory. As <code>patrick</code>, we can run a script as <code>sudo</code> that will change file permissions. We give write permissions to <code>/etc/passwd</code> and add a high privilege user to gain root. </p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/digitalworldlocal-joy,298/">https://www.vulnhub.com/entry/digitalworldlocal-joy,298/</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> VulnHub </tag>
+            
+            <tag> Remote Code Execution (RCE) </tag>
+            
+            <tag> File Transfer Protocol (FTP) </tag>
+            
+            <tag> Trivial File Transfer Protocol (TFTP) </tag>
+            
+            <tag> Simple Network Management Protocol (SNMP) </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>VulnHub - DC-9</title>
       <link href="/2022/04/29/DC-9/"/>
       <url>/2022/04/29/DC-9/</url>
       
-        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/dc-9,412/">https://www.vulnhub.com/entry/dc-9,412/</a></p>]]></content>
+        <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running a custum web application that is vulnerable to <code>SQLi</code>, leaking admin credentials to the website as well as credentials to several other users. Logging in as <code>admin</code>, we notice that <code>manage.php</code> is vulnerable to <code>LFI</code>, giving us the <code>port knocking</code> sequence to unlock <code>SSH</code>. With <code>SSH</code> unlocked, we use <code>hydra</code> to bruteforce logins with the leaked credentials we gathered earlier. We successfully login as user <code>janitor</code>, who has <code>sudo</code> access to an executable that can read and append to files. We use this to add a new high privileged user and get a root shell.</p><h2 id="WIP"><a href="#WIP" class="headerlink" title="WIP"></a>WIP</h2><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/dc-9,412/">https://www.vulnhub.com/entry/dc-9,412/</a></p>]]></content>
       
       
       
@@ -18,11 +149,15 @@
             
             <tag> DC </tag>
             
-            <tag> Easy </tag>
-            
             <tag> Bruteforce </tag>
             
+            <tag> Hydra </tag>
+            
             <tag> Port Knocking </tag>
+            
+            <tag> Local File Inclusion (LFI) </tag>
+            
+            <tag> SQL Injection (SQLi) </tag>
             
         </tags>
       
@@ -74,11 +209,11 @@
             
             <tag> Easy </tag>
             
+            <tag> Local File Inclusion (LFI) </tag>
+            
             <tag> Log Poisoning </tag>
             
             <tag> Nginx </tag>
-            
-            <tag> Local File Inclusion (LFI) </tag>
             
         </tags>
       
@@ -182,6 +317,8 @@
             
             <tag> Easy </tag>
             
+            <tag> Remote Code Execution (RCE) </tag>
+            
         </tags>
       
     </entry>
@@ -218,9 +355,9 @@
       
         <tags>
             
-            <tag> Cheat Sheet </tag>
+            <tag> SQL Injection (SQLi) </tag>
             
-            <tag> SQL Injection </tag>
+            <tag> Cheat Sheet </tag>
             
         </tags>
       
@@ -233,7 +370,7 @@
       <link href="/2022/01/19/Linux-Privilege-Escalation-Cheat-Sheet/"/>
       <url>/2022/01/19/Linux-Privilege-Escalation-Cheat-Sheet/</url>
       
-        <content type="html"><![CDATA[<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>A straight forward cheat sheet of commands for Linux Privilege Escalation. </p><span id="more"></span><h1 id="Basic-Manual-Enumeration"><a href="#Basic-Manual-Enumeration" class="headerlink" title="Basic Manual Enumeration"></a>Basic Manual Enumeration</h1><h2 id="Enumerating-Users"><a href="#Enumerating-Users" class="headerlink" title="Enumerating Users"></a>Enumerating Users</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Environment"><a href="#Enumerating-Environment" class="headerlink" title="Enumerating Environment"></a>Enumerating Environment</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/profile</span><br><span class="line"><span class="built_in">cat</span> /etc/bashrc</span><br><span class="line"><span class="built_in">cat</span> ~/.bash_profile</span><br><span class="line"><span class="built_in">cat</span> ~/.bashrc</span><br><span class="line"><span class="built_in">cat</span> ~/.bash_logout</span><br><span class="line"><span class="built_in">env</span></span><br><span class="line"><span class="built_in">set</span></span><br></pre></td></tr></table></figure><h2 id="Enumerating-Hostname"><a href="#Enumerating-Hostname" class="headerlink" title="Enumerating Hostname"></a>Enumerating Hostname</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname</span><br></pre></td></tr></table></figure><h2 id="Enumerating-System"><a href="#Enumerating-System" class="headerlink" title="Enumerating System"></a>Enumerating System</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line"><span class="built_in">cat</span> /proc/version</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Processes-and-Services"><a href="#Enumerating-Processes-and-Services" class="headerlink" title="Enumerating Processes and Services"></a>Enumerating Processes and Services</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># List running processes</span></span><br><span class="line">ps aux --forest  </span><br><span class="line"></span><br><span class="line"><span class="comment"># List network connections</span></span><br><span class="line">netstat -ano</span><br><span class="line">ss -antlp</span><br><span class="line"></span><br><span class="line"><span class="comment"># List packages</span></span><br><span class="line">dpkg -l </span><br></pre></td></tr></table></figure><h2 id="Enumerating-Network"><a href="#Enumerating-Network" class="headerlink" title="Enumerating Network"></a>Enumerating Network</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip a</span><br><span class="line">ifconfig</span><br><span class="line">route <span class="built_in">print</span></span><br><span class="line">netstat -ie</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Scheduled-Tasks"><a href="#Enumerating-Scheduled-Tasks" class="headerlink" title="Enumerating Scheduled Tasks"></a>Enumerating Scheduled Tasks</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la /etc/cron*</span><br><span class="line"><span class="built_in">cat</span> /etc/crontab</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Mountables"><a href="#Enumerating-Mountables" class="headerlink" title="Enumerating Mountables"></a>Enumerating Mountables</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/fstab</span><br><span class="line">mount</span><br><span class="line">lsblk</span><br></pre></td></tr></table></figure><h1 id="File-Permissions"><a href="#File-Permissions" class="headerlink" title="File Permissions"></a>File Permissions</h1><h2 id="Writeable"><a href="#Writeable" class="headerlink" title="Writeable"></a>Writeable</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -writable -<span class="built_in">type</span> f 2&gt;/dev/null</span><br></pre></td></tr></table></figure><h2 id="SUID-Binaries"><a href="#SUID-Binaries" class="headerlink" title="SUID Binaries"></a>SUID Binaries</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -<span class="built_in">type</span> f -perm -u=s 2&gt;/dev/null</span><br></pre></td></tr></table></figure><h1 id="SUDO"><a href="#SUDO" class="headerlink" title="SUDO"></a>SUDO</h1><h2 id="Intended-Functionality"><a href="#Intended-Functionality" class="headerlink" title="Intended Functionality"></a>Intended Functionality</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure><p>After identifying which binaries we can run as SUDO, we can try using <a href="https://gtfobins.github.io/">https://gtfobins.github.io/</a> to see if we can escalate our privileges</p><h1 id="Automated-Enumeration"><a href="#Automated-Enumeration" class="headerlink" title="Automated Enumeration"></a>Automated Enumeration</h1><h2 id="LinPeas"><a href="#LinPeas" class="headerlink" title="LinPeas"></a>LinPeas</h2><p>A bash script ran on the local machine</p><p><a href="https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh">https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh</a></p><h2 id="Unix-Priv-Esc-Check"><a href="#Unix-Priv-Esc-Check" class="headerlink" title="Unix-Priv-Esc-Check"></a>Unix-Priv-Esc-Check</h2><p>On Kali, the script is located at</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/unix-privesc-check/unix-privesc-check</span><br></pre></td></tr></table></figure><p>Standard run:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unix-privesc-check standard</span><br></pre></td></tr></table></figure><h1 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h1><h2 id="Getting-Desperate"><a href="#Getting-Desperate" class="headerlink" title="Getting Desperate"></a>Getting Desperate</h2><p>Find any files with “pass” in them</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grep --color=auto-R -i <span class="string">&quot;pass&quot;</span> --color=always 2&gt; (grep -v <span class="string">&#x27;Permission denied&#x27;</span> &gt;&amp;2)</span><br><span class="line">grep --color=auto -rnw <span class="string">&#x27;/&#x27;</span> -ie <span class="string">&quot;PASS&quot;</span> --color=always 2&gt; /dev/null</span><br><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">exec</span> grep -i -I <span class="string">&quot;PASS&quot;</span> &#123;&#125; /dev/null \;</span><br></pre></td></tr></table></figure>]]></content>
+        <content type="html"><![CDATA[<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>A straight forward cheat sheet of commands for Linux Privilege Escalation. </p><span id="more"></span><h1 id="Basic-Manual-Enumeration"><a href="#Basic-Manual-Enumeration" class="headerlink" title="Basic Manual Enumeration"></a>Basic Manual Enumeration</h1><h2 id="Enumerating-Users"><a href="#Enumerating-Users" class="headerlink" title="Enumerating Users"></a>Enumerating Users</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Environment"><a href="#Enumerating-Environment" class="headerlink" title="Enumerating Environment"></a>Enumerating Environment</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/profile</span><br><span class="line"><span class="built_in">cat</span> /etc/bashrc</span><br><span class="line"><span class="built_in">cat</span> ~/.bash_profile</span><br><span class="line"><span class="built_in">cat</span> ~/.bashrc</span><br><span class="line"><span class="built_in">cat</span> ~/.bash_logout</span><br><span class="line"><span class="built_in">env</span></span><br><span class="line"><span class="built_in">set</span></span><br></pre></td></tr></table></figure><h2 id="Enumerating-Hostname"><a href="#Enumerating-Hostname" class="headerlink" title="Enumerating Hostname"></a>Enumerating Hostname</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname</span><br></pre></td></tr></table></figure><h2 id="Enumerating-System"><a href="#Enumerating-System" class="headerlink" title="Enumerating System"></a>Enumerating System</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line"><span class="built_in">cat</span> /proc/version</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Processes-and-Services"><a href="#Enumerating-Processes-and-Services" class="headerlink" title="Enumerating Processes and Services"></a>Enumerating Processes and Services</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># List running processes</span></span><br><span class="line">ps aux --forest  </span><br><span class="line"></span><br><span class="line"><span class="comment"># List network connections</span></span><br><span class="line">netstat -ano</span><br><span class="line">ss -antlp</span><br><span class="line"></span><br><span class="line"><span class="comment"># List packages</span></span><br><span class="line">dpkg -l </span><br></pre></td></tr></table></figure><h2 id="Enumerating-Network"><a href="#Enumerating-Network" class="headerlink" title="Enumerating Network"></a>Enumerating Network</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip a</span><br><span class="line">ifconfig</span><br><span class="line">route <span class="built_in">print</span></span><br><span class="line">netstat -ie</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Scheduled-Tasks"><a href="#Enumerating-Scheduled-Tasks" class="headerlink" title="Enumerating Scheduled Tasks"></a>Enumerating Scheduled Tasks</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la /etc/cron*</span><br><span class="line"><span class="built_in">cat</span> /etc/crontab</span><br></pre></td></tr></table></figure><h2 id="Enumerating-Mountables"><a href="#Enumerating-Mountables" class="headerlink" title="Enumerating Mountables"></a>Enumerating Mountables</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/fstab</span><br><span class="line">mount</span><br><span class="line">lsblk</span><br></pre></td></tr></table></figure><h1 id="File-Permissions"><a href="#File-Permissions" class="headerlink" title="File Permissions"></a>File Permissions</h1><h2 id="Writeable"><a href="#Writeable" class="headerlink" title="Writeable"></a>Writeable</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -writable -<span class="built_in">type</span> f 2&gt;/dev/null</span><br></pre></td></tr></table></figure><h2 id="SUID-Binaries"><a href="#SUID-Binaries" class="headerlink" title="SUID Binaries"></a>SUID Binaries</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -<span class="built_in">type</span> f -perm -u=s 2&gt;/dev/null</span><br></pre></td></tr></table></figure><h1 id="SUDO"><a href="#SUDO" class="headerlink" title="SUDO"></a>SUDO</h1><h2 id="Intended-Functionality"><a href="#Intended-Functionality" class="headerlink" title="Intended Functionality"></a>Intended Functionality</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure><p>After identifying which binaries we can run as SUDO, we can try using <a href="https://gtfobins.github.io/">https://gtfobins.github.io/</a> to see if we can escalate our privileges</p><h1 id="Automated-Enumeration"><a href="#Automated-Enumeration" class="headerlink" title="Automated Enumeration"></a>Automated Enumeration</h1><h2 id="LinPeas"><a href="#LinPeas" class="headerlink" title="LinPeas"></a>LinPeas</h2><p>A bash script ran on the local machine</p><p><a href="https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh">https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh</a></p><h2 id="Unix-Priv-Esc-Check"><a href="#Unix-Priv-Esc-Check" class="headerlink" title="Unix-Priv-Esc-Check"></a>Unix-Priv-Esc-Check</h2><p>On Kali, the script is located at</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/unix-privesc-check/unix-privesc-check</span><br></pre></td></tr></table></figure><p>Standard run:</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unix-privesc-check standard</span><br></pre></td></tr></table></figure><h1 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h1><p>When privilege esclating via an <code>SUID</code> program to run <code>/bin/bash</code>, remember to use the <code>-p</code> flag. <code>bash</code> will drop all privileges unless <code>-p</code> is specified.</p><h2 id="Getting-Desperate"><a href="#Getting-Desperate" class="headerlink" title="Getting Desperate"></a>Getting Desperate</h2><p>Find any files with “pass” in them</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grep --color=auto-R -i <span class="string">&quot;pass&quot;</span> --color=always 2&gt; (grep -v <span class="string">&#x27;Permission denied&#x27;</span> &gt;&amp;2)</span><br><span class="line">grep --color=auto -rnw <span class="string">&#x27;/&#x27;</span> -ie <span class="string">&quot;PASS&quot;</span> --color=always 2&gt; /dev/null</span><br><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">exec</span> grep -i -I <span class="string">&quot;PASS&quot;</span> &#123;&#125; /dev/null \;</span><br></pre></td></tr></table></figure>]]></content>
       
       
       
