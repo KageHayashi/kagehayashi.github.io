@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title>POP3 Cheat Sheet</title>
+      <link href="/2022/06/27/POP3-Cheat-Sheet/"/>
+      <url>/2022/06/27/POP3-Cheat-Sheet/</url>
+      
+        <content type="html"><![CDATA[<table border="1"><tbody><tr><th>Command</th><th>Description</th><th>Example</th></tr><tr><td>USER [username]</td><td>1st login command</td><td>USER bruh<br>+OK Please enter a password</td></tr><tr><td>PASS [password]</td><td>2nd login command</td><td>PASS secret<br>+OK valid logon</td></tr><tr><td>QUIT</td><td>Logs out and saves any changes</td><td>QUIT<br>+OK Bye-bye.</td></tr><tr><td>STAT</td><td>Returns total number of messages and total size</td><td>STAT<br>+OK 2 320</td></tr><tr><td>LIST</td><td>Lists all messages</td><td>LIST<br>+OK 2 messages (320 octets)<br>1 120<br>2 200<br>…<br>LIST 2<br>+OK 2 200</td></tr><tr><td>RETR [message]</td><td>Retrieves the whole message</td><td>RETR 1<br>+OK 120 octets follow.<br>***</td></tr><tr><td>DELE [message]</td><td>Deletes the specified message</td><td>DELE 2<br>+OK message deleted</td></tr><tr><td>NOOP</td><td>The POP3 server does nothing, it merely replies with a positive response.</td><td>NOOP<br>+OK</td></tr><tr><td>RSET</td><td>Undelete the message if any marked for deletion</td><td>RSET<br>+OK maildrop has 2 messages (320 octets)</td></tr><tr><td>TOP [message] [number]</td><td>Returns the headers and number of lines from the message</td><td>TOP 1 10<br>+OK<br>***</td></tr></tbody></table>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>SQL Injection Cheat Sheet</title>
       <link href="/2022/06/23/SQL-Injection-Cheat-Sheet/"/>
       <url>/2022/06/23/SQL-Injection-Cheat-Sheet/</url>
