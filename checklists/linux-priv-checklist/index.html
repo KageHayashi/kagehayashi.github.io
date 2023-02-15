@@ -11,7 +11,7 @@
   
   <title>
     
-      Cheatsheets 
+      Linux Privilege Escalation - Checklist 
       
       
       |
@@ -159,7 +159,7 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">Cheatsheets</div>
+      <div class="post-title">Linux Privilege Escalation - Checklist</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
@@ -168,15 +168,73 @@
         
       </div>
       <div class="markdown-body">
-        <p>A whole lot of cheatsheets (really, this is a place I put things to learn and that need to be reinforced)</p>
-<p><a href="../survival-guide">Survival Guide</a></p>
-<h3 id="Pentesting-Network"><a href="#Pentesting-Network" class="headerlink" title="Pentesting Network"></a>Pentesting Network</h3><p><a href="../pentesting_network/pentesting-smb">Pentesting SMB (139, 445)</a></p>
-<h3 id="Pentesting-Web"><a href="#Pentesting-Web" class="headerlink" title="Pentesting Web"></a>Pentesting Web</h3><h3 id="Privilege-Escalation"><a href="#Privilege-Escalation" class="headerlink" title="Privilege Escalation"></a>Privilege Escalation</h3><p><a href="../linux-priv-esc">Linux Privilege Escalation</a><br><a href="../windows-priv-esc">Windows Privilege Escalation</a></p>
-<h3 id="Programming"><a href="#Programming" class="headerlink" title="Programming"></a>Programming</h3><p>[Bash]<br><a href="../powershell">Powershell</a></p>
-<h3 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h3><p>[HTTP]<br>[SMTP]<br>[SNMP]<br><a href="../pop3">POP3</a></p>
-<h3 id="Tricks"><a href="#Tricks" class="headerlink" title="Tricks"></a>Tricks</h3><p><a href="../file-transfers">File Transfers</a><br>[Reverse Shells]<br>[SSH Tunneling]</p>
-<h3 id="Web-Exploitation"><a href="#Web-Exploitation" class="headerlink" title="Web Exploitation"></a>Web Exploitation</h3><p>[Cross-site Scripting (XSS)]<br><a href="../sql-injection">SQL Injection</a></p>
-<h3 id="Checklists"><a href="#Checklists" class="headerlink" title="Checklists"></a>Checklists</h3><p><a href="../checklists/linux-priv-checklist">Linux Privilege Escalation - Checklist</a></p>
+        <p>Also see <a href="../../linux-priv-esc">Linux Privilege Escalation</a></p>
+<h2 id="System-Information"><a href="#System-Information" class="headerlink" title="System Information"></a>System Information</h2><ul>
+<li><input disabled="" type="checkbox"> Get OS Information</li>
+<li><input disabled="" type="checkbox"> Check PATH</li>
+<li><input disabled="" type="checkbox"> Check ENV</li>
+<li><input disabled="" type="checkbox"> Check Kernel (KE?)</li>
+</ul>
+<h2 id="Users"><a href="#Users" class="headerlink" title="Users"></a>Users</h2><ul>
+<li><input disabled="" type="checkbox"> Get all users</li>
+<li><input disabled="" type="checkbox"> Check user permissions </li>
+<li><input disabled="" type="checkbox"> Check user homes</li>
+</ul>
+<h2 id="Interesting-Files"><a href="#Interesting-Files" class="headerlink" title="Interesting Files"></a>Interesting Files</h2><ul>
+<li><input disabled="" type="checkbox"> Check &#x2F;etc&#x2F;passwd, &#x2F;etc&#x2F;shadow</li>
+<li><input disabled="" type="checkbox"> Check configs, logs, caches, etc…</li>
+<li><input disabled="" type="checkbox"> Check profile files</li>
+<li><input disabled="" type="checkbox"> Hidden files</li>
+<li><input disabled="" type="checkbox"> Check backups</li>
+<li><input disabled="" type="checkbox"> Greppable passwords &#x2F; other critial information</li>
+</ul>
+<h2 id="Writable"><a href="#Writable" class="headerlink" title="Writable"></a>Writable</h2><ul>
+<li><input disabled="" type="checkbox"> Modifiable log files? Logtotten exploit?</li>
+<li><input disabled="" type="checkbox"> Write in ini, int.d, systemd or rc.d?</li>
+</ul>
+<h2 id="SUDO-and-SUID"><a href="#SUDO-and-SUID" class="headerlink" title="SUDO and SUID"></a>SUDO and SUID</h2><ul>
+<li><input disabled="" type="checkbox"> Find SUID binaries &amp; GTFOBins</li>
+<li><input disabled="" type="checkbox"> Check SUDO version</li>
+</ul>
+<h2 id="Network"><a href="#Network" class="headerlink" title="Network"></a>Network</h2><ul>
+<li><input disabled="" type="checkbox"> Gather network information</li>
+<li><input disabled="" type="checkbox"> Connected to any other networks?</li>
+<li><input disabled="" type="checkbox"> Can we sniff network traffic?</li>
+<li><input disabled="" type="checkbox"> Find open ports</li>
+</ul>
+<h2 id="Processes"><a href="#Processes" class="headerlink" title="Processes"></a>Processes</h2><ul>
+<li><input disabled="" type="checkbox"> Any unknown software running?</li>
+<li><input disabled="" type="checkbox"> Privileges of running processes</li>
+<li><input disabled="" type="checkbox"> Exploits of running processes</li>
+<li><input disabled="" type="checkbox"> Modifying binary of process?</li>
+<li><input disabled="" type="checkbox"> Read from process memory?</li>
+</ul>
+<h2 id="Cron-Jobs"><a href="#Cron-Jobs" class="headerlink" title="Cron Jobs"></a>Cron Jobs</h2><ul>
+<li><input disabled="" type="checkbox"> Check crontabs</li>
+<li><input disabled="" type="checkbox"> Any wildcards in cron?</li>
+<li><input disabled="" type="checkbox"> Modifiable script being run by cron?</li>
+</ul>
+<h2 id="Services"><a href="#Services" class="headerlink" title="Services"></a>Services</h2><ul>
+<li><input disabled="" type="checkbox"> Find any writable .service file</li>
+<li><input disabled="" type="checkbox"> Find any writable binary executed by a service</li>
+<li><input disabled="" type="checkbox"> Find writable folder in PATH</li>
+</ul>
+<h2 id="Installed-Software"><a href="#Installed-Software" class="headerlink" title="Installed Software"></a>Installed Software</h2><ul>
+<li><input disabled="" type="checkbox"> Check for installed software</li>
+<li><input disabled="" type="checkbox"> Look for vulnerable versions</li>
+</ul>
+<h2 id="Drives"><a href="#Drives" class="headerlink" title="Drives"></a>Drives</h2><ul>
+<li><input disabled="" type="checkbox"> List mounted drives</li>
+<li><input disabled="" type="checkbox"> List unmounted drives</li>
+<li><input disabled="" type="checkbox"> Check fstab</li>
+</ul>
+<h2 id="Capabilities"><a href="#Capabilities" class="headerlink" title="Capabilities"></a>Capabilities</h2><ul>
+<li><input disabled="" type="checkbox"> Check capabilities of binaries</li>
+</ul>
+<h2 id="Open-Shell-Sessions"><a href="#Open-Shell-Sessions" class="headerlink" title="Open Shell Sessions"></a>Open Shell Sessions</h2><ul>
+<li><input disabled="" type="checkbox"> Screen</li>
+<li><input disabled="" type="checkbox"> Tmux</li>
+</ul>
 
       </div>
       
@@ -205,7 +263,7 @@
     <div class="title">Contents</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Pentesting-Network"><span class="toc-text">Pentesting Network</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pentesting-Web"><span class="toc-text">Pentesting Web</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Privilege-Escalation"><span class="toc-text">Privilege Escalation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Programming"><span class="toc-text">Programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protocols"><span class="toc-text">Protocols</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tricks"><span class="toc-text">Tricks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-Exploitation"><span class="toc-text">Web Exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Checklists"><span class="toc-text">Checklists</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#System-Information"><span class="toc-text">System Information</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Users"><span class="toc-text">Users</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Interesting-Files"><span class="toc-text">Interesting Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Writable"><span class="toc-text">Writable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SUDO-and-SUID"><span class="toc-text">SUDO and SUID</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network"><span class="toc-text">Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Processes"><span class="toc-text">Processes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cron-Jobs"><span class="toc-text">Cron Jobs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Services"><span class="toc-text">Services</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Installed-Software"><span class="toc-text">Installed Software</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Drives"><span class="toc-text">Drives</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Capabilities"><span class="toc-text">Capabilities</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-Shell-Sessions"><span class="toc-text">Open Shell Sessions</span></a></li></ol>
       
     </div>
   </div>
@@ -480,12 +538,12 @@
       </a>
       <div class="share-content hidden">
         
-          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Cheatsheets + '&url=' + http%3A%2F%2Fexample.com%2Fcheatsheets%2Findex.html + '" target="_blank" title="Twitter">
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Linux%20Privilege%20Escalation%20-%20Checklist + '&url=' + http%3A%2F%2Fexample.com%2Fchecklists%2Flinux-priv-checklist%2Findex.html + '" target="_blank" title="Twitter">
             <i class="iconfont icon-twitter"></i>
           </a>
         
         
-          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/cheatsheets/index.html" target="_blank" title="Facebook">
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=http://example.com/checklists/linux-priv-checklist/index.html" target="_blank" title="Facebook">
             <i class="iconfont icon-facebooksquare"></i>
           </a>
         
