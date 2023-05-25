@@ -22,9 +22,9 @@
             
             <tag> VulnHub </tag>
             
-            <tag> File Transfer Protocol (FTP) </tag>
-            
             <tag> Rabbit Hole </tag>
+            
+            <tag> File Transfer Protocol (FTP) </tag>
             
             <tag> Enumeration </tag>
             
@@ -187,11 +187,11 @@
             
             <tag> Bruteforce </tag>
             
-            <tag> Local File Inclusion (LFI) </tag>
-            
             <tag> Hydra </tag>
             
             <tag> Port Knocking </tag>
+            
+            <tag> Local File Inclusion (LFI) </tag>
             
             <tag> SQL Injection (SQLi) </tag>
             
@@ -224,9 +224,9 @@
             
             <tag> Easy </tag>
             
-            <tag> Bruteforce </tag>
-            
             <tag> WordPress </tag>
+            
+            <tag> Bruteforce </tag>
             
         </tags>
       
@@ -257,11 +257,11 @@
             
             <tag> Easy </tag>
             
+            <tag> Local File Inclusion (LFI) </tag>
+            
             <tag> Log Poisoning </tag>
             
             <tag> Nginx </tag>
-            
-            <tag> Local File Inclusion (LFI) </tag>
             
         </tags>
       
@@ -354,9 +354,9 @@
             
             <tag> Easy </tag>
             
-            <tag> Bruteforce </tag>
-            
             <tag> WordPress </tag>
+            
+            <tag> Bruteforce </tag>
             
             <tag> Restricted Bash (rbash) </tag>
             
