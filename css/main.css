@@ -1073,7 +1073,7 @@ html, body {
   letter-spacing: 0.01rem;
   background-color: var(--bg-body);
   transition: color 400ms ease-in-out 0s, background-color 400ms ease-in-out 0s;
-  font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Source Han Sans CN", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif
+  font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Source Han Sans CN", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif 
 }
 
 body.hidden {
@@ -1253,7 +1253,7 @@ a:hover {
   color: var(--color-text-base);
   font-size: 1.5rem;
   line-height: 21px;
-  /*font-family: 'Raleway', 'Helvetica Neue', 'Arial', sans-serif;*/
+  /* font-family: 'Raleway', 'Helvetica Neue', 'Arial', sans-serif; */
 }
 
 .post-item .title {
@@ -1303,7 +1303,7 @@ a:hover {
   font-size: 1.6rem;
   color: var(--color-text-a);
   margin-bottom: 20px;
-  /*font-family: 'Raleway', 'Helvetica Neue', 'Arial', sans-serif;*/
+  font-family: 'Raleway', 'Helvetica Neue', 'Arial', sans-serif;
 }
 
 .navbar {
