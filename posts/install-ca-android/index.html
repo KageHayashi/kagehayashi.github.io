@@ -13,7 +13,7 @@
   
   <title>
     
-      archive_a: 2024/3 
+      Installing System-level CAs on Android 
       
       
       |
@@ -119,41 +119,184 @@
 
 
       <div class="flex-container">
-        <!-- 归档页，展示本站所有文章，按照年份降序归类，url形式：https://yoursite/archives/ -->
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
 
-<!-- last: 按年份把文章分组，当前遍历到的年份 -->
-<!-- now: 当前遍历到的文章的发布年份 -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
 
-<div class="container archives">
-  <div class="post-list">
-    
-        <!-- 后续文章的发布年份呈现 -->
-        <div class="content-title">
-          <h2>
-            <span>2024</span>
-          </h2>
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Installing System-level CAs on Android</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-09 14:49:11
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Android/" title="Android">
+                    #Android
+                  </a>
+                </span>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Burp/" title="Burp">
+                    #Burp
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>I’ve been trying to play around with pentesting android apps and have run into some problems. I thought that the traffic intercept work flow would simply consist of:</p>
+<ul>
+<li>Start Burp Suite Proxy</li>
+<li>Install user-level Burp CA in Android</li>
+<li>Point proxy settings in Android device to Burp</li>
+<li>Start intercepting traffic</li>
+</ul>
+<p>However, I’ve been experiencing some problems with a user-level CA installed.<br><img src="/posts/install-ca-android/image-20240309141702680.png"></p>
+<p><img src="/posts/install-ca-android/image-20240309141716591.png"></p>
+<p>Apparently, starting with Android Nougat (API &gt;&#x3D;24), it is no longer possible to just install Burp Suite’s CA as a user certificate to start intercepting traffic. Apps now will only trust system level CAs. </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://android-developers.googleblog.com/2016/07/changes-to-trusted-certificate.html">https://android-developers.googleblog.com/2016/07/changes-to-trusted-certificate.html</a></li>
+</ul>
+<p>One way to get around this is to install the Burp CA as a <strong>system-level CA</strong></p>
+<h1 id="Installing-system-level-Trusted-CAs"><a href="#Installing-system-level-Trusted-CAs" class="headerlink" title="Installing system-level Trusted CAs"></a>Installing system-level Trusted CAs</h1><p>In Android, trusted CAs are located at <code>/system/etc/security/cacerts</code> using a special format. Certificates must be in the PEM format with the filename of <code>&lt;subject_hash_old&gt;.0</code></p>
+<h2 id="1-Export-Burp-CA-and-convert-to-PEM"><a href="#1-Export-Burp-CA-and-convert-to-PEM" class="headerlink" title="1. Export Burp CA and convert to PEM"></a>1. Export Burp CA and convert to PEM</h2><p><img src="/posts/install-ca-android/image-20240309141931258.png"></p>
+<p>We can then use <code>openssl</code> to convert the <code>.der</code> file to <code>.pem</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform DER -<span class="keyword">in</span> cacert.der -out cacert.pem</span><br><span class="line">openssl x509 -inform PEM -subject_hash_old -<span class="keyword">in</span> cacert.pem |<span class="built_in">head</span> -1</span><br><span class="line"><span class="built_in">mv</span> cacert.pem &lt;<span class="built_in">hash</span>&gt;.0</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/install-ca-android/image-20240309142119784.png"></p>
+<h2 id="2-Copy-the-CA-to-the-device"><a href="#2-Copy-the-CA-to-the-device" class="headerlink" title="2. Copy the CA to the device"></a>2. Copy the CA to the device</h2><p>In order to install the certificate as a trusted CA, we need to copy the file to <code>/system/etc/security/cacerts</code>, which isn’t normally accessible by normal users. We have to remount <code>/system</code> to be writeable, which can be done via <code>adb root</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adb devices</span><br><span class="line">adb root</span><br><span class="line">adb remount</span><br><span class="line">adb push &lt;cert&gt;.0 /sdcard/</span><br></pre></td></tr></table></figure>
+
+<p>As an example, here I’m using NoxPlayer as the emulator of choice<br><img src="/posts/install-ca-android/image-20240309142528753.png"></p>
+<p>From here, go into <code>adb shell</code> and transfer the CA file from <code>/sdcard</code> to <code>/system/etc/security/cacerts/</code> and reboot</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adb shell</span><br><span class="line"><span class="built_in">mv</span> /sdcard/&lt;cert&gt;.0 /system/etc/security/cacerts/</span><br><span class="line"><span class="built_in">chmod</span> 644 /system/etc/security/cacerts/&lt;cert&gt;.0</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/install-ca-android/image-20240309142830510.png"></p>
+<h2 id="3-Check-Trusted-Credentials"><a href="#3-Check-Trusted-Credentials" class="headerlink" title="3. Check Trusted Credentials"></a>3. Check Trusted Credentials</h2><p>Depending on the Android device, navigate into something like <code>Settings -&gt; Security &amp; Location -&gt; Encryption &amp; Credentials -&gt; Trusted Credentials</code> and check that <code>PortSwigger</code> is installed as a system-level CA.</p>
+<p><img src="/posts/install-ca-android/image-20240309143118272.png"></p>
+<h2 id="4-Manually-Set-Proxy"><a href="#4-Manually-Set-Proxy" class="headerlink" title="4. Manually Set Proxy"></a>4. Manually Set Proxy</h2><p>Now that we have the CA installed, we can start our proxy. First, make sure that Burp proxy is set on All interfaces.<br><img src="/posts/install-ca-android/image-20240309143707275.png"></p>
+<p>Next, make note of the IP of the host running Burp Suite. Here it’s <code>192.168.248.175</code> for me.<br><img src="/posts/install-ca-android/image-20240309143822411.png"></p>
+<p>Go into <code>Settings -&gt; Network &amp; Internet -&gt; Wi-Fi</code> and set the <code>Proxy</code> setting to <code>Manual</code> and fill in the proxy hostname and proxy port (Burp defaults to <code>8080</code>)<br><img src="/posts/install-ca-android/image-20240309143950370.png"></p>
+<h2 id="5-Start-Intercepting"><a href="#5-Start-Intercepting" class="headerlink" title="5. Start Intercepting"></a>5. Start Intercepting</h2><p>At this point, Burp should be intercepting all the network traffic on the Android device. Start an app, and you should start seeing traffic coming in.</p>
+<p><img src="/posts/install-ca-android/image-20240309144231357.png"></p>
+<hr>
+<p>References:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.ropnop.com/configuring-burp-suite-with-android-nougat/">https://blog.ropnop.com/configuring-burp-suite-with-android-nougat/</a></li>
+<li><a target="_blank" rel="noopener" href="https://android-developers.googleblog.com/2016/07/changes-to-trusted-certificate.html">https://android-developers.googleblog.com/2016/07/changes-to-trusted-certificate.html</a></li>
+</ul>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/wireguard/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-09 14:49:11
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Android/" title="Android">
+                        #Android
+                      </a>
+                    </span>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Burp/" title="Burp">
+                        #Burp
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
         </div>
       
-      <div class="post-item" title="Installing System-level CAs on Android">
-        <div class="time-m-d">03-09</div>
-        <div class="title">
-          <a href="/posts/install-ca-android/">
-            <span>Installing System-level CAs on Android</span>
-          </a>
-        </div>
-      </div>
+    </div>
     
-      <div class="post-item" title="Wireguard Quick Start">
-        <div class="time-m-d">03-09</div>
-        <div class="title">
-          <a href="/posts/wireguard/">
-            <span>Wireguard Quick Start</span>
-          </a>
-        </div>
-      </div>
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Installing-system-level-Trusted-CAs"><span class="toc-text">Installing system-level Trusted CAs</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Export-Burp-CA-and-convert-to-PEM"><span class="toc-text">1. Export Burp CA and convert to PEM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Copy-the-CA-to-the-device"><span class="toc-text">2. Copy the CA to the device</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Check-Trusted-Credentials"><span class="toc-text">3. Check Trusted Credentials</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Manually-Set-Proxy"><span class="toc-text">4. Manually Set Proxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Start-Intercepting"><span class="toc-text">5. Start Intercepting</span></a></li></ol></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
     
   </div>
-</div>
+
 
         
 <div class="footer">
