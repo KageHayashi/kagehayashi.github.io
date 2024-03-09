@@ -12,12 +12,16 @@ const switchMode = () => {
     html.setAttribute("color-mode", "dark");
     themeIcon.classList = "iconfont icon-sun";
     colorMode = "dark";
-    author_photo.src = "/images/dark.png";
+    if (author_photo.src != "/images/dark.png") {
+      author_photo.src = "/images/dark.png";
+    }
   } else {
     html.setAttribute("color-mode", "light");
     themeIcon.classList = "iconfont icon-moon";
     colorMode = "light";
-    author_photo.src = "/images/light.png";
+    if (author_photo.src != "/images/light.png") {
+      author_photo.src = "/images/light.png";
+    }
   }
   localStorage.setItem("color-mode", colorMode);
 };
@@ -27,8 +31,12 @@ switchHandle.addEventListener("click", switchMode, false);
 const currColorMode = localStorage.getItem("color-mode");
 if (currColorMode === "light") {
   themeIcon.classList = "iconfont icon-moon";
-  author_photo.src = "/images/light.png";
+  if (author_photo.src != "/images/light.png") {
+    author_photo.src = "/images/light.png";
+  }
 } else {
   themeIcon.classList = "iconfont icon-sun";
-  author_photo.src = "/images/dark.png";
+  if (author_photo.src != "/images/dark.png") {
+    author_photo.src = "/images/dark.png";
+  }
 }
