@@ -166,7 +166,7 @@
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2024-03-11 16:02:12
+          2024-03-11 16:04:36
         </span>
         
               <span class="post-tags">
@@ -196,7 +196,7 @@
 <p>We’ll be using <code>Microsoft Visual Studio</code> for our project. Create a new empty <code>C++</code> console app. Here I’ll call the project “ProcessHollowing”. This should produce the following solution structure.<br><img src="/posts/process-hollowing-direct-syscalls/image-20240311143940736.png"></p>
 <h2 id="MASM-Build-Customization"><a href="#MASM-Build-Customization" class="headerlink" title="MASM Build Customization"></a>MASM Build Customization</h2><p>From here, we need to set up build customizations for assembly files. Right-click on the project and go to <code>Build Dependencies -&gt; Build Customizations...</code><br><img src="/posts/process-hollowing-direct-syscalls/image-20240311144046575.png"></p>
 <p>Make sure <code>masm</code> is checked and press Ok.<br><img src="/posts/process-hollowing-direct-syscalls/image-20240311144153381.png"></p>
-<h2 id="Importing-SysWhisphers2"><a href="#Importing-SysWhisphers2" class="headerlink" title="Importing SysWhisphers2"></a>Importing SysWhisphers2</h2><p>The next step we need to do is download SysWhisphers2. The project is intended for AV&#x2F;EDR evasion via direct system calls, but in this case we’ll just use some of the basic APIs it provides such as the aforementioned <code>NtQueryInformationProcess</code>.</p>
+<h2 id="Importing-SysWhispers2"><a href="#Importing-SysWhispers2" class="headerlink" title="Importing SysWhispers2"></a>Importing SysWhispers2</h2><p>The next step we need to do is download SysWhispers2. The project is intended for AV&#x2F;EDR evasion via direct system calls, but in this case we’ll just use some of the basic APIs it provides such as the aforementioned <code>NtQueryInformationProcess</code>.</p>
 <p>Download the project and run the following command to generate the required files:</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/jthuraisamy/SysWhispers2">https://github.com/jthuraisamy/SysWhispers2</a></li>
@@ -323,7 +323,7 @@
           <div class="post-attach">
             <span class="post-pubtime">
               <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2024-03-11 16:02:12
+              2024-03-11 16:04:36
             </span>
             
                   <span class="post-tags">
@@ -352,7 +352,7 @@
     <div class="title">Contents</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Theory"><span class="toc-text">Theory</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Setting-up-Our-Environment"><span class="toc-text">Setting up Our Environment</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MASM-Build-Customization"><span class="toc-text">MASM Build Customization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Importing-SysWhisphers2"><span class="toc-text">Importing SysWhisphers2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Include-ASM-File-to-Build"><span class="toc-text">Include ASM File to Build</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Process-Hollowing"><span class="toc-text">Process Hollowing</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-Process-in-Suspended-State"><span class="toc-text">Create Process in Suspended State</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-EntryPoint-Address"><span class="toc-text">Getting EntryPoint Address</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Manually-Getting-the-EntryPoint-in-WinDbg"><span class="toc-text">Manually Getting the EntryPoint in WinDbg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-the-EntryPoint-with-Code"><span class="toc-text">Getting the EntryPoint with Code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overwriting-the-Memory"><span class="toc-text">Overwriting the Memory</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Theory"><span class="toc-text">Theory</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Setting-up-Our-Environment"><span class="toc-text">Setting up Our Environment</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MASM-Build-Customization"><span class="toc-text">MASM Build Customization</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Importing-SysWhispers2"><span class="toc-text">Importing SysWhispers2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Include-ASM-File-to-Build"><span class="toc-text">Include ASM File to Build</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Process-Hollowing"><span class="toc-text">Process Hollowing</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Create-Process-in-Suspended-State"><span class="toc-text">Create Process in Suspended State</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Getting-EntryPoint-Address"><span class="toc-text">Getting EntryPoint Address</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Manually-Getting-the-EntryPoint-in-WinDbg"><span class="toc-text">Manually Getting the EntryPoint in WinDbg</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Getting-the-EntryPoint-with-Code"><span class="toc-text">Getting the EntryPoint with Code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Overwriting-the-Memory"><span class="toc-text">Overwriting the Memory</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Code"><span class="toc-text">Code</span></a></li></ol>
       
     </div>
   </div>
