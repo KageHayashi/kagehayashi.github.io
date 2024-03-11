@@ -593,7 +593,7 @@
   max-width: 100%;
   -webkit-box-sizing: content-box;
           box-sizing: content-box;
-  background-color: #fff;
+  background-color: var(--bg-body);
 }
 
 .markdown-body code {

@@ -624,7 +624,7 @@
   display: block;
   margin: 0 auto;
   box-sizing: content-box;
-  background-color: #fff;
+  background-color: var(--bg-body);
 }
 
 .markdown-body img[align="right"] {
