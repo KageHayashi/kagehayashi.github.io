@@ -218,31 +218,31 @@
 <p>We’ll need to get the raw hex-bytes for later. This can be done using <code>xxd</code>:</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -p -l 1000 rev.exe</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310203628586.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310203628586.png"></p>
 <h2 id="Adding-a-New-PE-Section"><a href="#Adding-a-New-PE-Section" class="headerlink" title="Adding a New PE Section"></a>Adding a New PE Section</h2><p>Open <code>putty.exe</code> in CFF Explorer, navigate to <code>Section Headers</code>, and right-click to <code>Add Section (Empty Space)</code>. Make sure to make the size of the section at least 324 bytes - the size of our shellcode. Here, I’ll specify 200h - which is 512 bytes.</p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310151913464.png"></p>
-<p>I’ll rename the section to <code>.code</code> and right-click <code>Change Section Flags</code><br><img src="/2024/03/10/backdooring-pe-files/image-20240310152255772.png"></p>
-<p>Make sure that the section is readable, writeable, executable, and contains code.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310152340682.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310151913464.png"></p>
+<p>I’ll rename the section to <code>.code</code> and right-click <code>Change Section Flags</code><br><img src="/posts/backdooring-pe-files/image-20240310152255772.png"></p>
+<p>Make sure that the section is readable, writeable, executable, and contains code.<br><img src="/posts/backdooring-pe-files/image-20240310152340682.png"></p>
 <p>Take note that the <code>Raw Address</code> of the section is <code>00166200</code> and make sure to save the changes.</p>
 <h2 id="Insert-Shellcode-into-New-Section"><a href="#Insert-Shellcode-into-New-Section" class="headerlink" title="Insert Shellcode into New Section"></a>Insert Shellcode into New Section</h2><p>From here, open the binary in <code>HxD</code>. Navigate to <code>Search -&gt; Go to...</code></p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310152743665.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310152743665.png"></p>
 <p>Go to offset <code>00166200</code>, where our new section is.</p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310152827261.png"></p>
-<p>You should see an empty section of code.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310152907463.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310152827261.png"></p>
+<p>You should see an empty section of code.<br><img src="/posts/backdooring-pe-files/image-20240310152907463.png"></p>
 <p>We’ll insert our shellcode into this. Using the same <code>xxd</code> command before, copy the hex output.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -p -l 1000 rev.exe</span><br></pre></td></tr></table></figure>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310203837253.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310203837253.png"></p>
 <p>Right-click in <code>HxD</code> and <code>Paste write</code></p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310153045244.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310153045244.png"></p>
 <p>The newly pasted code section should be red. Make sure to save the changes.</p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310153106387.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310153106387.png"></p>
 <h2 id="Manually-Trigger-the-Shellcode"><a href="#Manually-Trigger-the-Shellcode" class="headerlink" title="Manually Trigger the Shellcode"></a>Manually Trigger the Shellcode</h2><p>Now that our shellcode is in the binary, let’s try to manually force it to execute in <code>x32dbg</code>. </p>
 <p>Open the binary in <code>x32dbg</code> and navigate to <code>Memory Map</code>. We should see the <code>.code</code> section at <code>010DF000</code>. This address could have also been calculated by using the base address of <code>putty.exe</code> at <code>00F70000</code> and adding the relative virtual address of the <code>.code</code> section of <code>0016F000</code> to get <code>00F70000 + 0016F000 = 010DF000</code></p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310153626835.png"></p>
-<p>Double-click the section and if we follow it in dump, we should see the hex bytes of our shellcode.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310154039487.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310153626835.png"></p>
+<p>Double-click the section and if we follow it in dump, we should see the hex bytes of our shellcode.<br><img src="/posts/backdooring-pe-files/image-20240310154039487.png"></p>
 <p>With everything in place, we can start a listener on our attacker machine, manually set the EIP to <code>010DF000</code> (1) and continue execution (2). We should see a reverse shell connect back (3).</p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310154355294.png"></p>
-<p>Here is the whole process in action:<br><img src="/2024/03/10/backdooring-pe-files/backdoor_pe.gif"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310154355294.png"></p>
+<p>Here is the whole process in action:<br><img src="/posts/backdooring-pe-files/backdoor_pe.gif"></p>
 <p>We have successfully triggered the shellcode. Now, we know that the theories are in place and we have laid the groundworks for what’s coming next.</p>
 <h1 id="Execution-Redirection"><a href="#Execution-Redirection" class="headerlink" title="Execution Redirection"></a>Execution Redirection</h1><p>With the help of a debugger, we were able to manually trigger our shellcode. Now, we’ll attempt to patch the binary so that the shell triggers automatically and redirects execution back to <code>putty.exe</code></p>
 <p>The patching process can be a little complicated and tedious. The high level step are as follows:</p>
@@ -257,18 +257,18 @@
 <li><a target="_blank" rel="noopener" href="https://www.felixcloutier.com/x86/pushf:pushfd:pushfq">https://www.felixcloutier.com/x86/pushf:pushfd:pushfq</a></li>
 </ul>
 <p>This process is relatively easy. <code>pushad</code>‘s opcode is <code>60</code> and <code>pushfd</code>‘s opcode is <code>9C</code>. We just need to insert these right before our shellcode in <code>HxD</code>. I recommend putting <code>609C</code> before your shellcode and just pasting it as a whole into <code>HxD</code>.</p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310193300866.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193300866.png"></p>
 <h2 id="Jumping-to-our-Shellcode"><a href="#Jumping-to-our-Shellcode" class="headerlink" title="Jumping to our Shellcode"></a>Jumping to our Shellcode</h2><p>The next step we want to do is to find a 5 byte instruction where we can overwrite with <code>jmp &lt;addr_of_shellcode&gt;</code>.</p>
 <p>Step through the execution of <code>putty.exe</code> in a debugger. We see a 5 byte instruction at <code>0073FA61</code>. We’ll take a note of this instruction and the next for later.</p>
 <figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0073FA61 | E8 3A070000              | call putty.7401A0                       | (assembly: call 0x007401A0)</span><br><span class="line">0073FA66 | 6A 01                    | push 1                                  |</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310193447062.png"></p>
-<p>Overwrite the instruction with a jump to our shellcode. In this case, it’s at <code>0080F000</code><br><img src="/2024/03/10/backdooring-pe-files/image-20240310193538819.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193447062.png"></p>
+<p>Overwrite the instruction with a jump to our shellcode. In this case, it’s at <code>0080F000</code><br><img src="/posts/backdooring-pe-files/image-20240310193538819.png"></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp 0x0080F000</span><br></pre></td></tr></table></figure>
 
-<p>To patch, Right-click -&gt; <code>Assemble</code> and put our jump instruction in.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310193615493.png"></p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310193630408.png"></p>
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310193644246.png"></p>
+<p>To patch, Right-click -&gt; <code>Assemble</code> and put our jump instruction in.<br><img src="/posts/backdooring-pe-files/image-20240310193615493.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193630408.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310193644246.png"></p>
 <p>Next, we’ll attempt to add a few modifications to our shellcode to redirect the execution back to <code>putty.exe</code>.</p>
 <h2 id="Appending-our-Shellcode"><a href="#Appending-our-Shellcode" class="headerlink" title="Appending our Shellcode"></a>Appending our Shellcode</h2><p>There are several places where we need to modify our shellcode in order to have the redirection work properly. Mainly, the modifications consist of:</p>
 <ul>
@@ -279,13 +279,13 @@
 </ul>
 <h3 id="Unblocking-the-Thread"><a href="#Unblocking-the-Thread" class="headerlink" title="Unblocking the Thread"></a>Unblocking the Thread</h3><p>If we ran the previous modification with the jump instruction to our shellcode, you’ll notice that although we catch the reverse shell, the <code>putty.exe</code> GUI won’t display afterwards.</p>
 <p>The reason <code>putty.exe</code> isn’t showing its GUI is because the shellcode execution is blocking the thread by calling <code>WaitForSignaledObject</code> with <code>-1 (INFINITE)</code>  as the argument - essentially blocking it forever. We want to make sure the value passed in as the argument is <code>0</code>.</p>
-<p>The instruction <code>dec esi</code> at <code>0080F11B</code> changes ESI to <code>-1</code>, which is then pushed onto the stack as an argument to <code>WaitForSignaledObject</code><br><img src="/2024/03/10/backdooring-pe-files/image-20240310201003514.png"></p>
-<p>We can attempt to NOP out the instruction, so that ESI stays <code>0</code> - telling the thread to wait for 0 seconds before unblocking.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310201017372.png"></p>
+<p>The instruction <code>dec esi</code> at <code>0080F11B</code> changes ESI to <code>-1</code>, which is then pushed onto the stack as an argument to <code>WaitForSignaledObject</code><br><img src="/posts/backdooring-pe-files/image-20240310201003514.png"></p>
+<p>We can attempt to NOP out the instruction, so that ESI stays <code>0</code> - telling the thread to wait for 0 seconds before unblocking.<br><img src="/posts/backdooring-pe-files/image-20240310201017372.png"></p>
 <h3 id="Restore-Stack-Frame-Execution"><a href="#Restore-Stack-Frame-Execution" class="headerlink" title="Restore Stack Frame &amp; Execution"></a>Restore Stack Frame &amp; Execution</h3><p>Now, we modify the end of the shellcode to restore our stack frame and register states to before our shellcode execution. Then, we can pass execution back to <code>putty.exe</code>.</p>
-<p>At the end of our shellcode, you’ll notice a <code>call ebp</code> instruction. This essentially closes the <code>putty.exe</code> process after our thread has executed. We will start patching from this last instruction.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310205922936.png"></p>
-<p>We’ll want to replace this with an instruction that restores our ESP to before our shellcode execution, but after our <code>pushad</code> and <code>pushfd</code> instructions. To find this value, we can put a breakpoint after the <code>pushad</code> and <code>pushfd</code> instructions and note the ESP right after. In this case, it’s <code>012FFB00</code>.<br><img src="/2024/03/10/backdooring-pe-files/image-20240310205720973.png"></p>
-<p>The ESP after our shellcode execution is <code>012FF8FC</code><br><img src="/2024/03/10/backdooring-pe-files/image-20240310205825552.png"></p>
-<p>This means that the stack grew by <code>0x204</code> bytes<br><img src="/2024/03/10/backdooring-pe-files/image-20240310205852824.png"></p>
+<p>At the end of our shellcode, you’ll notice a <code>call ebp</code> instruction. This essentially closes the <code>putty.exe</code> process after our thread has executed. We will start patching from this last instruction.<br><img src="/posts/backdooring-pe-files/image-20240310205922936.png"></p>
+<p>We’ll want to replace this with an instruction that restores our ESP to before our shellcode execution, but after our <code>pushad</code> and <code>pushfd</code> instructions. To find this value, we can put a breakpoint after the <code>pushad</code> and <code>pushfd</code> instructions and note the ESP right after. In this case, it’s <code>012FFB00</code>.<br><img src="/posts/backdooring-pe-files/image-20240310205720973.png"></p>
+<p>The ESP after our shellcode execution is <code>012FF8FC</code><br><img src="/posts/backdooring-pe-files/image-20240310205825552.png"></p>
+<p>This means that the stack grew by <code>0x204</code> bytes<br><img src="/posts/backdooring-pe-files/image-20240310205852824.png"></p>
 <p>From this, we will add the following instructions to our shellcode:</p>
 <ul>
 <li>Increase the ESP by <code>0x204</code> bytes to restore the stack</li>
@@ -296,14 +296,14 @@
 <p>In this case, we would append the following to the shellcode:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add esp, 0x204</span><br><span class="line">popfd</span><br><span class="line">popad</span><br><span class="line">call 0x007401A0</span><br><span class="line">jmp 0x0073FA66</span><br></pre></td></tr></table></figure>
 
-<p><img src="/2024/03/10/backdooring-pe-files/image-20240310201108577.png"></p>
-<p>Patch the file by Right-clicking -&gt; <code>Patches</code>, select all patches, and click <code>Patch File</code><br><img src="/2024/03/10/backdooring-pe-files/image-20240310212548779.png"><br><img src="/2024/03/10/backdooring-pe-files/image-20240310212627368.png"></p>
+<p><img src="/posts/backdooring-pe-files/image-20240310201108577.png"></p>
+<p>Patch the file by Right-clicking -&gt; <code>Patches</code>, select all patches, and click <code>Patch File</code><br><img src="/posts/backdooring-pe-files/image-20240310212548779.png"><br><img src="/posts/backdooring-pe-files/image-20240310212627368.png"></p>
 <p>We’ll save the file as <code>putty_patched.exe</code></p>
 <h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>Now, we should have a fully patched file. Let’s test it. We should see our shellcode execute and pass execution right back to <code>putty.exe</code>. To the target, it’s as if nothing happened :D</p>
-<p><img src="/2024/03/10/backdooring-pe-files/backdoor_pe_patched.gif"></p>
+<p><img src="/posts/backdooring-pe-files/backdoor_pe_patched.gif"></p>
 <h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>We were able to successfully embed a reverse shell into a 32-bit <code>putty.exe</code> PE binary. It must be noted that this technique is extremely well signatured. Windows Defender was turned off throughout this lab - although at some points it still picked it up (can never trust when Defender is truly off…) </p>
 <p>Here’s a speedrun attempt :)</p>
-<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"video":{"url":"/2024/03/10/backdooring-pe-files/demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
+<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"video":{"url":"/posts/backdooring-pe-files/demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
 
 <hr>
 <p>References:<br><a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode">https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode</a><br><a target="_blank" rel="noopener" href="https://ap3x.github.io/posts/backdooring-portable-executables-(pe)/">https://ap3x.github.io/posts/backdooring-portable-executables-(pe)/</a></p>
@@ -313,7 +313,7 @@
         <div class="prev-or-next">
           <div class="post-foot-next">
             
-              <a href="/2024/03/09/install-ca-android/" target="_self">
+              <a href="/posts/install-ca-android/" target="_self">
                 <i class="iconfont icon-chevronleft"></i>
                 <span>Prev</span>
               </a>
@@ -339,7 +339,7 @@
           </div>
           <div class="post-foot-prev">
             
-              <a href="/2024/03/11/process-hollowing-direct-syscalls/" target="_self">
+              <a href="/posts/process-hollowing-direct-syscalls/" target="_self">
                 <span>Next</span>
                 <i class="iconfont icon-chevronright"></i>
               </a>
